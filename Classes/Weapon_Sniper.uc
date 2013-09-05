@@ -24,7 +24,4 @@ DefaultProperties
 	InstantHitDamageTypes(1)=class'UTDmgType_LinkBeam'
 
 	WeaponRange=500
-
-
-	WeaponAttachmentSocketName=WeaponPoint
 }

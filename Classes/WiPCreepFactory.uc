@@ -1,41 +1,56 @@
 class WiPCreepFactory extends WiPActor
     placeable;
 
+// the spawn interval for creeps
 var const float spawnInterval;
-var const int numMeleeCreep;
-var const int numRangedCreep;
+
+// by default, CreepFactories will create two types of creeps
+var(CreepFactory) const WiPCreepPawn pawnArchetype1;
+var(CreepFactory) const WiPCreepPawn pawnArchetype2;
+
+// the number of each archetype we want to generate
+var(CreepFactory) const int numArchetype1;
+var(CreepFactory) const int numArchetype2;
+
+// the route for the creeps to follow
+var(CreepFactory) const Route route;
 
 function PostBeginPlay(){
 
     Super.PostBeginPlay();
 
+    // spawn creeps - make sure to check if the archetypes are set
     spawnCreep();
-
-   // if (spawnInterval > 0.f )
-   //     setTimer(spawnInterval, true, NameOf(SpawnCreep));
+    // setTimer(spawnInterval, true, NameOf(SpawnCreep));
 
 }
 
 function spawnCreep(){
 
     local int i;
-    local WiPMeleeCreepPawn meleePawn;
-    local WiPRangedCreepPawn rangedPawn;
+    local WiPCreepPawn creepPawn;
     local WiPCreepAIController ai;
 
-    for (i = 0; i<numMeleeCreep; i++){
-        meleePawn = Spawn(class'WiPMeleeCreepPawn',,,Location);
-        if (meleePawn != none){
-          //  ai = WiPCreepAIController(meleePawn.Controller);
-          //  ai.initialize();
+    // spawn archetype 1 only if its defined
+    if (pawnArchetype1 != none){
+        for (i = 0; i<numArchetype1; i++){
+            creepPawn = Spawn(pawnArchetype1.Class, Self, ,Location);
+            if(creepPawn != none){
+                ai = WiPCreepAIController(creepPawn.Controller);
+                ai.initialize();
+            }
+    
         }
-
     }
-    for (i = 0; i<numMeleeCreep; i++){
-        //rangedPawn = Spawn(class'WiPRangedCreepPawn',,,Location);
-        if (rangedPawn != none){
-          //  ai = WiPCreepAIController(rangedPawn.Controller);
-          //  ai.initialize();
+    
+    // spawn archetype 1 only if its defined
+    if (pawnArchetype2 != none){
+        for (i = 0; i<numArchetype2; i++){
+            //  creepPawn = Spawn(pawnArchetype1.Class, Self, Location, Rotation, pawnArchetype1);
+            if (creepPawn != none){
+              //  ai = WiPCreepAIController(rangedPawn.Controller);
+              //  ai.initialize();
+            }
         }
     }
 
@@ -45,8 +60,8 @@ function spawnCreep(){
 defaultproperties
 {
     spawnInterval = 2.0;
-    numMeleeCreep = 3;
-    numRangedCreep = 3;
+    numArchetype1 = 3;
+    numArchetype2 = 3;
 
     bBlockActors=True
     bCollideActors=True
