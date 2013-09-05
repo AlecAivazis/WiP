@@ -6,7 +6,6 @@ var float CameraZOffset;
 simulated event PostBeginPlay()
 {
 	super.PostBeginPlay();
-	`Log("Custom Camera up");
 }
 
 function UpdateViewTarget(out TViewTarget OutVT, float DeltaTime)
@@ -53,7 +52,7 @@ function UpdateViewTarget(out TViewTarget OutVT, float DeltaTime)
 
             // calculate camera location from pawn location
             CollisionRadius = 36;
-        
+
             CamStart = Controller.Pawn.Location;
             CamStart.Z += CameraZOffset;
         

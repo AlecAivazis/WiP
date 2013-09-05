@@ -1,33 +1,26 @@
 class WiPPawn extends GamePawn;
 
-var name WeaponSocket;
-
 simulated event ReplicatedEvent(name VarName)
 {
 	// Money was replicated
-	`Log("ReplicatedEvent:"@VarName);
 	Super.ReplicatedEvent(VarName);
 }
 
 simulated event PostBeginPlay()
 {
 	super.PostBeginPlay();
-	`Log("Custom Pawn up");
 }
 
 simulated function name GetDefaultCameraMode( PlayerController RequestedBy )
 {
-	`Log("Requested Isometric");
-	`Log("Role"@Role);
     return 'Isometric';
 }
 
 function AddDefaultInventory()
 {
-	//InvManager.CreateInventory(class'Weapon_Sniper'); //InvManager is the pawn's InventoryManager
-	InvManager.CreateInventory(class'UTWeap_LinkGun'); //InvManager is the pawn's InventoryManager
+	InvManager.CreateInventory(class'Weapon_Sniper'); //InvManager is the pawn's InventoryManager
+	// InvManager.CreateInventory(class'UTWeap_LinkGun'); //InvManager is the pawn's InventoryManager
 
-	`Log("Default Inventory created!");
 }
 
 //fix aiming to a plane
@@ -35,17 +28,12 @@ simulated singular event Rotator GetBaseAimRotation()
 {
    local rotator   POVRot, tempRot;
 
-
-   `Log("GetBaseAimRotation"@Rotation);
    tempRot = Rotation;
    tempRot.Pitch = 0;
    SetRotation(tempRot);
    POVRot = Rotation;
    POVRot.Pitch = 0;
 
-   `Log("GetBaseAimRotation"@Rotation);
-   `Log("tempRot"@tempRot);
-   `Log("POVRot"@POVRot);
 
    return POVRot;
 }
@@ -103,7 +91,6 @@ defaultproperties
 	Components.Add(InitialSkeletalMesh);
 
 	InventoryManagerClass=class'WiPInventoryManager';
-	WeaponSocket=WeaponPoint;
 
 	// Collision
 	BaseEyeHeight=+00008.000000
