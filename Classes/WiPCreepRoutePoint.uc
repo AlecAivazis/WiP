@@ -1,5 +1,4 @@
-class WiPCreepRoute extends Actor
-	ClassGroup(MOBA)
+class WiPCreepRoutePoint extends WiPActor
 	HideCategories(Attachment, Collision, Physics, Debug, Object)
 	Placeable;
 
