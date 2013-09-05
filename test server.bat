@@ -1,0 +1,1 @@
+C:\UDK\UDK-2013-07\Binaries\Win32\UDK.exe server aram?TimeLimit=0?Game=WiP.WiPGame -log
