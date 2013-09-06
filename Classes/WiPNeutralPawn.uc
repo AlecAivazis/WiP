@@ -38,4 +38,13 @@ simulated event PostBeginPlay(){
     }
 }
 
+function bool isFiring(){
+    
+    if (WeaponFireMode != none){
+        return WeaponFireMode.isFiring();
+    }
+    
+    return false;
+}
+
 defaultproperties{}
