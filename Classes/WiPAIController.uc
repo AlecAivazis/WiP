@@ -46,7 +46,7 @@ function bool canReachDestination(Vector loc){
         `log("No line of site...");
         return false;
     }
-    
+
     /* check for specific actors if necessary - TBI
     foreach TraceActors(class'Actor', actorHit, hitNormal, loc, Pawn.Location, extent){
 
@@ -56,17 +56,37 @@ function bool canReachDestination(Vector loc){
         }
     }
     */
-    
+
     return true;
 }
 
-function bool isWithinAttackingRange(WiPAttackable target){
-    
+function bool isWithinAttackingAngle(Actor target){
+
+    local Vector currentEnemyLocation, pawnLocation;
     // if the current enemy or pawn is invalid, no
     if (currentEnemy == none || cachedPawn == none) return false;
     
+    // ignore z-axis
+    currentEnemyLocation = currentEnemy.Location;
+    currentEnemyLocation.z = 0.f;
+
+    // ignore the z-axis 
+    pawnLocation = Pawn.Location;
+    pawnLocation.z = 0.f;
+
+    return Vector(Pawn.Rotation) dot Normal(currentEnemyLocation - pawnLocation) >= cachedPawn.weaponFireMode.getAttackingAngle();
+
+
+}
+
+function bool isWithinAttackingRange(Actor target){
+
+
+    // if the current enemy or pawn is invalid, no
+    if (currentEnemy == none || cachedPawn == none) return false;
+
     // return true if the current enemy is touching the weapon range trigger
-    return cachedPawn.weaponRangeTrigger.Touching.Find(currentEnemy) != INDEX_NONE;
+    return cachedPawn.weaponRangeTrigger.Touching.Find(target) != INDEX_NONE;
 }
 
 /*****************************************************************
@@ -114,6 +134,13 @@ CanAttackCurrentEnemy:
     
     // check if currentEnemy is within attacking range
     else if (isWithinAttackingRange(currentEnemy)){
+        
+        // check if currentEnemy is within attacking angle
+        if (isWithingAttackingAngle(currentEnemy)){
+            if (!Pawn.isFiring()){
+                Pawn.StartFire(0);                
+            }
+        }
         
     }
 
