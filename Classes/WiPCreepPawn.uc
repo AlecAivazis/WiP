@@ -8,9 +8,22 @@ var(Creep) const float sightRange;
 // experience earned by the creep
 var(Creep) const int experienceToGiveOnKill;
 
+// store the parent factory
+var RepNotify WiPCreepFactory Factory;
+
+// Replication Block
+replication{
+    if (bNetInitial)
+        Factory;
+}
+
 
 simulated event PostBeginPlay()
 {
+    if (Role == Role_Authority){
+        Factory = WiPCreepFactory(Owner);
+    }
+
 	super.PostBeginPlay();
 }
 

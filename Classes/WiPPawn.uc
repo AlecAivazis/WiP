@@ -58,6 +58,10 @@ simulated event BecomeViewTarget( PlayerController PC )
 defaultproperties
 {
 	Components.Remove(Sprite)
+	
+	Physics=PHYS_Walking
+	bAlwaysRelevant=true
+	bReplicateHealthToAll=true
 
 	Begin Object Class=DynamicLightEnvironmentComponent Name=MyLightEnvironment
 		ModShadowFadeoutTime=0.25
