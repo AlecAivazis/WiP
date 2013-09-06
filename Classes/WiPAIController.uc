@@ -39,4 +39,13 @@ function bool canReachDestination(Vector loc){
     return true;
 }
 
+
+
+/*****************************************************************
+*   State - AttackingEnemy                                       *
+******************************************************************/
+
+
+
+
 defaultproperties{}

@@ -1,4 +1,4 @@
-// Creep AIController - follows creepPawn.Factory.Route 
+// Creep AIController - follows creepPawn.Factory.Route
 
 class WiPCreepAIController extends WiPAIController;
 
@@ -45,7 +45,7 @@ function WhatToDoNext(){
 
 
 /*****************************************************************
-*   States                                                       *
+*   State - Walking Along Route                                  *
 ******************************************************************/
 
 state WalkingAlongRoute{
