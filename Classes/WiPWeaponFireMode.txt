@@ -1,0 +1,9 @@
+class WiPWeaponFireMode extends Object
+    abstract
+    EditInlineNew
+    HideCategories(Object);
+
+// weapon owner    
+var ProtectedWrite WiPAttackable weaponOwner;
+
+

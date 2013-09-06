@@ -1,15 +1,12 @@
-class WiPPawn extends Pawn;
+class WiPPawn
+    extends Pawn;
+
+
 
 simulated event ReplicatedEvent(name VarName)
 {
 	// Money was replicated
 	Super.ReplicatedEvent(VarName);
-}
-
-
-simulated function name GetDefaultCameraMode( PlayerController RequestedBy )
-{
-    return 'Isometric';
 }
 
 function AddDefaultInventory()
@@ -18,6 +15,19 @@ function AddDefaultInventory()
 	// InvManager.CreateInventory(class'UTWeap_LinkGun'); //InvManager is the pawn's InventoryManager
 
 }
+/*****************************************************************
+*   Interface - WiPAttackble                                     *
+******************************************************************/
+
+
+// return true if the actor is still valid to attack
+simulated function bool isValidToAttack(){
+    return Controller != None && Health > 0;
+}
+
+/*****************************************************************
+*   Camera                                                       *
+******************************************************************/
 
 //fix aiming to a plane
 simulated singular event Rotator GetBaseAimRotation()

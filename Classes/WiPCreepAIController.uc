@@ -45,7 +45,7 @@ function WhatToDoNext(){
 
 
 /*****************************************************************
-*   State - Walking Along Route                                  *
+*   State - WalkingAlongRoute                                    *
 ******************************************************************/
 
 state WalkingAlongRoute{
@@ -53,12 +53,8 @@ state WalkingAlongRoute{
     // called when the state is first entered
     function BeginState(Name PreviousStateName){
 
-        `log("Creep is starting to walk..... =================================");
-
         // check that we have values for everything
         if (creepPawn != none && creepPawn.Factory != none && creepPawn.Factory.Route != none){
-
-            `log("Passed initial state checks ================================");
 
             // set the pawn's destination to the appropriate actor in its route
             SetDestinationPosition(CreepPawn.Factory.Route.RouteList[RouteIndex].Actor.Location);
