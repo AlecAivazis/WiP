@@ -45,20 +45,19 @@ function WhatToDoNext(){
 
 
 /*****************************************************************
-*   State                                                       *
+*   States                                                       *
 ******************************************************************/
 
 state WalkingAlongRoute{
-    
+
     // called when the state is first entered
-    
     function BeginState(Name PreviousStateName){
 
         `log("Creep is starting to walk..... =================================");
 
         // check that we have values for everything
         if (creepPawn != none && creepPawn.Factory != none && creepPawn.Factory.Route != none){
-            
+
             `log("Passed initial state checks ================================");
 
             // set the pawn's destination to the appropriate actor in its route
@@ -66,7 +65,26 @@ state WalkingAlongRoute{
             // set the pawn's focal point
             SetFocalPoint(GetDestinationPosition() + Normal(GetDestinationPosition()-Pawn.Location) *64.f);
         }
+    }
+    
+    // called whenever the controller updates itself
+    function Tick(float DeltaTime){
 
+        local vector destination;
+
+        Global.Tick(DeltaTime);
+
+        // adjust currentDestination to be at the height of the pawn
+        // so that ReachedDestination succeeds
+        destination = GetDestinationPosition();
+        destination.Z = Pawn.Location.Z;
+        SetDestinationPosition(destination);
+
+    }
+    
+    // called when the pawn reaches its destination
+    event ReachedPreciseDestination(){
+        GotoState('WalkingAlongRoute', 'ReachedDestination');
     }
 
 Begin:
@@ -75,18 +93,35 @@ Begin:
     if (creepPawn == none) Goto('End');
 
 Move:
-    
+
     // if there's a direct path
-    //if (canReachDestination(GetDestinationPosition())){
-    if (true){
+    if (canReachDestination(GetDestinationPosition())){
         // move to the destination
         bPreciseDestination = true;
 
     }
 
+// wait 'til we've reached the destination point
+NotAtDestination:
+
+    Sleep(0.f);
+    Goto('NotAtDestination');
 
 
 
+// we've reached our destination, go to the next one if it exists
+ReachedDestination:
+
+    if (routeIndex != creepPawn.Factory.Route.RouteList.Length -1) routeIndex ++ ;
+    
+    // set the next destination point
+    SetDestinationPosition(CreepPawn.Factory.Route.RouteList[RouteIndex].Actor.Location);
+    // face our destination
+    SetFocalPoint(GetDestinationPosition() + Normal(GetDestinationPosition() - Pawn.Location) * 64.f);
+    Sleep(0.f);
+    
+    // go to the next one
+    Goto('begin');
 
 
 
