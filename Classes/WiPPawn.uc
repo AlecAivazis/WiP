@@ -1,4 +1,4 @@
-class WiPPawn extends GamePawn;
+class WiPPawn extends Pawn;
 
 simulated event ReplicatedEvent(name VarName)
 {
@@ -6,10 +6,6 @@ simulated event ReplicatedEvent(name VarName)
 	Super.ReplicatedEvent(VarName);
 }
 
-simulated event PostBeginPlay()
-{
-	super.PostBeginPlay();
-}
 
 simulated function name GetDefaultCameraMode( PlayerController RequestedBy )
 {

@@ -8,31 +8,14 @@ var(Creep) const float sightRange;
 // experience earned by the creep
 var(Creep) const int experienceToGiveOnKill;
 
-// Factory that created this creep
-var RepNotify WiPCreepFactory Factory;
 
-simulated function int getWhiteDamage(){
-    return 5;
-}
-
-simulated function int getCurrentHealth(){
-    return Health;
-}
-
-simulated function int getMaxHealth(){
-    return HealthMax;
-}
-
-
-function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLocation)
+simulated event PostBeginPlay()
 {
-    // impliment these in Hero and Creep Pawn... 
-
-    Destroy();
-	return true;
+	super.PostBeginPlay();
+	
+	`log("You created a CREEP pawn ========================" @ Controller);
 }
-
-
 
 defaultproperties{
+    ControllerClass=class'WiPCreepAIController'
 }

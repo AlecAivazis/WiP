@@ -33,8 +33,7 @@ function UpdateViewTarget(out TViewTarget OutVT, float DeltaTime)
 		CamOverridePostProcessAlpha = CamActor.CamOverridePostProcessAlpha;
 		CamPostProcessSettings = CamActor.CamOverridePostProcess;
 	}
-	else
-	{
+	else{
 		// Give Pawn Viewtarget a chance to dictate the camera position.
 		// If Pawn doesn't override the camera view, then we proceed with our own defaults
 		if( Pawn(OutVT.Target) == None ||

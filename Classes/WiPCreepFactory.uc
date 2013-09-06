@@ -27,6 +27,8 @@ function PostBeginPlay(){
 
 function spawnCreep(){
 
+
+
     local int i;
     local WiPCreepPawn creepPawn;
     local WiPCreepAIController ai;
@@ -34,15 +36,16 @@ function spawnCreep(){
     // spawn archetype 1 only if its defined
     if (pawnArchetype1 != none){
         for (i = 0; i<numArchetype1; i++){
-            creepPawn = Spawn(pawnArchetype1.Class, Self, ,Location);
+            creepPawn = Spawn(pawnArchetype1.Class, Self, ,Location, Rotation, pawnArchetype1);
             if(creepPawn != none){
+                `log("We spawned a melee creep! =============================="  @ creepPawn.Controller);
                 ai = WiPCreepAIController(creepPawn.Controller);
-                ai.initialize();
+                `log("I made an ai unit ================================== "@ ai);
+                if (ai != none) ai.Initialize();
             }
-    
+
         }
     }
-    
     // spawn archetype 1 only if its defined
     if (pawnArchetype2 != none){
         for (i = 0; i<numArchetype2; i++){
