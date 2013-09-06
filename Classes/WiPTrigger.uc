@@ -17,7 +17,7 @@ simulated singular event UnTouch(Actor Other){
 simulated event Tick(float DeltaTime){
     super.Tick(DeltaTime);
 	DrawDebugCylinder(Location + Vect(0.f, 0.f, 1.f) * triggerCollisionComponent.CollisionHeight,
-            Location - Vect(0.f, 0.f, 1.f) * triggerCollisionComponent.CollisionHeight, 
+            Location - Vect(0.f, 0.f, 1.f) * triggerCollisionComponent.CollisionHeight,
             triggerCollisionComponent.CollisionRadius, 16, 255, 0, 255);
 }
 

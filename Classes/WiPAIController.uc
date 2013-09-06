@@ -61,7 +61,12 @@ function bool canReachDestination(Vector loc){
 }
 
 function bool isWithinAttackingRange(WiPAttackable target){
-    return false;
+    
+    // if the current enemy or pawn is invalid, no
+    if (currentEnemy == none || cachedPawn == none) return false;
+    
+    // return true if the current enemy is touching the weapon range trigger
+    return cachedPawn.weaponRangeTrigger.Touching.Find(currentEnemy) != INDEX_NONE;
 }
 
 /*****************************************************************

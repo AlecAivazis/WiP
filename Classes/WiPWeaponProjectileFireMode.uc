@@ -1,0 +1,3 @@
+class WiPWeaponProjectileFireMode extends WiPWeaponFireMode;
+
+defaultproperties{}

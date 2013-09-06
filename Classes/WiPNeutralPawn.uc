@@ -5,17 +5,17 @@ class WiPNeutralPawn
 var(Creep) const int moneyToGiveOnKill;
 // sight range of creep
 var(Creep) const float sightRange;
+// weapon range of creep
+var(Creep) float defaultWeaponRange;
 // experience earned by the creep
 var(Creep) const int experienceToGiveOnKill;
 // weapon range trigger
 var ProtectedWrite WiPTrigger weaponRangeTrigger;
-// default weapon range
-var const float defaultWeaponRange;
+
 // Weapon fire mode
 var(Weapon) const editinline instanced WiPWeaponFireMode WeaponFireMode;
 
 simulated event PostBeginPlay(){
-
 
     Super.PostBeginPlay();
 
@@ -31,7 +31,6 @@ simulated event PostBeginPlay(){
             weaponRangeTrigger.SetBase(self);
 
             if (weaponRangeTrigger != none){
-                `log("Attaching weapon range trigger =================================");
                 weaponRangeTrigger.triggerCollisionComponent.SetCylinderSize(defaultWeaponRange - GetCollisionRadius(), 64.f);
             }
 
@@ -39,7 +38,4 @@ simulated event PostBeginPlay(){
     }
 }
 
-defaultproperties{
-    defaultWeaponRange=256.f;
-    ControllerClass=class'WiPAIController'
-}
+defaultproperties{}

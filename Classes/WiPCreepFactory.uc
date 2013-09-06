@@ -1,8 +1,6 @@
 class WiPCreepFactory extends WiPActor
     placeable;
 
-// the spawn interval for creeps
-var const float spawnInterval;
 
 // by default, CreepFactories will create two types of creeps
 var(CreepFactory) const WiPCreepPawn pawnArchetype1;
@@ -16,6 +14,9 @@ var(CreepFactory) const int numArchetype2;
 var int numArchetype1_current;
 var int numArchetype2_current;
 
+// the spawn interval for creeps
+var(CreepFactory) const float spawnInterval;
+
 // the route for the creeps to follow
 var(CreepFactory) const Route route;
 
@@ -23,8 +24,8 @@ function PostBeginPlay(){
 
     Super.PostBeginPlay();
 
-    // for development, start spawning 10 seconds after the game starts
-    SetTimer(30, false, NameOf(startTimer));
+    // for development, start spawning 5 seconds after the game starts
+    SetTimer(5, false, NameOf(startTimer));
 }
 
 function startTimer(){
@@ -75,7 +76,7 @@ function spawnCreepTimer(){
 }
 
 function connectWithAI(WiPCreepPawn creepPawn){
-    
+
     local WiPCreepAIController ai;
 
     // make an ai controller

@@ -12,9 +12,7 @@ var int routeIndex;
 
 
 function Initialize(){
-
-    `log('Called initialize');
-
+    
     // cache a type casted version of Pawn
     CreepPawn = WiPCreepPawn(Pawn);
 
