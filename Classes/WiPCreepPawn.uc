@@ -12,10 +12,8 @@ var(Creep) const int experienceToGiveOnKill;
 simulated event PostBeginPlay()
 {
 	super.PostBeginPlay();
-	
-	`log("You created a CREEP pawn ========================" @ Controller);
 }
 
 defaultproperties{
-    ControllerClass=class'WiPCreepAIController'
+    ControllerClass=class'WiPAIController'
 }

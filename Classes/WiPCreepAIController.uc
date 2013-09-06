@@ -1,15 +1,18 @@
-class WiPCreepAIController extends AIController;
+class WiPCreepAIController extends WiPAIController;
+
 
 // the current pawn (typecasted version of Pawn)
 var WiPCreepPawn creepPawn;
 // the index in the route
 var int routeIndex;
 
-event PostBeingPlay(){
-    Super(Actor).PostBeginPlay();
-    
-    `log("Created an ai! (PostBeginPlay) ========================================");
+
+event Possess(Pawn inPawn, bool bVehicleTransition)
+{
+    Super.Possess(inPawn, bVehicleTransition);
+	inPawn.SetMovementPhysics();
 }
+
 
 
 function Initialize(){
@@ -24,16 +27,8 @@ function Initialize(){
 
     // begin AI loop
     WhatToDoNext();
-    // SetTimer(0.25f, true, NameOf(aiTick));
+    SetTimer(0.25f, true, NameOf(WhatToDoNext));
 }
-
-event Possess(Pawn inPawn, bool bVehicleTransition)
-{
-    `log("Possesed pawn");
-	Super.Possess(inPawn, bVehicleTransition);
-	inPawn.SetMovementPhysics();
-}
-
 
 function WhatToDoNext(){
 

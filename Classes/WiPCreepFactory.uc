@@ -20,43 +20,45 @@ function PostBeginPlay(){
     Super.PostBeginPlay();
 
     // spawn creeps - make sure to check if the archetypes are set
-    spawnCreep();
+    spawnCreepTimer();
     // setTimer(spawnInterval, true, NameOf(SpawnCreep));
 
 }
 
-function spawnCreep(){
 
-
+function spawnCreepTimer(){
 
     local int i;
     local WiPCreepPawn creepPawn;
-    local WiPCreepAIController ai;
 
     // spawn archetype 1 only if its defined
     if (pawnArchetype1 != none){
         for (i = 0; i<numArchetype1; i++){
             creepPawn = Spawn(pawnArchetype1.Class, Self, ,Location, Rotation, pawnArchetype1);
-            if(creepPawn != none){
-                `log("We spawned a melee creep! =============================="  @ creepPawn.Controller);
-                ai = WiPCreepAIController(creepPawn.Controller);
-                `log("I made an ai unit ================================== "@ ai);
-                if (ai != none) ai.Initialize();
-            }
-
+            if(creepPawn != none) connectWithAI(creepPawn);
         }
     }
-    // spawn archetype 1 only if its defined
+    
+    // spawn archetype 2 only if its defined
     if (pawnArchetype2 != none){
         for (i = 0; i<numArchetype2; i++){
-            //  creepPawn = Spawn(pawnArchetype1.Class, Self, Location, Rotation, pawnArchetype1);
-            if (creepPawn != none){
-              //  ai = WiPCreepAIController(rangedPawn.Controller);
-              //  ai.initialize();
-            }
+            creepPawn = Spawn(pawnArchetype2.Class, Self, ,Location, Rotation, pawnArchetype2);
+            if(creepPawn != none) connectWithAI(creepPawn);
         }
     }
+}
 
+function connectWithAI(WiPCreepPawn creepPawn){
+    
+    local WiPCreepAIController ai;
+
+    // make an ai controller
+    ai = Spawn(class'WiPCreepAIController');
+    if (ai != none){
+        // possess the pawn(no vehicle transition) and initialize the ai
+        ai.Possess(creepPawn, false);
+        ai.initialize();
+    }
 }
 
 
@@ -66,7 +68,6 @@ defaultproperties
     numArchetype1 = 3;
     numArchetype2 = 3;
 
-    bBlockActors=True
     bCollideActors=True
     
     Begin Object Class=DynamicLightEnvironmentComponent Name=MyLightEnvironment
@@ -81,5 +82,4 @@ defaultproperties
         Scale3D=(X=0.125,Y=0.125,Z=0.125)
     End Object
     Components.Add(PickupMesh)
-
 }

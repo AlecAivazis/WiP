@@ -1,0 +1,2 @@
+class WiPAIController extends AIController;
+
