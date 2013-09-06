@@ -12,6 +12,10 @@ var(CreepFactory) const WiPCreepPawn pawnArchetype2;
 var(CreepFactory) const int numArchetype1;
 var(CreepFactory) const int numArchetype2;
 
+// the current number of each archetype created
+var int numArchetype1_current;
+var int numArchetype2_current;
+
 // the route for the creeps to follow
 var(CreepFactory) const Route route;
 
@@ -19,32 +23,54 @@ function PostBeginPlay(){
 
     Super.PostBeginPlay();
 
+    // for development, start spawning 10 seconds after the game starts
+    SetTimer(30, false, NameOf(startTimer));
+}
+
+function startTimer(){
     // spawn creeps - make sure to check if the archetypes are set
     spawnCreepTimer();
-    // setTimer(spawnInterval, true, NameOf(SpawnCreep));
+    setTimer(spawnInterval, true, NameOf(SpawnCreepTimer));
 
 }
 
 
 function spawnCreepTimer(){
 
-    local int i;
     local WiPCreepPawn creepPawn;
 
-    // spawn archetype 1 only if its defined
+    // only spawn archtype1 if its defined
     if (pawnArchetype1 != none){
-        for (i = 0; i<numArchetype1; i++){
+
+        // check if we have spawned enough
+        if (numArchetype1_current < numArchetype1){
+            
+            // spawn a pawn of archetype1
             creepPawn = Spawn(pawnArchetype1.Class, Self, ,Location, Rotation, pawnArchetype1);
-            if(creepPawn != none) connectWithAI(creepPawn);
+            if(creepPawn != none){
+                connectWithAI(creepPawn);
+                numArchetype1_current ++;
+
+                // limit one pawn per spawn
+                return;
+            }
+            
+        // check if Archetype2 is define so we can end the timer early
+        } else if (pawnArchetype2 == none) {
+            ClearTimer(NameOf(SpawnCreepTimer));
         }
     }
     
-    // spawn archetype 2 only if its defined
-    if (pawnArchetype2 != none){
-        for (i = 0; i<numArchetype2; i++){
+    // same for archetype 2
+    if(pawnArchetype2 != none){
+        if (numArchetype2_current < numArchetype2){
             creepPawn = Spawn(pawnArchetype2.Class, Self, ,Location, Rotation, pawnArchetype2);
-            if(creepPawn != none) connectWithAI(creepPawn);
-        }
+            if(creepPawn != none){
+                connectWithAI(creepPawn);
+                numArchetype2_current ++;
+            }
+
+        } else ClearTimer(NameOf(SpawnCreepTimer));
     }
 }
 
@@ -61,10 +87,9 @@ function connectWithAI(WiPCreepPawn creepPawn){
     }
 }
 
-
 defaultproperties
 {
-    spawnInterval = 2.0;
+    spawnInterval = 0.4;
     numArchetype1 = 3;
     numArchetype2 = 3;
 
