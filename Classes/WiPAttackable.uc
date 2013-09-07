@@ -18,6 +18,8 @@ simulated function class<DamageType> GetDamageType();
 
 */
 
+simulated function int getAttackPriority(Actor Attacker);
+
 // return the actor implimenting this interface
 simulated function Actor getActor();
 

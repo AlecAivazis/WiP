@@ -72,7 +72,7 @@ function WhatToDoNext(){
         if (bestAttackInterface != none){
             setCurrentEnemy(bestAttackInterface.GetActor(), BestAttackInterface);
 
-            if (!IsInState('AttackingCurrentEnemy') GotoState('AttackingCurrentEnemy');
+            if (!IsInState('AttackingCurrentEnemy')) GotoState('AttackingCurrentEnemy');
             
             return;
         }
@@ -80,7 +80,7 @@ function WhatToDoNext(){
     // else, we have an enemy
     } else {
      
-        if (!IsInState('AttackingCurrentEnemy'){
+        if (!IsInState('AttackingCurrentEnemy')){
             GotoState('AttackingCurrentEnemy');
         }
         

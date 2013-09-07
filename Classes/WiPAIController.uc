@@ -293,6 +293,20 @@ state AttackingEnemy{
 		CurrentDestinationPosition.Z = Pawn.Location.Z;
 		SetDestinationPosition(CurrentDestinationPosition);
 	}
+	
+	event ReachedPreciseDestination(){
+		GotoState('AttackingEnemy', 'CanAttackCurrentEnemy');
+	}
+
+
+	function EndState(Name NextStateName){
+		Super.EndState(NextStateName);
+
+		// Stop firing
+		if (cachedPawn != None && cachedPawn.IsFiring()){
+			cachedPawn.StopFire(0);
+		}
+	}
 
 Begin:
 

@@ -44,6 +44,12 @@ simulated event PostBeginPlay(){
     }
 }
 
+simulated function int GetAttackPriority(Actor Attacker)
+{
+	return 10;
+}
+
+
 function Actor getActor(){
     return self;
 }
