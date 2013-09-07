@@ -54,7 +54,7 @@ function bool isFiring(){
 
 // start attacking the current enemy
 function startFire(byte FireModeNum){
-    if (weaponFireMode != none) WeaponFireMode.StartFire();
+    if (weaponFireMode != none) WeaponFireMode.startFire();
 }
 
 defaultproperties{}

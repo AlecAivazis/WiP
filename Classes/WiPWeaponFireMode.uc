@@ -13,7 +13,7 @@ function float getAttackingAngle(){
 
 // set owner of the weapon
 function setOwner(WiPAttackable newOwner){
-    
+
     // prevent newOwner == none
     if (newOwner == none) return;
 
@@ -28,5 +28,21 @@ function bool IsFiring(){
 }
 
 function Fire(){
-    return;   
+    `log("pew pew pew");
+}
+
+// start firing the weapon
+function startFire(){
+    
+    local float firingRate;
+    local WiPNeutralPawn neutralPawn;
+    
+    if (weaponOwner != none){
+        fire();
+        
+        neutralPawn = WiPNeutralPawn(WeaponOwner);
+        if (neutralPawn != none){
+            firingRate = neautralPawn.BaseAttackTime;
+        }
+    }
 }
