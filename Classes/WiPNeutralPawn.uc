@@ -54,6 +54,15 @@ function Actor getActor(){
     return self;
 }
 
+simulated function Actor getEnemy(){
+    
+    local WiPAIController aiController;
+    
+    aiController = WiPAIController(Controller);
+    if (aiController != none) return aiController.currentEnemy;
+    return none;
+}
+
 function bool isFiring(){
     
     if (WeaponFireMode != none){
