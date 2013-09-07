@@ -18,5 +18,8 @@ simulated function class<DamageType> GetDamageType();
 
 */
 
+// return the actor implimenting this interface
+simulated function Actor getActor();
+
 // return if the actor is still valid to attack
 simulated function bool isValidToAttack();
