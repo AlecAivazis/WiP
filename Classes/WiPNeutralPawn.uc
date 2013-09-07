@@ -5,7 +5,7 @@ class WiPNeutralPawn
 // money earned by killing the creep
 var(Creep) const int moneyToGiveOnKill;
 // sight range of creep
-var(Creep) const float sightRange;
+var(Creep) const float SightRange;
 // weapon range of creep
 var(Creep) float defaultWeaponRange;
 // experience earned by the creep

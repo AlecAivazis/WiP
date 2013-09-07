@@ -11,15 +11,26 @@ var WiPCreepPawn creepPawn;
 var int routeIndex;
 // Sight detection trigger
 var WiPTrigger sightDetectionTrigger;
+// store the team of creepPawn
+var byte teamIndex;
 
 
 function Initialize(){
 
     // cache a type casted version of Pawn
-    CreepPawn = WiPCreepPawn(Pawn);
+    creepPawn = WiPCreepPawn(Pawn);
 
-    // start at the beginning of the route
-    routeIndex = 0;
+    teamIndex = creepPawn.getTeamNum();
+    
+    `log("sight range ======================" @ creepPawn.SightRange);
+
+    // start at the appropriate end of the route
+    if ( teamIndex == 1){
+        // if we're on the second team, start the minion at the end of the route
+        routeIndex = CreepPawn.Factory.Route.RouteList.Length - 1;
+    } else {
+        routeIndex = 0;
+    }
 
     // begin AI loop
     WhatToDoNext();
@@ -48,7 +59,7 @@ function Initialize(){
 simulated function internalOnSightTrigger(Actor Caller, Actor Other, PrimitiveComponent OtherComp, vector HitLocation, vector HitNormal){
 
     local WiPAttackable wipAttackable;
-
+    
     // make sure that the caller is who triggered the detection
     if (Caller == sightDetectionTrigger){
         
@@ -61,7 +72,7 @@ simulated function internalOnSightTrigger(Actor Caller, Actor Other, PrimitiveCo
         //  * is not currently in my visible
         wipAttackable = WiPAttackable(Other);
         if (wipAttackable != none && wipAttackable.IsValidToAttack() && creepPawn.GetTeamNum() != wipAttackable.GetTeamNum() && visibleAttackables.Find(wipAttackable) == INDEX_NONE){
-            visibleAttackbles.AddItem(wipAttackable);
+            visibleAttackables.AddItem(wipAttackable);
         }
     }
 }
@@ -131,7 +142,7 @@ function WhatToDoNext(){
         if (bestAttackInterface != none){
             setCurrentEnemy(bestAttackInterface.GetActor(), BestAttackInterface);
 
-            if (!IsInState('AttackingCurrentEnemy')) GotoState('AttackingCurrentEnemy');
+            if (!IsInState('AttackingEnemy')) GotoState('AttackingEnemy');
             
             return;
         }
@@ -139,8 +150,8 @@ function WhatToDoNext(){
     // else, we have an enemy
     } else {
      
-        if (!IsInState('AttackingCurrentEnemy')){
-            GotoState('AttackingCurrentEnemy');
+        if (!IsInState('AttackingEnemy')){
+            GotoState('AttackingEnemy');
         }
         
         return;
@@ -219,8 +230,9 @@ NotAtDestination:
 
 // we've reached our destination, go to the next one if it exists
 ReachedDestination:
-
-    if (routeIndex != creepPawn.Factory.Route.RouteList.Length -1) routeIndex ++ ;
+    
+    if (teamIndex == 1 && routeIndex > 0) routeIndex--;
+    else if (teamIndex != 1 && routeIndex != creepPawn.Factory.Route.RouteList.Length -1) routeIndex++ ;
     
     // set the next destination point
     SetDestinationPosition(CreepPawn.Factory.Route.RouteList[RouteIndex].Actor.Location);
