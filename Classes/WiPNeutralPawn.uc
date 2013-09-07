@@ -1,5 +1,6 @@
 class WiPNeutralPawn
-    extends WiPPawn;
+    extends WiPPawn
+    implements(WiPAttackable);
 
 // money earned by killing the creep
 var(Creep) const int moneyToGiveOnKill;
@@ -22,7 +23,7 @@ simulated event PostBeginPlay(){
     // set weapon range detector
     if (WeaponFireMode != none){
 
-        WeaponFireMode.SetOwner(Self);
+        WeaponFireMode.SetOwner(self);
 
         weaponRangeTrigger = Spawn(class'WiPTrigger',,,Location);
         if (weaponRangeTrigger != none){
@@ -38,6 +39,10 @@ simulated event PostBeginPlay(){
     }
 }
 
+function Actor getActor(){
+    return self;
+}
+
 function bool isFiring(){
     
     if (WeaponFireMode != none){
@@ -45,6 +50,11 @@ function bool isFiring(){
     }
     
     return false;
+}
+
+// start attacking the current enemy
+function startFire(byte FireModeNum){
+    if (weaponFireMode != none) WeaponFireMode.StartFire();
 }
 
 defaultproperties{}
