@@ -66,7 +66,7 @@ function ClearCurrentEnemy(){
 // target an enemy
 function bool setCurrentEnemy(Actor potentialEnemy, optional WiPAttackable potentialEnemyAttackInterface){
     currentEnemy = potentialEnemy;
-	currentEnemyAttackInterface = (potentialEnemyAttackInterface != None) ? potentialEnemyAttackInterface : UDKMOBAAttackInterface(potentialEnemy);
+	currentEnemyAttackInterface = (potentialEnemyAttackInterface != None) ? potentialEnemyAttackInterface : WiPAttackable(potentialEnemy);
 
 	// Clears the current enemy if it is invalid
 	if (currentEnemy == None || currentEnemyAttackInterface == None){
@@ -333,11 +333,11 @@ EvaluateBestAttackingPosition:
 
 // check if we can directly move to the best position
 MoveDirect:
-    if (canReachDestination(GetDestinationPosition()){
+    if (canReachDestination(GetDestinationPosition())){
 
         // move to the best position
         bPreciseDestination = true;
-        Slep(0.f);
+        Sleep(0.f);
         Goto('WaitUntilReachedDestination');
     }
 
@@ -365,7 +365,6 @@ End:
     // stop moving and come out of the state
 	bPreciseDestination = false;
 	GotoState('');
-}
 
 }
 
