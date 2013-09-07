@@ -42,7 +42,6 @@ function recalculateStats(){
     // local bool JustSpawned;
 
     if (statModifier == None){
-        `log ("Could not make a statModifier!! ======================================");
         return;
     }
     // Check if this pawn has just spawned
