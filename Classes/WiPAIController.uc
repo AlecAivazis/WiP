@@ -7,19 +7,42 @@ var PrivateWrite WiPAttackable currentEnemyAttackInterface;
 // cached version of Pawn
 var PrivateWrite WiPNeutralPawn cachedPawn;
 
+// calle when controlled is initialized
+event PostBeginPlay()
+{
+	Super(Actor).PostBeginPlay();
+
+	if (!bDeleteMe && WorldInfo.NetMode != NM_Client)
+	{
+		// create a new player replication info
+		InitPlayerReplicationInfo();
+		InitNavigationHandle();
+
+	}
+
+	// have tested - after this call AIController IS a WiPPRI
+}
+
+// called when controller possesses a pawn
 event Possess(Pawn inPawn, bool bVehicleTransition)
 {
 	// cache a typecasted inPawn
 	cachedPawn = WiPNeutralPawn(inPawn);
-	
+
 	if (cachedPawn != none){
         Super.Possess(inPawn, bVehicleTransition);
-    
+
         // set physics for generated pawns
     	inPawn.SetMovementPhysics();
     }
 }
 
+
+// set defeault replication info to WiP's Pawn Rep Info class
+function InitPlayerReplicationInfo()
+{
+	PlayerReplicationInfo = Spawn(class'WiPPawnReplicationInfo', Self);
+}
 
 // stop targeting current enemy
 function ClearCurrentEnemy(){
