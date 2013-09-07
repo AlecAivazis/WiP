@@ -12,10 +12,7 @@ simulated event PostBeginPlay(){
         statModifier = new class'WiPStatModifier'();
 
     }
-
-
 }
-
 
 simulated event ReplicatedEvent(name VarName)
 {
@@ -52,8 +49,6 @@ function recalculateStats(){
     if (pawnRepInfo != none) {
         pawnRepInfo.AttackSpeed = 0.2f;
     }
-
-
 }
 
 function AddDefaultInventory()
@@ -86,7 +81,6 @@ simulated singular event Rotator GetBaseAimRotation()
    SetRotation(tempRot);
    POVRot = Rotation;
    POVRot.Pitch = 0;
-
 
    return POVRot;
 }

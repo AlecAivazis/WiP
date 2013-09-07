@@ -39,7 +39,7 @@ function startTimer(){
 }
 
 simulated function byte getTeamNum(){
-    return teamIndex;   
+    return teamIndex;
 }
 
 

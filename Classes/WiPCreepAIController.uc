@@ -22,8 +22,6 @@ function Initialize(){
 
     teamIndex = creepPawn.getTeamNum();
     
-    `log("sight range ======================" @ creepPawn.SightRange);
-
     // start at the appropriate end of the route
     if ( teamIndex == 1){
         // if we're on the second team, start the minion at the end of the route
@@ -59,10 +57,10 @@ function Initialize(){
 simulated function internalOnSightTrigger(Actor Caller, Actor Other, PrimitiveComponent OtherComp, vector HitLocation, vector HitNormal){
 
     local WiPAttackable wipAttackable;
-    
+
     // make sure that the caller is who triggered the detection
     if (Caller == sightDetectionTrigger){
-        
+
         // Don't include this pawn
         if (Other == creepPawn) return;
     

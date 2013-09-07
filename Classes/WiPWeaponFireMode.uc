@@ -34,7 +34,7 @@ function Fire(){
 
 // start firing the weapon
 function startFire(){
-    
+
     local float firingRate;
     local WiPNeutralPawn neutralPawn;
     local WiPPawnReplicationInfo pawnRepInfo;
@@ -53,3 +53,5 @@ function startFire(){
         }
     }
 }
+
+defaultproperties{}

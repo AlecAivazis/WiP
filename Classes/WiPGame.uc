@@ -14,6 +14,11 @@ function PreBeginPlay(){
 function createTeam(int teamIndex){
     Teams[teamIndex] = spawn(class'WiPTeamInfo');
     Teams[teamIndex].TeamIndex = TeamIndex;
+    GameReplicationInfo.SetTeam(TeamIndex, teams[teamIndex]);
+}
+
+function WiPTeamInfo getTeam(int teamIndex){
+    return teams[teamIndex];
 }
 
 DefaultProperties
