@@ -136,7 +136,7 @@ CanAttackCurrentEnemy:
     else if (isWithinAttackingRange(currentEnemy)){
         
         // check if currentEnemy is within attacking angle
-        if (isWithingAttackingAngle(currentEnemy)){
+        if (isWithinAttackingAngle(currentEnemy)){
             if (!Pawn.isFiring()){
                 Pawn.StartFire(0);                
             }
