@@ -1,8 +1,19 @@
 class WiPPawn
     extends Pawn;
 
+var ProtectedWrite WiPStatModifier statModifier;
+
 simulated event PostBeginPlay(){
     super.PostBeginPlay();
+    
+    if (Role == Role_Authority){
+     
+        //create a StatModifier
+        statModifier = new class'WiPStatModifier'();
+
+    }
+
+
 }
 
 
@@ -10,6 +21,27 @@ simulated event ReplicatedEvent(name VarName)
 {
 	// Money was replicated
 	Super.ReplicatedEvent(VarName);
+}
+
+// called everytime a pawn updates
+simulated function Tick(float DeltaTime){
+    
+    Super.Tick(DeltaTime);
+    
+    if (Role == Role_Authority){
+       
+       recalculateStats();
+    }
+}
+
+// recalcuate the pawn's stats
+function recalculateStats(){
+    
+    local WiPPawnReplicationInfo pawnRepInfo;
+    local bool JustSpawned;
+    
+
+
 }
 
 function AddDefaultInventory()
