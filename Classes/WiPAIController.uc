@@ -63,6 +63,20 @@ function ClearCurrentEnemy(){
     currentEnemyAttackInterface =  None;
 }
 
+// target an enemy
+function bool setCurrentEnemy(Actor potentialEnemy, optional WiPAttackable potentialEnemyAttackInterface){
+    currentEnemy = potentialEnemy;
+	currentEnemyAttackInterface = (potentialEnemyAttackInterface != None) ? potentialEnemyAttackInterface : UDKMOBAAttackInterface(potentialEnemy);
+
+	// Clears the current enemy if it is invalid
+	if (currentEnemy == None || currentEnemyAttackInterface == None){
+		clearCurrentEnemy();
+		return false;
+	}
+
+	return true;
+}
+
 // check if there is a direct path between me and a location
 function bool canReachDestination(Vector loc){
 
@@ -310,11 +324,48 @@ CanAttackCurrentEnemy:
         Goto('CanAttackCurretEnemy');
     }
     
+// find the best position to attack currentEnemy
 EvaluateBestAttackingPosition:
 
+    findBestAttackingDestination();
 
+    if (cachedPawn.isFiring()) cachedPawn.StopFire(0);
 
+// check if we can directly move to the best position
+MoveDirect:
+    if (canReachDestination(GetDestinationPosition()){
 
+        // move to the best position
+        bPreciseDestination = true;
+        Slep(0.f);
+        Goto('WaitUntilReachedDestination');
+    }
+
+// wait until we've reach destination
+WaitUntilDestinationReached:
+
+    // Check if the current enemy is still valid
+	if (CurrentEnemyAttackInterface != None && !CurrentEnemyAttackInterface.IsValidToAttack()){
+		ClearCurrentEnemy();
+		Goto('End');
+	}
+	// Check if within range to attack the enemy
+	else if (IsWithinAttackingRange(currentEnemy)){
+		Sleep(0.f);
+		Goto('CanAttackCurrentEnemy');
+	}
+	else
+	{
+		Sleep(0.f);
+		Goto('WaitUntilReachedDestination');
+	}
+
+End:
+    
+    // stop moving and come out of the state
+	bPreciseDestination = false;
+	GotoState('');
+}
 
 }
 
