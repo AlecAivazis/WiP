@@ -7,7 +7,7 @@ simulated event PostBeginPlay(){
     super.PostBeginPlay();
     
     if (Role == Role_Authority){
-     
+
         //create a StatModifier
         statModifier = new class'WiPStatModifier'();
 
@@ -37,9 +37,22 @@ simulated function Tick(float DeltaTime){
 // recalcuate the pawn's stats
 function recalculateStats(){
     
-    local WiPPawnReplicationInfo pawnRepInfo;
-    local bool JustSpawned;
+   local WiPPawnReplicationInfo pawnRepInfo;
+
+    // local bool JustSpawned;
+
+    if (statModifier == None){
+        `log ("Could not make a statModifier!! ======================================");
+        return;
+    }
+    // Check if this pawn has just spawned
+    // JustSpawned = (Abs(WorldInfo.TimeSeconds - SpawnTime) < 0.05f);
+
+    pawnRepInfo = WiPPawnReplicationInfo(PlayerReplicationInfo);
     
+    if (pawnRepInfo != none) {
+        pawnRepInfo.AttackSpeed = 0.2f;
+    }
 
 
 }
