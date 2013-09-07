@@ -293,9 +293,9 @@ state AttackingEnemy{
 		CurrentDestinationPosition.Z = Pawn.Location.Z;
 		SetDestinationPosition(CurrentDestinationPosition);
 	}
-	
+
 	event ReachedPreciseDestination(){
-		GotoState('AttackingEnemy', 'CanAttackCurrentEnemy');
+		GotoState('AttackingEnemy', 'Begin');
 	}
 
 
@@ -335,7 +335,7 @@ CanAttackCurrentEnemy:
         
         // in range by not within angle of attack - wait
         Sleep(0.f);
-        Goto('CanAttackCurretEnemy');
+        Goto('CanAttackCurrentEnemy');
     }
     
 // find the best position to attack currentEnemy
@@ -356,7 +356,7 @@ MoveDirect:
     }
 
 // wait until we've reach destination
-WaitUntilDestinationReached:
+WaitUntilReachedDestination:
 
     // Check if the current enemy is still valid
 	if (CurrentEnemyAttackInterface != None && !CurrentEnemyAttackInterface.IsValidToAttack()){
@@ -366,12 +366,12 @@ WaitUntilDestinationReached:
 	// Check if within range to attack the enemy
 	else if (IsWithinAttackingRange(currentEnemy)){
 		Sleep(0.f);
-		Goto('CanAttackCurrentEnemy');
+		Goto('Begin');
 	}
 	else
 	{
 		Sleep(0.f);
-		Goto('WaitUntilReachedDestination');
+		Goto('Begin');
 	}
 
 End:
