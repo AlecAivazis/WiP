@@ -1,6 +1,9 @@
 class WiPPawn
     extends Pawn;
 
+simulated event PostBeginPlay(){
+    super.PostBeginPlay();
+}
 
 
 simulated event ReplicatedEvent(name VarName)

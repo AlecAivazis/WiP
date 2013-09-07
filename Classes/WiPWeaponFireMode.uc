@@ -19,13 +19,8 @@ function setOwner(WiPAttackable newOwner){
     if (newOwner == none) return;
 
     weaponOwner = newOwner;
-
-    neutralPawn = WiPNeutralPawn(weaponOwner);
     
-    if (neutralPawn != none){
-        `log("rep info ===============================" @ neutralPawn.PlayerReplicationInfo);
-    }
-    
+    `log("set owner with PRI ==================" @ WiPNeutralPawn(weaponOwner).PlayerReplicationInfo);
 
 }
 
