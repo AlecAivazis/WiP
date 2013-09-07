@@ -19,9 +19,6 @@ function setOwner(WiPAttackable newOwner){
     if (newOwner == none) return;
 
     weaponOwner = newOwner;
-    
-    `log("set owner with PRI ==================" @ WiPNeutralPawn(weaponOwner).PlayerReplicationInfo);
-
 }
 
 function bool IsFiring(){
@@ -48,8 +45,11 @@ function startFire(){
         neutralPawn = WiPNeutralPawn(WeaponOwner);
         if (neutralPawn != none){
             firingRate = neutralPawn.BaseAttackTime;
-            
+
             pawnRepInfo = WiPPawnReplicationInfo(neutralPawn.PlayerReplicationInfo);
+            if (pawnRepInfo != none && pawnRepInfo.AttackSpeed > -1.f){
+                firingRate /= (1.f + pawnRepInfo.AttackSpeed);
+            }
         }
     }
 }
