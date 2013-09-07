@@ -19,6 +19,10 @@ simulated event PostBeginPlay() {
 	super.PostBeginPlay();
 }
 
+simulated function byte getTeamNum(){
+    return Factory.getTeamNum();
+}
+
 /*****************************************************************
 *   Interface - WiPAttackble                                     *
 ******************************************************************/

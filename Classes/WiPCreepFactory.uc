@@ -17,6 +17,9 @@ var int numArchetype2_current;
 // the spawn interval for creeps
 var(CreepFactory) const float spawnInterval;
 
+// the team controlling this factory
+var(CreepFactory) const byte teamIndex;
+
 // the route for the creeps to follow
 var(CreepFactory) const Route route;
 
@@ -33,6 +36,10 @@ function startTimer(){
     spawnCreepTimer();
     setTimer(spawnInterval, true, NameOf(SpawnCreepTimer));
 
+}
+
+simulated function byte getTeamNum(){
+    return teamIndex;   
 }
 
 

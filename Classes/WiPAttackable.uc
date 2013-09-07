@@ -18,6 +18,9 @@ simulated function class<DamageType> GetDamageType();
 
 */
 
+// return the team numbers
+simulated function byte GetTeamNum();
+
 simulated function int getAttackPriority(Actor Attacker);
 
 // return the actor implimenting this interface
