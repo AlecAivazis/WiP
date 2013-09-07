@@ -9,6 +9,8 @@ var array<WiPAttackable> VisibleAttackables;
 var WiPCreepPawn creepPawn;
 // the index in the route
 var int routeIndex;
+// Sight detection trigger
+var WiPTrigger sightDetectionTrigger;
 
 
 function Initialize(){
@@ -22,9 +24,66 @@ function Initialize(){
     // begin AI loop
     WhatToDoNext();
     SetTimer(0.25f, true, NameOf(WhatToDoNext));
+
+    // spawn sight detector trigger
+    sightDetectionTrigger = Spawn(class'WiPTrigger');
+    if(sightDetectionTrigger != none){
+        
+        // attach it to the creep pawn
+        sightDetectionTrigger.SetBase(creepPawn);
+
+        // set sight collision radius
+        if (sightDetectionTrigger.triggerCollisionComponent != none)
+            sightDetectionTrigger.triggerCollisionComponent.SetCylinderSize(creepPawn.sightRange, 64.F);
+            
+        //bind the delegates
+        sightDetectionTrigger.OnTouch = internalOnSightTrigger;
+        sightDetectionTrigger.OnUnTouch = internalOnUnSightTrigger;
+
+    }
+
 }
 
+// Called when the trigger used for sight has been touched
+simulated function internalOnSightTrigger(Actor Caller, Actor Other, PrimitiveComponent OtherComp, vector HitLocation, vector HitNormal){
 
+    local WiPAttackable wipAttackable;
+
+    // make sure that the caller is who triggered the detection
+    if (Caller == sightDetectionTrigger){
+        
+        // Don't include this pawn
+        if (Other == creepPawn) return;
+    
+        // make sure other implements WiPAttackable
+        //  * is valid for attacking
+        //  * on a different team
+        //  * is not currently in my visible
+        wipAttackable = WiPAttackable(Other);
+        if (wipAttackable != none && wipAttackable.IsValidToAttack() && creepPawn.GetTeamNum() != wipAttackable.GetTeamNum() && visibleAttackables.Find(wipAttackable) == INDEX_NONE){
+            visibleAttackbles.AddItem(wipAttackable);
+        }
+    }
+}
+
+//Called when the trigger used for sight has been untouched
+simulated function internalOnUnSightTrigger(Actor Caller, Actor Other)
+{
+	local WiPAttackable wipAttackable;
+
+	// Ensure the caller matches the sight detection trigger
+	if (Caller == sightDetectionTrigger)
+	{
+		// Remove UDKMOBAAttackInterface from the visible attack interfaces array
+		wipAttackable = WiPAttackable(Other);
+		if (wipAttackable != None)
+		{
+			visibleAttackables.RemoveItem(wipAttackable);
+		}
+	}
+}
+
+// AI tick
 function WhatToDoNext(){
     
     local WiPAttackable AttackInterface, BestAttackInterface;
@@ -68,7 +127,7 @@ function WhatToDoNext(){
                 }
             }
         }
-        
+
         if (bestAttackInterface != none){
             setCurrentEnemy(bestAttackInterface.GetActor(), BestAttackInterface);
 
