@@ -71,4 +71,5 @@ simulated function startFire(byte FireModeNum){
 defaultproperties{
 	BaseAttackTime=2.f
 	BaseAttackSpeed=1.f
+	SightRange=384.f
 }
