@@ -12,7 +12,7 @@ var int routeIndex;
 
 
 function Initialize(){
-    
+
     // cache a type casted version of Pawn
     CreepPawn = WiPCreepPawn(Pawn);
 
@@ -22,6 +22,12 @@ function Initialize(){
     // begin AI loop
     WhatToDoNext();
     SetTimer(0.25f, true, NameOf(WhatToDoNext));
+}
+
+// set defeault replication info to WiP's
+function InitPlayerReplicationInfo()
+{
+	PlayerReplicationInfo = Spawn(class'WiPPawnReplicationInfo', Self);
 }
 
 function WhatToDoNext(){

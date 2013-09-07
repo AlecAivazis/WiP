@@ -14,10 +14,19 @@ function float getAttackingAngle(){
 // set owner of the weapon
 function setOwner(WiPAttackable newOwner){
 
+    local WiPNeutralPawn neutralPawn;
     // prevent newOwner == none
     if (newOwner == none) return;
 
     weaponOwner = newOwner;
+
+    neutralPawn = WiPNeutralPawn(weaponOwner);
+    
+    if (neutralPawn != none){
+        `log("rep info ===============================" @ neutralPawn.PlayerReplicationInfo);
+    }
+    
+
 }
 
 function bool IsFiring(){
@@ -36,13 +45,16 @@ function startFire(){
     
     local float firingRate;
     local WiPNeutralPawn neutralPawn;
-    
+    local WiPPawnReplicationInfo pawnRepInfo;
+
     if (weaponOwner != none){
         fire();
-        
+
         neutralPawn = WiPNeutralPawn(WeaponOwner);
         if (neutralPawn != none){
-            firingRate = neautralPawn.BaseAttackTime;
+            firingRate = neutralPawn.BaseAttackTime;
+            
+            pawnRepInfo = WiPPawnReplicationInfo(neutralPawn.PlayerReplicationInfo);
         }
     }
 }

@@ -10,6 +10,11 @@ var(Creep) const float sightRange;
 var(Creep) float defaultWeaponRange;
 // experience earned by the creep
 var(Creep) const int experienceToGiveOnKill;
+// How long an attack takes to do (in seconds) - doesn't change, but does combine with Attack Speed stat.
+var(Creep) const float BaseAttackTime;
+// Attack speed multiplier for this unit without upgrades/items
+var(Stats) const float BaseAttackSpeed;
+
 // weapon range trigger
 var ProtectedWrite WiPTrigger weaponRangeTrigger;
 
@@ -53,8 +58,11 @@ function bool isFiring(){
 }
 
 // start attacking the current enemy
-function startFire(byte FireModeNum){
+simulated function startFire(byte FireModeNum){
     if (weaponFireMode != none) WeaponFireMode.startFire();
 }
 
-defaultproperties{}
+defaultproperties{
+	BaseAttackTime=2.f
+	BaseAttackSpeed=1.f
+}

@@ -11,6 +11,7 @@ replication{
 }
 
 simulated event PostBeginPlay() {
+
     if (Role == Role_Authority){
         Factory = WiPCreepFactory(Owner);
     }
