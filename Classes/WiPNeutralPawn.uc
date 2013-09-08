@@ -21,6 +21,8 @@ var(Stats) float DefaultWeaponRange;
 // sight range of creep
 var(Stats) const float SightRange;
 
+
+
 // weapon range trigger
 var ProtectedWrite WiPTrigger weaponRangeTrigger;
 
@@ -116,10 +118,35 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 	Velocity += TearOffMomentum;
 
 	BeginRagdoll();
-	LifeSpan = 5.f;
+	LifeSpan = 1.f;
 	return true;
 }
 
+// change the location/rotation of the projectil to that of the weapon
+simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, out Rotator FireRotation){
+	local Actor currentEnemy;
+
+	// Grab the skeletal mesh component, abort if it doesn't exist
+	if (WeaponSkeletalMesh == None || WeaponSkeletalMesh.SkeletalMesh == None){
+		return;
+	}
+
+	// Check that FiringSocketName is a valid name of a socket
+	if (WeaponSkeletalMesh.GetSocketByName(WeaponFiringSocketName) == None){
+		return;
+	}
+
+	// Get the current enemy, abort if there is no current enemy
+	currentEnemy = GetEnemy();
+	if (CurrentEnemy == None){
+		return;
+	}
+
+	// Grab the world socket location and rotation and forward this to begin fire
+	WeaponSkeletalMesh.GetSocketWorldLocationAndRotation(WeaponFiringSocketName, FireLocation, FireRotation);
+}
+
+// take damage handler
 event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector Momentum, class<DamageType> DamageType, optional TraceHitInfo HitInfo, optional Actor DamageCauser){
 
 
@@ -204,4 +231,6 @@ defaultproperties
 	BaseAttackSpeed=1.f
 	SightRange=500.f
 	PawnDamageType=class'DamageType'
+	
+
 }

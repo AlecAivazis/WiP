@@ -12,6 +12,9 @@ simulated function float getMaxHealth();
 
 */
 
+// Returns the weapon firing location and rotation
+simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, out Rotator FireRotation);
+
 // return the damage type for white damage
 simulated function class<DamageType> GetDamageType();
 

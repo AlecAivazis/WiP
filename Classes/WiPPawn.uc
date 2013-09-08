@@ -10,6 +10,12 @@ enum AttackTypes
 };
 
 var ProtectedWrite WiPStatModifier statModifier;
+// Weapon firing socket name, the socket is stored within WeaponSkeletalMesh
+var(Weapon) const Name WeaponFiringSocketName;
+// Weapon skeletalMesh
+var(Weapon) const SkeletalMeshComponent WeaponSkeletalMesh;
+// Weapon attachment socket
+var(Weapon) const Name WeaponAttachmentSocketName;
 
 simulated event PostBeginPlay(){
     super.PostBeginPlay();
@@ -197,6 +203,17 @@ defaultproperties
 		AnimTreeTemplate=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
 		SkeletalMesh=SkeletalMesh'CH_LIAM_Cathode.Mesh.SK_CH_LIAM_Cathode'
 	End Object
+
+ Begin Object Class=SkeletalMeshComponent Name=MyWeaponSkeletalMeshComponent
+		CollideActors=false
+		BlockRigidBody=false
+		bHasPhysicsAssetInstance=false
+		bUpdateKinematicBonesFromAnimation=false
+		MinDistFactorForKinematicUpdate=0.f
+		LightEnvironment=MyLightEnvironment
+	End Object
+	WeaponSkeletalMesh=MyWeaponSkeletalMeshComponent
+	Components.Add(MyWeaponSkeletalMeshComponent)
 
 	Mesh=InitialSkeletalMesh;
 	Components.Add(InitialSkeletalMesh);

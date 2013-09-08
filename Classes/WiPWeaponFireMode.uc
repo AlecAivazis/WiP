@@ -66,7 +66,7 @@ function Fire(){
    
     /* implement this!!!! *************************/
 
-    // weaponOwner.GetWeaponFiringLocationAndRotation(targetLoc, targetRot);
+    weaponOwner.GetWeaponFiringLocationAndRotation(targetLoc, targetRot);
 
     BeginFire(targetLoc, Rotator(currentEnemy.Location - targetLoc), currentEnemy);
 
