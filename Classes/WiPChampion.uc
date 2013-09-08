@@ -3,12 +3,25 @@ class WiPChampion extends WiPPawn
 
 // white damage
 var(Damage) int WhiteDamage;
+// white damage type
 var(Damage) class<DamageType> WhiteDamageType;
 
 
 simulated event PostBeginPlay(){
+
+    super.PostBeginPlay();
+
     `log("Created a champion =================");
 }
+
+
+function AddDefaultInventory()
+{
+	InvManager.CreateInventory(class'Weapon_Sniper'); //InvManager is the pawn's InventoryManager
+	// InvManager.CreateInventory(class'UTWeap_LinkGun'); //InvManager is the pawn's InventoryManager
+
+}
+
 
 
 /*****************************************************************
@@ -41,6 +54,6 @@ simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, o
 defaultProperties
 {
     WhiteDamage = 50
-	WhiteDamageType = ATT_Physical
+	WhiteDamageType = class'DamageType'
 
 }
