@@ -1,9 +1,18 @@
-class Weapon_Sniper extends UTWeap_LinkGun;
+class WiPWeapon extends UDKWeapon;
+
+simulated function ProcessInstantHit(byte FiringMode, ImpactInfo Impact, optional int NumHits){
+    `log("fired weapon.");
+}
+
+simulated function float GetFireInterval( byte FireModeNum )
+{
+	return FireInterval[FireModeNum] > 0 ? FireInterval[FireModeNum] : 0.01;
+}
 
 
 DefaultProperties
 {
-
+    FiringStatesArray(0)=WeaponFiring
     FireInterval(0)=+0.24
     Spread(0)=0
 
@@ -15,13 +24,8 @@ DefaultProperties
     Mesh=GunMesh
     Components.Add(GunMesh)
 
-	// Damage
-	InstantHitDamage(0)=10
-
-	WeaponFireTypes(0)=EWFT_Projectile
-	WeaponFireTypes(1)=EWFT_InstantHit
+	WeaponFireTypes(0)=EWFT_InstantHit
 	WeaponProjectiles(0)=class'UTProj_Rocket' // UTProj_LinkPowerPlasma if linked (see GetProjectileClass() )
-	InstantHitDamageTypes(1)=class'UTDmgType_LinkBeam'
 
 	WeaponRange=500
 }

@@ -11,9 +11,13 @@ simulated event PostBeginPlay(){
 
 
 function AddDefaultInventory(){
-	InvManager.CreateInventory(class'Weapon_Sniper');
+	InvManager.CreateInventory(class'WiPWeapon');
 }
 
+
+function float getAttackingRate(){
+    return 0.1f;
+}
 
 
 
@@ -42,7 +46,7 @@ simulated function class<DamageType> GetDamageType(){
     return PawnDamageType;
 }
 
-// need to impliment 
+// need to impliment
 simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, out Rotator FireRotation);
 
 defaultProperties
