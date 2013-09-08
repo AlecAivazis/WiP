@@ -1,6 +1,14 @@
 class WiPPawn
     extends Pawn;
 
+
+// Attack type definition
+enum AttackTypes
+{
+	ATT_Magic,
+	ATT_Physical,
+};
+
 var ProtectedWrite WiPStatModifier statModifier;
 
 simulated event PostBeginPlay(){
@@ -12,6 +20,24 @@ simulated event PostBeginPlay(){
         statModifier = new class'WiPStatModifier'();
 
     }
+}
+
+// modify the damage based on the damage type
+function ModifyDamage(out float Damage, class<DamageType> DamageType){
+
+    local WiPPawnReplicationInfo pawnRepInfo;
+
+    pawnRepInfo = WiPPawnReplicationInfo(PlayerReplicationInfo);
+
+    if (pawnRepInfo != none){
+
+      //if (DamageType == class'WiPDamageTypePhysical')
+
+        // for now, just leave it untouched
+        Damage *= 1;
+
+    }
+
 }
 
 simulated event ReplicatedEvent(name VarName)
