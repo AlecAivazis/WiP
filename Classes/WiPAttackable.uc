@@ -10,13 +10,13 @@ simulated function float getHealth();
 // return the maximum health
 simulated function float getMaxHealth();
 
-// return the amount of white damage (auto attacks)
-simulated function int getWhiteDamage();
+*/
 
 // return the damage type for white damage
 simulated function class<DamageType> GetDamageType();
 
-*/
+// return the amount of white damage (auto attacks)
+simulated function int getWhiteDamage();
 
 // return the team numbers
 simulated function byte GetTeamNum();
