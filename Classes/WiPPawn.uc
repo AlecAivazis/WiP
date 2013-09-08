@@ -9,7 +9,9 @@ enum AttackTypes
 	ATT_Physical,
 };
 
+// statModifier
 var ProtectedWrite WiPStatModifier statModifier;
+
 // Weapon firing socket name, the socket is stored within WeaponSkeletalMesh
 var(Weapon) const Name WeaponFiringSocketName;
 // Weapon skeletalMesh
@@ -58,21 +60,17 @@ simulated function BeginRagdoll(){
 }
 
 // modify the damage based on the damage type
-function ModifyDamage(out float Damage, class<DamageType> DamageType){
+function AdjustDamage(out int InDamage, out vector Momentum, Controller InstigatedBy, vector HitLocation, class<DamageType> DamageType, TraceHitInfo HitInfo, Actor DamageCauser){
 
-    local WiPPawnReplicationInfo pawnRepInfo;
+	Super.AdjustDamage(InDamage, Momentum, InstigatedBy, HitLocation, DamageType, HitInfo, DamageCauser);
 
-    pawnRepInfo = WiPPawnReplicationInfo(PlayerReplicationInfo);
+}
 
-    if (pawnRepInfo != none){
 
-      //if (DamageType == class'WiPDamageTypePhysical')
-
-        // for now, just leave it untouched
-        Damage *= 1;
-
-    }
-
+// buff/debuff damage take compensate for missing, magic amp, etc.
+function BuffAttack(out float Damage, class<DamageType> DamageType){
+	//if (DamageType == class'UDKMOBADamageTypePhysical')
+	Damage *=1 ;
 }
 
 simulated event ReplicatedEvent(name VarName)

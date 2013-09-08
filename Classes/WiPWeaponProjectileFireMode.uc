@@ -29,7 +29,7 @@ protected function BeginFire(Vector FireLocation, Rotator FireRotation, Actor En
 			neutralPawn = WiPNeutralPawn(WeaponOwner);
 			if (neutralPawn != None)
 			{
-				NeutralPawn.ModifyDamage(SpawnedProjectile.Damage, SpawnedProjectile.DamageType);
+				NeutralPawn.BuffAttack(SpawnedProjectile.Damage, SpawnedProjectile.DamageType);
 			}
 		}
 	}

@@ -28,5 +28,5 @@ DefaultProperties
 	PlayerControllerClass=class'WiPPlayerController'
 	PlayerReplicationInfoClass=class'WiPPlayerReplicationInfo'
 	GameReplicationInfoClass=class'WiPGameReplicationInfo'
-	DefaultPawnClass=class'WiPPawn'
+	DefaultPawnClass=class'WiPChampion'
 }

@@ -146,6 +146,7 @@ simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, o
 	WeaponSkeletalMesh.GetSocketWorldLocationAndRotation(WeaponFiringSocketName, FireLocation, FireRotation);
 }
 
+
 // take damage handler
 event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector Momentum, class<DamageType> DamageType, optional TraceHitInfo HitInfo, optional Actor DamageCauser){
 
@@ -153,13 +154,13 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
     local int actualDamage;
     local Controller killer;
 
-   `log("my health is at =========================" @ currentHealth);
-   `log("I'm taking damage!!!!! ====================" @ Damage);
+    // `log("my health is at =========================" @ currentHealth);
+    // `log("I'm taking damage!!!!! ====================" @ Damage);
 
     if (Role < ROLE_Authority || Health <=0){
         return;
     }
-    
+
     if (DamageType == none){
         DamageType = class'DamageType';
     }
