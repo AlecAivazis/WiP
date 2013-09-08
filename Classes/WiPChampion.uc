@@ -10,16 +10,15 @@ simulated event PostBeginPlay(){
 }
 
 
+// add the default weapon
 function AddDefaultInventory(){
 	InvManager.CreateInventory(class'WiPWeapon');
 }
 
-
+// return attacking rate
 function float getAttackingRate(){
     return 0.1f;
 }
-
-
 
 
 /*****************************************************************
