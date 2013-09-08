@@ -74,7 +74,7 @@ simulated function BeginRagdoll(){
 	Mesh.SetRBCollidesWithChannel(RBCC_BlockingVolume, true); */
 }
 
-// modify the damage based on the damage type
+// modify the incoming damage based on the damage type
 function AdjustDamage(out int InDamage, out vector Momentum, Controller InstigatedBy, vector HitLocation, class<DamageType> DamageType, TraceHitInfo HitInfo, Actor DamageCauser){
 
 	Super.AdjustDamage(InDamage, Momentum, InstigatedBy, HitLocation, DamageType, HitInfo, DamageCauser);

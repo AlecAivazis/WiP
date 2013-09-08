@@ -4,12 +4,13 @@ class WiPWeapon extends UDKWeapon;
 var WiPPawn cachedOwner;
 
 simulated function ProcessInstantHit(byte FiringMode, ImpactInfo Impact, optional int NumHits){
-    
-    local int damage;
+
+    local float damage;
     local WipPawnReplicationInfo pawnRepInfo;
+    local WiPPawn target;
     
     pawnRepInfo = WipPawnReplicationInfo(cachedOwner.PlayerReplicationInfo);
-    
+
     damage = cachedOwner.BaseAttackDamage;
     
     // if there is valid replication info 
@@ -17,13 +18,14 @@ simulated function ProcessInstantHit(byte FiringMode, ImpactInfo Impact, optiona
     if (pawnRepInfo != none){
         
         // modify the damage based on stuff
-        cachedOwner.BuffDamage(damage, cachedOwner.PawnDamageType);
+        cachedOwner.BuffAttack(damage, cachedOwner.PawnDamageType);
     }
 
-    WiPPawn target = WiPPawn(Impact.ActorHit) != none ? WiPPawn(Impact.ActorHit) : none;
+    target = WiPPawn(Impact.HitActor) != none ? WiPPawn(Impact.HitActor) : none;
 
     if (target != none){
-        target.TakeDamage(damage, cachedOwner, target.Location, ,cachedOwner.PawnDamageType, ,
+        `log("called enemies takeDamage()");
+        // target.TakeDamage(damage, cachedOwner.Controller , target.Location, none ,cachedOwner.PawnDamageType, , self);
     }
 }
 
