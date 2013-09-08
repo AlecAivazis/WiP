@@ -30,7 +30,7 @@ var(Stats) const float BaseAttackSpeed;
 // Attack speed multiplier for this unit without upgrades/items
 var(Stats) const float BaseAttackDamage;
 // weapon range of creep
-var(Stats) float DefaultWeaponRange;
+var(Stats) float WeaponRange;
 // sight range of creep
 var(Stats) const float SightRange;
 
@@ -81,13 +81,6 @@ function AdjustDamage(out int InDamage, out vector Momentum, Controller Instigat
 
 }
 
-
-// buff/debuff damage take compensate for missing, magic amp, etc.
-function BuffAttack(out float Damage, class<DamageType> DamageType){
-	//if (DamageType == class'UDKMOBADamageTypePhysical')
-	Damage *=1 ;
-}
-
 simulated event ReplicatedEvent(name VarName)
 {
 	// Money was replicated
@@ -128,6 +121,12 @@ function recalculateStats(){
     if (pawnRepInfo != none) {
         pawnRepInfo.AttackSpeed = 0.2f;
     }
+}
+
+// buff/debuff damage take compensate for missing, magic amp, etc.
+function BuffAttack(out float Damage, class<DamageType> DamageType){
+	//if (DamageType == class'UDKMOBADamageTypePhysical')
+	Damage *=1 ;
 }
 
 /*****************************************************************
@@ -178,6 +177,10 @@ simulated event BecomeViewTarget( PlayerController PC )
       }
    }
 }
+
+// Take Damage handler (to be implemented by subclasses);
+event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector Momentum, class<DamageType> DamageType, optional TraceHitInfo HitInfo, optional Actor DamageCauser);
+
 
 defaultproperties
 {

@@ -28,7 +28,7 @@ simulated event PostBeginPlay(){
             weaponRangeTrigger.SetBase(self);
 
             if (weaponRangeTrigger != none){
-                weaponRangeTrigger.triggerCollisionComponent.SetCylinderSize(defaultWeaponRange - GetCollisionRadius(), 64.f);
+                weaponRangeTrigger.triggerCollisionComponent.SetCylinderSize(WeaponRange - GetCollisionRadius(), 64.f);
             }
 
         }
@@ -125,12 +125,6 @@ simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, o
 
 	// Grab the world socket location and rotation and forward this to begin fire
 	WeaponSkeletalMesh.GetSocketWorldLocationAndRotation(WeaponFiringSocketName, FireLocation, FireRotation);
-}
-
-// buff/debuff damage take compensate for missing, magic amp, etc.
-function BuffAttack(out float Damage, class<DamageType> DamageType){
-	//if (DamageType == class'UDKMOBADamageTypePhysical')
-	Damage *=1 ;
 }
 
 // take damage handler

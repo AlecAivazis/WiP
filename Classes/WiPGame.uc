@@ -25,7 +25,7 @@ DefaultProperties
 {
     bTeamGame=true
 	bDelayedStart=false
-	PlayerControllerClass=class'WiPPlayerController'
+	PlayerControllerClass=class'WiPChampionController'
 	PlayerReplicationInfoClass=class'WiPPlayerReplicationInfo'
 	GameReplicationInfoClass=class'WiPGameReplicationInfo'
 	DefaultPawnClass=class'WiPChampion'
