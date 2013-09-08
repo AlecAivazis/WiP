@@ -3,12 +3,16 @@ class WiPWeapon extends UDKWeapon;
 // cached a typecasted version of owner
 var WiPPawn cachedOwner;
 
-simulated function ProcessInstantHit(byte FiringMode, ImpactInfo Impact, optional int NumHits){
 
+
+simulated function ProcessInstantHit(byte FiringMode, ImpactInfo Impact, optional int NumHits){
     local float damage;
     local WipPawnReplicationInfo pawnRepInfo;
     local WiPPawn target;
-    
+
+    `log("Called process hit");
+
+
     pawnRepInfo = WipPawnReplicationInfo(cachedOwner.PlayerReplicationInfo);
 
     damage = cachedOwner.BaseAttackDamage;
@@ -16,7 +20,7 @@ simulated function ProcessInstantHit(byte FiringMode, ImpactInfo Impact, optiona
     // if there is valid replication info 
     // potentially add if owner is still alive (currentHealth > 0)
     if (pawnRepInfo != none){
-        
+
         // modify the damage based on stuff
         cachedOwner.BuffAttack(damage, cachedOwner.PawnDamageType);
     }
@@ -24,7 +28,7 @@ simulated function ProcessInstantHit(byte FiringMode, ImpactInfo Impact, optiona
     target = WiPPawn(Impact.HitActor) != none ? WiPPawn(Impact.HitActor) : none;
 
     if (target != none){
-        `log("called enemies takeDamage()");
+        `log("called enemies' takeDamage()");
         // target.TakeDamage(damage, cachedOwner.Controller , target.Location, none ,cachedOwner.PawnDamageType, , self);
     }
 }
@@ -44,7 +48,7 @@ simulated function float GetFireInterval( byte FireModeNum ){
     // `log("Attack Speed ======================" @ pawnRepInfo.AttackSpeed);
     }
 
-    // `log("Final firing rate =================" @firingRate);
+   // `log("Final firing rate =================" @firingRate);
 
     return firingRate;
 }
@@ -52,7 +56,9 @@ simulated function float GetFireInterval( byte FireModeNum ){
 
 // return the max range of the weapon
 simulated function float MaxRange (){
-    return cachedOwner.WeaponRange;
+    if (cachedOwner != none) return cachedOwner.WeaponRange;
+    
+    return 200.f;
 
 }
 
@@ -75,7 +81,7 @@ DefaultProperties
     Mesh=GunMesh
     Components.Add(GunMesh)
 
-	WeaponFireTypes(0)=EWFT_InstantHit
+	WeaponFireTypes(0)=EWFT_Projectile
 	WeaponProjectiles(0)=class'UTProj_Rocket' // UTProj_LinkPowerPlasma if linked (see GetProjectileClass() )
 
 	WeaponRange=500

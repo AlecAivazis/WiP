@@ -144,15 +144,17 @@ simulated function bool isValidToAttack(){
 ******************************************************************/
 
 //fix aiming to a plane
-simulated singular event Rotator GetBaseAimRotation()
-{
+simulated singular event Rotator GetBaseAimRotation(){
+
    local rotator   POVRot, tempRot;
+
 
    tempRot = Rotation;
    tempRot.Pitch = 0;
    SetRotation(tempRot);
    POVRot = Rotation;
    POVRot.Pitch = 0;
+
 
    return POVRot;
 }
@@ -171,7 +173,7 @@ simulated event BecomeViewTarget( PlayerController PC )
       if (UTPC != None)
       {
          //set player controller to behind view and make mesh visible
-         UTPC.SetBehindView(true);
+         // UTPC.SetBehindView(true);
          UTPawn(PC.Pawn).SetMeshVisibility(UTPC.bBehindView);
          UTPC.bNoCrosshair = true;
       }
