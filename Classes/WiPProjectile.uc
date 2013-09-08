@@ -65,7 +65,6 @@ simulated event ReplicatedEvent(Name VarName)
 
 // set the velocity of the particle based on the direction
 simulated function Init(Vector Direction){
-   // `log("Called Projectile init!=====================");
     super.Init(Direction);
     
     // start homing timer
@@ -78,21 +77,23 @@ simulated function Init(Vector Direction){
 // projectile timer loop
 simulated function HomingTimer(){
     local WiPAttackable WipAttackable;
+
     
     // if the enemy doesn't exist, destroy the projectile
     if (Enemy == None){
+        `log("Enemy doesn't exist");
         
         // spawn the impact particle effect, if there is one
         if (ImpactTemplate != none && WorldInfo.MyEmitterPool != none){
             // WorldInfo.MyEmitterPool.SpawnEmitter(ImpactTemplate, Location);
         }
-        
+
         Destroy();
     }
 
     WipAttackable = WiPAttackable(Enemy);
-    if (WipAttackable != none && WipAttackable.IsValidToAttack()){
-        
+    if (WipAttackable != none && !WipAttackable.IsValidToAttack()){
+
         // spawn the impact particle effect
         if (ImpactTemplate != none && WorldInfo.MyEmitterPool != none){
             // WorldInfo.MyEmitterPool.SpawnEmitter(ImpactTemplate, Location);
@@ -100,14 +101,17 @@ simulated function HomingTimer(){
         
         Destroy();
     }
-    
+
     Init(Normal(Enemy.Location-Location));
+
 
 }
 
 // called when the projectile touches something
-simulated event Touch(Actor Other, PrimitiveComponent OtherComp, vector HitLocation, vector HitNormal)
-{
+simulated event Touch(Actor Other, PrimitiveComponent OtherComp, vector HitLocation, vector HitNormal){
+
+  //  `log("called touch");
+
 	// Projectiles only ever hit their targetted enemy
 	if (Other == Enemy){
 		Super.Touch(Other, OtherComp, HitLocation, HitNormal);
@@ -136,11 +140,13 @@ simulated singular event HitWall(vector HitNormal, actor Wall, PrimitiveComponen
 }
 
 // deal damage to the enemy
-simulated function DealEnemyDamage()
-{
+simulated function DealEnemyDamage(){
+
 	local Controller AttackingController;
 	local int DamageDone;
 	local WiPPawn NeutralPawn;
+
+ //   `log("called dealEnemyDamage()");
 
 	// Only deal damage on the server
 	if (Role == ROLE_Authority && OwnerAttackInterface != None)
@@ -158,12 +164,12 @@ simulated function DealEnemyDamage()
 		}
 
 		Enemy.TakeDamage(DamageDone, AttackingController, Enemy.Location, Velocity, DamageType, , Self);
+
 	}
 }
 
 // explode projectile
-simulated function Explode(vector HitLocation, vector HitNormal)
-{
+simulated function Explode(vector HitLocation, vector HitNormal){
 	// Create the explosion effects
 	SpawnExplosionEffects(HitLocation, HitNormal);
 
@@ -172,22 +178,19 @@ simulated function Explode(vector HitLocation, vector HitNormal)
 }
 
 // create explosion effects
-simulated function SpawnExplosionEffects(vector HitLocation, vector HitNormal)
-{
+simulated function SpawnExplosionEffects(vector HitLocation, vector HitNormal){
 	local MaterialInstanceTimeVarying MaterialInstanceTimeVarying;
 	local float Width, Height;
 	local Vector TraceHitLocation, TraceHitNormal;
 	local Actor HitActor;
 
-	if (HasExploded)
-	{
+	if (HasExploded){
 		return;
 	}
 
-	HasExploded = true;	
+	HasExploded = true;
 
-	if (WorldInfo.NetMode != NM_DedicatedServer)
-	{
+	if (WorldInfo.NetMode != NM_DedicatedServer){
 		// Play the impact sound if there is one
 		if (ImpactSound != None){
 			PlaySound(ImpactSound, true);
@@ -245,5 +248,5 @@ defaultproperties
 
 	WiPMaxSpeed=+02000.000000
 	WiPSpeed=+02000.000000
-	AttackType=ATT_Spells
+	AttackType=ATT_Magic
 }

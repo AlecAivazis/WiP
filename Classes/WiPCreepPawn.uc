@@ -32,4 +32,5 @@ simulated function bool isValidToAttack(){
     return Factory != none && Super.isValidToAttack();
 }
 
-defaultproperties{}
+defaultproperties
+{}

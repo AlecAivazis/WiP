@@ -7,8 +7,7 @@ protected function BeginFire(Vector FireLocation, Rotator FireRotation, Actor En
 
     local WiPProjectile SpawnedProjectile;
 	local WiPNeutralPawn NeutralPawn;
-	
-//	`log("Called BeginFire!=====================");
+
 
 	// Only spawn the projectile on the server
 	if (WeaponOwner.GetActor().Role == ROLE_Authority)
@@ -37,4 +36,5 @@ protected function BeginFire(Vector FireLocation, Rotator FireRotation, Actor En
 }
 
 
-defaultproperties{}
+defaultproperties
+{}

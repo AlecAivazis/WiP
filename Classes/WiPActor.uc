@@ -1,3 +1,4 @@
 class WiPActor extends Actor;
 
-defaultproperties{}
+defaultproperties
+{}

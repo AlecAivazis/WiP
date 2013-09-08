@@ -1,3 +1,4 @@
 class WiPGameReplicationInfo extends GameReplicationInfo;
 
-defaultproperties{}
+defaultproperties
+{}

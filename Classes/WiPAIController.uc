@@ -141,6 +141,10 @@ function bool isWithinAttackingRange(Actor target){
     return cachedPawn.weaponRangeTrigger.Touching.Find(target) != INDEX_NONE;
 }
 
+
+
+
+// find the best attacking location for the currentEnemy
 function findBestAttackingDestination(){
     
     local int i, Slices, Slice;
@@ -319,11 +323,9 @@ CanAttackCurrentEnemy:
     if (currentEnemyAttackInterface != none && !currentEnemyAttackInterface.isValidToAttack()){
         ClearCurrentEnemy();
         Goto('End');
-    }
-    
+
     // check if currentEnemy is within attacking range
-    else if (isWithinAttackingRange(currentEnemy)){
-        
+    } else if (isWithinAttackingRange(currentEnemy)){
         // check if currentEnemy is within attacking angle
         if (isWithinAttackingAngle(currentEnemy)){
             if (!cachedPawn.isFiring()) cachedPawn.startFire(0);
@@ -337,7 +339,7 @@ CanAttackCurrentEnemy:
         Sleep(0.f);
         Goto('CanAttackCurrentEnemy');
     }
-    
+
 // find the best position to attack currentEnemy
 EvaluateBestAttackingPosition:
 
@@ -358,8 +360,10 @@ MoveDirect:
 // wait until we've reach destination
 WaitUntilReachedDestination:
 
+    // `log("are you a valid target??");
     // Check if the current enemy is still valid
 	if (CurrentEnemyAttackInterface != None && !CurrentEnemyAttackInterface.IsValidToAttack()){
+      //   `log("target is no longer valid to attack");
 		ClearCurrentEnemy();
 		Goto('End');
 	}
@@ -384,4 +388,5 @@ End:
 
 
 
-defaultproperties{}
+defaultproperties
+{}
