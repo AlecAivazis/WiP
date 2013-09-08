@@ -27,6 +27,8 @@ var(Stats) float currentHealth;
 var(Stats) const float BaseAttackTime;
 // Attack speed multiplier for this unit without upgrades/items
 var(Stats) const float BaseAttackSpeed;
+// Attack speed multiplier for this unit without upgrades/items
+var(Stats) const float BaseAttackDamage;
 // weapon range of creep
 var(Stats) float DefaultWeaponRange;
 // sight range of creep

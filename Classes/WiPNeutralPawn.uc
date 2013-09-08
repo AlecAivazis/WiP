@@ -50,7 +50,7 @@ function Actor getActor(){
 
 // get the white damage done by this pawn
 function int getWhiteDamage(){
-    return 20;
+    return BaseAttackDamage;
 }
 
 
@@ -218,6 +218,5 @@ defaultproperties
 	BaseAttackSpeed=1.f
 	SightRange=500.f
 	PawnDamageType=class'DamageType'
-	
-
+	BaseAttackDamage=20
 }
