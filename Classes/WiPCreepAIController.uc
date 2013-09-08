@@ -14,7 +14,6 @@ var WiPTrigger sightDetectionTrigger;
 // store the team of creepPawn
 var byte teamIndex;
 
-
 function Initialize(){
 
     // cache a type casted version of Pawn
@@ -37,7 +36,7 @@ function Initialize(){
     // spawn sight detector trigger
     sightDetectionTrigger = Spawn(class'WiPTrigger');
     if(sightDetectionTrigger != none){
-        
+
         // attach it to the creep pawn
         sightDetectionTrigger.SetBase(creepPawn);
 

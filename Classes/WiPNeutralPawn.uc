@@ -4,30 +4,11 @@ class WiPNeutralPawn
 
 // money earned by killing the creep
 var(Creep) const int moneyToGiveOnKill;
-
 // experience earned by the creep
 var(Creep) const int experienceToGiveOnKill;
 
-
-
-// How much health this pawn has - sync'd with 'Pawn.Health'
-var(Stats) float currentHealth;
-// How long an attack takes to do (in seconds) - doesn't change, but does combine with Attack Speed stat.
-var(Stats) const float BaseAttackTime;
-// Attack speed multiplier for this unit without upgrades/items
-var(Stats) const float BaseAttackSpeed;
-// weapon range of creep
-var(Stats) float DefaultWeaponRange;
-// sight range of creep
-var(Stats) const float SightRange;
-
-
-
 // weapon range trigger
 var ProtectedWrite WiPTrigger weaponRangeTrigger;
-
-// The type of damage this pawn deals when auto-attacking
-var(Weapon) const class<DamageType> PawnDamageType<DisplayName=DamageType>;
 // Weapon fire mode
 var(Weapon) const editinline instanced WiPWeaponFireMode WeaponFireMode;
 
@@ -146,6 +127,11 @@ simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, o
 	WeaponSkeletalMesh.GetSocketWorldLocationAndRotation(WeaponFiringSocketName, FireLocation, FireRotation);
 }
 
+// buff/debuff damage take compensate for missing, magic amp, etc.
+function BuffAttack(out float Damage, class<DamageType> DamageType){
+	//if (DamageType == class'UDKMOBADamageTypePhysical')
+	Damage *=1 ;
+}
 
 // take damage handler
 event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector Momentum, class<DamageType> DamageType, optional TraceHitInfo HitInfo, optional Actor DamageCauser){

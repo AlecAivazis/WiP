@@ -18,6 +18,19 @@ var(Weapon) const Name WeaponFiringSocketName;
 var(Weapon) const SkeletalMeshComponent WeaponSkeletalMesh;
 // Weapon attachment socket
 var(Weapon) const Name WeaponAttachmentSocketName;
+// The type of damage this pawn deals when auto-attacking
+var(Weapon) const class<DamageType> PawnDamageType<DisplayName=DamageType>;
+
+// How much health this pawn has - sync'd with 'Pawn.Health'
+var(Stats) float currentHealth;
+// How long an attack takes to do (in seconds) - doesn't change, but does combine with Attack Speed stat.
+var(Stats) const float BaseAttackTime;
+// Attack speed multiplier for this unit without upgrades/items
+var(Stats) const float BaseAttackSpeed;
+// weapon range of creep
+var(Stats) float DefaultWeaponRange;
+// sight range of creep
+var(Stats) const float SightRange;
 
 simulated event PostBeginPlay(){
     super.PostBeginPlay();
@@ -115,12 +128,6 @@ function recalculateStats(){
     }
 }
 
-function AddDefaultInventory()
-{
-	InvManager.CreateInventory(class'Weapon_Sniper'); //InvManager is the pawn's InventoryManager
-	// InvManager.CreateInventory(class'UTWeap_LinkGun'); //InvManager is the pawn's InventoryManager
-
-}
 /*****************************************************************
 *   Interface - WiPAttackble                                     *
 ******************************************************************/
