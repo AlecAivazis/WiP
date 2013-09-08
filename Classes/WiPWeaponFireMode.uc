@@ -5,6 +5,8 @@ class WiPWeaponFireMode extends Object // fire mode for creeps and towers
 
 // weapon owner
 var ProtectedWrite WiPAttackable weaponOwner;
+// store if the weapon is firing
+var bool bIsFiring;
 
 
 function float getAttackingAngle(){
@@ -14,30 +16,68 @@ function float getAttackingAngle(){
 // set owner of the weapon
 function setOwner(WiPAttackable newOwner){
 
-    local WiPNeutralPawn neutralPawn;
     // prevent newOwner == none
     if (newOwner == none) return;
 
     weaponOwner = newOwner;
 }
 
+// return true if the actor is firing a weapon
 function bool IsFiring(){
-	
+
+    return bIsFiring;
+
+    `log ("called correct isFiring() ==================== " @ WeaponOwner.GetActor().IsTimerActive(NameOf(Fire), Self)) ;
     if (weaponOwner != None) return WeaponOwner.GetActor().IsTimerActive(NameOf(Fire), Self);
 
 	return false;
 }
 
-function Fire(){
-    `log("pew pew pew");
+// stop firing
+function stopFire(){
+	if (weaponOwner != None){
+		weaponOwner.getActor().ClearTimer(NameOf(Fire), Self);
+		bIsFiring = false;
+	}
 }
 
-// start firing the weapon
-function startFire(){
+// begins firing the weapon
+function Fire(){
+    local vector targetLoc;
+    local Rotator targetRot;
+    local Actor currentEnemy;
 
+    // check if there is a weaponOwner
+    if (weaponOwner == none) return;
+
+    // grab the current enemy
+    currentEnemy = WiPNeutralPawn(WeaponOwner) != none ? WiPNeutralPawn(WeaponOwner).GetEnemy() : none;
+
+    if (currentEnemy == none){
+        StopFire();
+        return;
+    } 
+   
+    /* implement this!!!! *************************/
+
+    // weaponOwner.GetWeaponFiringLocationAndRotation(targetLoc, targetRot);
+
+    BeginFire(targetLoc, Rotator(currentEnemy.Location - targetLoc), currentEnemy);
+
+
+}
+
+// tbi by subclasses to finish off the weapon
+protected function BeginFire(vector fireLoc, Rotator fireRotation, Actor enemy);
+
+// start the weapon loop
+function startFire(){
     local float firingRate;
     local WiPNeutralPawn neutralPawn;
     local WiPPawnReplicationInfo pawnRepInfo;
+
+
+    `log("Called StartFire!=====================");
 
     if (weaponOwner != none){
         fire();
@@ -45,11 +85,20 @@ function startFire(){
         neutralPawn = WiPNeutralPawn(WeaponOwner);
         if (neutralPawn != none){
             firingRate = neutralPawn.BaseAttackTime;
+            `log("Base firing rate ========================" @ firingRate);
 
             pawnRepInfo = WiPPawnReplicationInfo(neutralPawn.PlayerReplicationInfo);
             if (pawnRepInfo != none && pawnRepInfo.AttackSpeed > -1.f){
+                `log("we found a PawnRepInfo");
                 firingRate /= (1.f + pawnRepInfo.AttackSpeed);
+                `log("Attack Speed ======================" @ pawnRepInfo.AttackSpeed);
             }
+            
+            `log("Final Firing rate ========================== " @ firingRate);
+
+            // start firing timer
+            WeaponOwner.GetActor().SetTimer(firingRate, true, NameOf(Fire), self);
+            bIsFiring = true;
         }
     }
 }
