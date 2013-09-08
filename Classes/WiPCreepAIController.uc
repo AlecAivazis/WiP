@@ -53,6 +53,22 @@ function Initialize(){
 
 }
 
+//Called when this actor is scheduled to be destroyed
+simulated function Destroyed()
+{
+	Super.Destroyed();
+
+	// Destroy the sight detection trigger
+	if (SightDetectionTrigger != None)
+	{
+		// Unbind the delegates
+		SightDetectionTrigger.OnTouch = None;
+		SightDetectionTrigger.OnUnTouch = None;
+		// destroy the trigger
+		SightDetectionTrigger.Destroy();
+	}
+}
+
 // Called when the trigger used for sight has been touched
 simulated function internalOnSightTrigger(Actor Caller, Actor Other, PrimitiveComponent OtherComp, vector HitLocation, vector HitNormal){
 
@@ -247,4 +263,5 @@ ReachedDestination:
 
 
 
-defaultproperties{}
+defaultproperties
+{}

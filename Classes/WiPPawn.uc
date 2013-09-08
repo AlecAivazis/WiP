@@ -22,6 +22,35 @@ simulated event PostBeginPlay(){
     }
 }
 
+simulated function BeginRagdoll(){
+	if (WorldInfo.NetMode == NM_DedicatedServer)
+	{
+		return;
+	}
+
+	// Turn off collision
+	SetCollision(false, false, false);
+	CollisionComponent = Mesh;
+	// Always perform kinematic update regardless of distance
+	Mesh.MinDistFactorForKinematicUpdate = 0.f;
+	// Force an update on the skeletal mesh
+	//Mesh.ForceSkelUpdate();
+	//Mesh.UpdateRBBonesFromSpaceBases(true, true);
+	// Turn on physics assets
+	// Mesh.PhysicsWeight = 1.f;
+	// Set the physics simulation
+	//SetPhysics(PHYS_RigidBody);
+	// Unfix all of the bodies on the physics asset instance
+    /*	Mesh.PhysicsAssetInstance.SetAllBodiesFixed(false);
+	// Set the rigid body channels
+	Mesh.SetRBChannel(RBCC_Pawn);
+	Mesh.SetRBCollidesWithChannel(RBCC_Default, true);
+	Mesh.SetRBCollidesWithChannel(RBCC_Pawn, true);
+	Mesh.SetRBCollidesWithChannel(RBCC_Vehicle, true);
+	Mesh.SetRBCollidesWithChannel(RBCC_Untitled3, false);
+	Mesh.SetRBCollidesWithChannel(RBCC_BlockingVolume, true); */
+}
+
 // modify the damage based on the damage type
 function ModifyDamage(out float Damage, class<DamageType> DamageType){
 
@@ -49,11 +78,16 @@ simulated event ReplicatedEvent(name VarName)
 // called everytime a pawn updates
 simulated function Tick(float DeltaTime){
     
+    local WiPPawnReplicationInfo pawnRepInfo;
+    
     Super.Tick(DeltaTime);
     
     if (Role == Role_Authority){
-       
+
        recalculateStats();
+       
+        pawnRepInfo = WiPPawnReplicationInfo(PlayerReplicationInfo);
+
     }
 }
 

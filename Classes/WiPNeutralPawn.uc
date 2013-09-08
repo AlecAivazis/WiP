@@ -67,7 +67,7 @@ function Actor getActor(){
 
 // get the white damage done by this pawn
 function int getWhiteDamage(){
-    return 2;
+    return 20;
 }
 
 
@@ -100,6 +100,25 @@ simulated function startFire(byte FireModeNum){
     if (weaponFireMode != none) WeaponFireMode.startFire();
 }
 
+function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLocation){
+    `log("Died was called");
+    // Tell the inventory manager
+    if (InvManager != none)    InvManager.OwnerDied();
+    // Detach controller
+	DetachFromController(true);
+	// Destroy the weapon fire
+	if (WeaponFireMode != none)    WeaponFireMode.Destroy();
+	// Destroy the weapon range trigger
+	if (WeaponRangeTrigger != none) WeaponRangeTrigger.Destroy();
+	
+	bReplicateMovement = false;
+	bTearOff = true;
+	Velocity += TearOffMomentum;
+
+	BeginRagdoll();
+	LifeSpan = 5.f;
+	return true;
+}
 
 event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector Momentum, class<DamageType> DamageType, optional TraceHitInfo HitInfo, optional Actor DamageCauser){
 
@@ -107,8 +126,8 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
     local int actualDamage;
     local Controller killer;
 
-    `log("my health is at =========================" @ currentHealth);
-    `log("I'm taking damage!!!!! ====================" @ Damage);
+   `log("my health is at =========================" @ currentHealth);
+   `log("I'm taking damage!!!!! ====================" @ Damage);
 
     if (Role < ROLE_Authority || Health <=0){
         return;
@@ -154,6 +173,7 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
 
 	if (Health <= 0){
 		// pawn died
+		`log("This pawn has died ========================" @ self);
 		Killer = SetKillInstigator(InstigatedBy, DamageType);
 		TearOffMomentum = Momentum;
 		Died(Killer, DamageType, HitLocation);
@@ -178,7 +198,8 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
 }
 
 
-defaultproperties{
+defaultproperties
+{
 	BaseAttackTime=2.f
 	BaseAttackSpeed=1.f
 	SightRange=500.f

@@ -6,8 +6,16 @@ class WiPWeaponFireMode extends Object // fire mode for creeps and towers
 // weapon owner
 var ProtectedWrite WiPAttackable weaponOwner;
 // store if the weapon is firing
-var bool bIsFiring;
+var RepNotify bool bIsFiring;
 
+
+function Destroy(){
+	// Stop firing
+	StopFire();
+
+	// Clear the weapon owner
+	WeaponOwner = None;
+}
 
 function float getAttackingAngle(){
     return 0.9f;
@@ -26,11 +34,6 @@ function setOwner(WiPAttackable newOwner){
 function bool IsFiring(){
 
     return bIsFiring;
-
-    `log ("called correct isFiring() ==================== " @ WeaponOwner.GetActor().IsTimerActive(NameOf(Fire), Self)) ;
-    if (weaponOwner != None) return WeaponOwner.GetActor().IsTimerActive(NameOf(Fire), Self);
-
-	return false;
 }
 
 // stop firing
@@ -46,6 +49,9 @@ function Fire(){
     local vector targetLoc;
     local Rotator targetRot;
     local Actor currentEnemy;
+
+
+ //   `log("called fire ==============");
 
     // check if there is a weaponOwner
     if (weaponOwner == none) return;
@@ -77,7 +83,8 @@ function startFire(){
     local WiPPawnReplicationInfo pawnRepInfo;
 
 
-    `log("Called StartFire!=====================");
+  //  `log("Called StartFire!=====================");
+  //  `log("Targeting =========================" @ WiPNeutralPawn(WeaponOwner).GetEnemy() );
 
     if (weaponOwner != none){
         fire();
@@ -85,16 +92,15 @@ function startFire(){
         neutralPawn = WiPNeutralPawn(WeaponOwner);
         if (neutralPawn != none){
             firingRate = neutralPawn.BaseAttackTime;
-            `log("Base firing rate ========================" @ firingRate);
+       //     `log("Base firing rate ========================" @ firingRate);
 
             pawnRepInfo = WiPPawnReplicationInfo(neutralPawn.PlayerReplicationInfo);
             if (pawnRepInfo != none && pawnRepInfo.AttackSpeed > -1.f){
-                `log("we found a PawnRepInfo");
                 firingRate /= (1.f + pawnRepInfo.AttackSpeed);
-                `log("Attack Speed ======================" @ pawnRepInfo.AttackSpeed);
+           //     `log("Attack Speed ======================" @ pawnRepInfo.AttackSpeed);
             }
-            
-            `log("Final Firing rate ========================== " @ firingRate);
+
+         //   `log("Final Firing rate ========================== " @ firingRate);
 
             // start firing timer
             WeaponOwner.GetActor().SetTimer(firingRate, true, NameOf(Fire), self);
