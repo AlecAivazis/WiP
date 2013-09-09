@@ -28,6 +28,36 @@ simulated function PostBeginPlay()
 
 }
 
+event Possess(Pawn inPawn, bool bVehicleTransition){
+    
+    local WiPChampion champPawn;
+    local WiPChampionController champController;
+    local WiPPlayerReplicationInfo pri;
+
+    // only allow players to posses a champion
+    champPawn = WiPChampion(inPawn);
+    if (champPawn == none) return;
+
+    // spawn the champion's controller
+    champController = WiPChampionController(champPawn.Controller);
+    if (champController != none){
+        champPawn.Controller = self;
+        champPawn.PlayerController = self;
+        `log("We spawned a champ controller");
+    }
+
+
+    // assign pri
+    pri = WiPPlayerReplicationInfo(PlayerReplicationInfo);
+    if (pri != none){
+        
+        // if the pri already has a pawn,
+
+
+    }
+}
+
+
 function UpdateRotation( float DeltaTime )
 {
     local Rotator   DeltaRot, newRotation, ViewRotation;
