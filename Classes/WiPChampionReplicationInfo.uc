@@ -4,6 +4,8 @@ class WiPChampionReplicationInfo extends WiPPawnReplicationInfo;
 var ProtectedWrite RepNotify int Level;
 // How much experience this hero has
 var ProtectedWrite RepNotify int Experience;
+// Number of Abilities that the champion can level up
+var ProtectedWrite RepNotify int nSkillPoints;
 // How long (in seconds) the hero will remain dead after a death before reviving.
 var ProtectedWrite float ReviveTime;
 
@@ -11,7 +13,7 @@ replication
 {
 	// Replicate only if the values are dirty, this replication info is owned by the player and from server to client
 	if (bNetDirty && bNetOwner)
-		Experience, Level;
+		Experience, Level, nSkillPoints;
 
 	// Replicate only if the values are dirty and from server to client
 	if (bNetDirty)
@@ -20,8 +22,8 @@ replication
 
 
 // return the amount of experience needed for a level
-simulated functon float ExperienceNeededForLevel(int level){
-    return (TriangleNumber(level - 1) - 1)*100;
+simulated function float ExperienceNeededForLevel(int N){
+    return (TriangleNumber(N - 1) - 1)*100;
 }
 
 
@@ -43,7 +45,10 @@ simulated function giveExeperience(int exp){
 
 // gain a level
 simulated function gainLevel(){
+    // increase the level
     Level++;
+    // give the champion a skill point to level an ability
+    nSkillPoints++;
 }
 
 
