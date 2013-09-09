@@ -2,5 +2,5 @@ class WiPChampionController extends WiPPlayerController;
 
 function InitPlayerReplicationInfo()
 {
-	PlayerReplicationInfo = Spawn(class'WiPPawnReplicationInfo', Self);
+	PlayerReplicationInfo = Spawn(class'WiPChampionReplicationInfo', Self);
 }
