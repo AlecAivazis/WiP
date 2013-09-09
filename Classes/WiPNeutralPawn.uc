@@ -6,6 +6,8 @@ class WiPNeutralPawn
 var(Creep) const int moneyToGiveOnKill;
 // experience earned by the creep
 var(Creep) const int experienceToGiveOnKill;
+// range to reward gold/exp
+var(Creep) const float rewardRange;
 
 // weapon range trigger
 var ProtectedWrite WiPTrigger weaponRangeTrigger;
@@ -84,7 +86,41 @@ simulated function startFire(byte FireModeNum){
 }
 
 function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLocation){
-    `log("Died was called");
+
+    local int eligibleChampions;
+    local WiPChampion CurHeroPawn;
+    local WiPChampionReplicationInfo champRepInfo;
+
+    if (Killer != none){
+
+        // make sure that the killer was not on the same team as me
+        if (Killer.GetTeamNum() != GetTeamNum()){
+
+            // how many champions are within rewardRange
+            eligibleChampions = 0;
+            foreach WorldInfo.AllPawns(class'WiPChampion', CurHeroPawn, Location, rewardRange ){
+                if (CurHeroPawn.GetTeamNum() != GetTeamNum()){
+                    eligibleChampions++;
+                }
+            }
+            
+            // iterate over those champions and reward them
+            foreach WorldInfo.AllPawns(class'WiPChampion', CurHeroPawn, Location, rewardRange ){
+                if(CurHeroPawn.GetTeamNum() != GetTeamNum()){
+                    champRepInfo = WiPChampionReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
+                    if (champRepInfo != none){
+                        champRepInfo.GiveExperience(ExperienceToGiveOnKill/eligibleChampions);
+                    }
+                }
+
+            }
+
+
+        }
+
+    }
+
+
     // Tell the inventory manager
     if (InvManager != none)    InvManager.OwnerDied();
     // Detach controller
@@ -93,7 +129,7 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 	if (WeaponFireMode != none)    WeaponFireMode.Destroy();
 	// Destroy the weapon range trigger
 	if (WeaponRangeTrigger != none) WeaponRangeTrigger.Destroy();
-	
+
 	bReplicateMovement = false;
 	bTearOff = true;
 	Velocity += TearOffMomentum;
@@ -134,8 +170,8 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
     local int actualDamage;
     local Controller killer;
 
-    // `log("my health is at =========================" @ currentHealth);
-    // `log("I'm taking damage!!!!! ====================" @ Damage);
+    `log("my health is at =========================" @ currentHealth);
+    `log("I'm taking damage!!!!! ====================" @ Damage);
 
     if (Role < ROLE_Authority || Health <=0){
         return;
