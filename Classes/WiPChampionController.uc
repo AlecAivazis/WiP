@@ -1,10 +1,10 @@
-class WiPChampionController extends WiPPlayerController;
+class WiPChampionController extends AIController;
 
-// cached typecasted version of player controller
-var WiPPlayerController WiPPlayerController;
+// the player controller of this pawn
+var WiPPlayerController PlayerController;
 
 
 defaultproperties
 {
-    bIsPlayer=true   
+    	bIsPlayer=true
 }

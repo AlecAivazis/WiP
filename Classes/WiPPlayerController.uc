@@ -43,7 +43,6 @@ event Possess(Pawn inPawn, bool bVehicleTransition){
     if (champController != none){
         champPawn.Controller = self;
         champPawn.PlayerController = self;
-        `log("We spawned a champ controller");
     }
 
 

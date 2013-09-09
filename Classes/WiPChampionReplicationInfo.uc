@@ -9,6 +9,7 @@ var ProtectedWrite RepNotify int nSkillPoints;
 // How long (in seconds) the hero will remain dead after a death before reviving.
 var ProtectedWrite float ReviveTime;
 
+
 replication
 {
 	// Replicate only if the values are dirty, this replication info is owned by the player and from server to client
@@ -34,7 +35,7 @@ simulated function int TriangleNumber(int n){
 
 
 // give this champion experience
-simulated function giveExeperience(int exp){
+simulated function giveExperience(int exp){
 
     Experience = Max(Experience + exp, 0);
 

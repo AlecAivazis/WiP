@@ -6,7 +6,12 @@ simulated event PostBeginPlay(){
 
     super.PostBeginPlay();
 
-    `log("Created a champion =================");
+    // Only the server needs to spawn the AIController which is used for pathing
+	if (Role == Role_Authority)
+	{
+		SpawnDefaultController();
+        `log("should have spawned the correct controller");
+	}
 }
 
 
@@ -23,7 +28,8 @@ function float getAttackingRate(){
 
 // return the team number of this pawn
 simulated function byte GetTeamNum(){
-    local
+
+    return 0;
 }
 
 /*****************************************************************
@@ -58,5 +64,5 @@ defaultProperties
     BaseAttackDamage = 50
 	BaseAttackTime = 2.f
 	PawnDamageType = class'DamageType'
-	ControllerClass=WiPChampionController
+    ControllerClass = class'WiPChampionController');
 }
