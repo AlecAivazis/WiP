@@ -1,6 +1,10 @@
 class WiPChampionController extends WiPPlayerController;
 
-function InitPlayerReplicationInfo()
+// cached typecasted version of player controller
+var WiPPlayerController WiPPlayerController;
+
+
+defaultproperties
 {
-	PlayerReplicationInfo = Spawn(class'WiPChampionReplicationInfo', Self);
+    bIsPlayer=true   
 }

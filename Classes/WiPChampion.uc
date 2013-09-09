@@ -21,6 +21,11 @@ function float getAttackingRate(){
 }
 
 
+// return the team number of this pawn
+simulated function byte GetTeamNum(){
+    local
+}
+
 /*****************************************************************
 *   Interface - WiPAttackble                                     *
 ******************************************************************/
@@ -53,4 +58,5 @@ defaultProperties
     BaseAttackDamage = 50
 	BaseAttackTime = 2.f
 	PawnDamageType = class'DamageType'
+	ControllerClass=WiPChampionController
 }

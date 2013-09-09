@@ -57,5 +57,4 @@ defaultproperties
     Experience = 0
     Level = 0
     ReviveTime = 0.f
-
 }
