@@ -35,6 +35,7 @@ event Possess(Pawn inPawn, bool bVehicleTransition){
     local WiPChampion champPawn;
     local WiPChampionController champController;
     local WiPPlayerReplicationInfo pri;
+	local WiPChampionReplicationInfo champRepInfo;
 
     Super.Possess(inPawn, bVehicleTransition);
 
@@ -50,14 +51,28 @@ event Possess(Pawn inPawn, bool bVehicleTransition){
     }
 
 
-    // assign pri
+    // assign the hero pawn's player rep info
     pri = WiPPlayerReplicationInfo(PlayerReplicationInfo);
     if (pri != none){
 
         // if the pri already has a pawn,
+        if (pri.PawnRepInfo == none){
+            champRepInfo = Spawn(class'WiPChampionReplicationInfo', self);
+        } else {
+            champRepInfo = WiPChampionReplicationInfo(pri.PawnRepInfo);
+        }
+
+        champRepInfo.Team = PlayerReplicationInfo.Team;
+        champRepInfo.PlayerReplicationInfo = PlayerReplicationInfo;
+
+        champPawn.PlayerReplicationInfo = champRepInfo;
+        pri.PawnRepInfo = champRepInfo;
 
 
     }
+    
+    // Restart the player controller
+	Restart(bVehicleTransition);
 }
 
 

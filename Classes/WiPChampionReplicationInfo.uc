@@ -38,6 +38,8 @@ simulated function int TriangleNumber(int n){
 simulated function giveExperience(int exp){
 
     Experience = Max(Experience + exp, 0);
+    
+    `log("I just gained experience. Current amount ========== " @ Experience);
 
     if (Experience >= ExperienceNeededForLevel(Level+1)){
         gainLevel();
@@ -56,6 +58,6 @@ simulated function gainLevel(){
 defaultproperties
 {
     Experience = 0
-    Level = 0
+    Level = 1
     ReviveTime = 0.f
 }

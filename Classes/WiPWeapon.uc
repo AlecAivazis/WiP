@@ -81,7 +81,7 @@ DefaultProperties
     Mesh=GunMesh
     Components.Add(GunMesh)
 
-	WeaponFireTypes(0)=EWFT_Projectile
+	WeaponFireTypes(0)=EWFT_InstantHit
 	WeaponProjectiles(0)=class'UTProj_Rocket' // UTProj_LinkPowerPlasma if linked (see GetProjectileClass() )
 
 	WeaponRange=500

@@ -2,6 +2,7 @@ class WiPChampion extends WiPPawn
     implements (WiPAttackable);
 
 
+
 simulated event PostBeginPlay(){
 
     super.PostBeginPlay();
@@ -10,7 +11,6 @@ simulated event PostBeginPlay(){
 	if (Role == Role_Authority)
 	{
 		SpawnDefaultController();
-        `log("should have spawned the correct controller ============= "@ Controller);
 	}
 	
 	currentHealth = BaseHealth;
