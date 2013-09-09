@@ -248,5 +248,5 @@ defaultproperties
 	BaseAttackSpeed=1.f
 	SightRange=500.f
 	PawnDamageType=class'DamageType'
-	BaseAttackDamage=20
+	BaseAttackDamage=2
 }

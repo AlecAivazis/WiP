@@ -12,6 +12,8 @@ simulated event PostBeginPlay(){
 		SpawnDefaultController();
         `log("should have spawned the correct controller");
 	}
+	
+	currentHealth = BaseHealth;
 }
 
 
@@ -61,6 +63,7 @@ simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, o
 
 defaultProperties
 {
+    BaseHealth = 150.f
     BaseAttackDamage = 50
 	BaseAttackTime = 2.f
 	PawnDamageType = class'DamageType'

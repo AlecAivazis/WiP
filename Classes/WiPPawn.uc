@@ -33,6 +33,8 @@ var(Stats) const float BaseAttackDamage;
 var(Stats) float WeaponRange;
 // sight range of creep
 var(Stats) const float SightRange;
+// How many hit points this unit has at level 1 (minus strength hitpoints)
+var(Stats) const float BaseHealth;
 
 
 simulated event PostBeginPlay(){
@@ -193,6 +195,7 @@ defaultproperties
 	Physics=PHYS_Walking
 	bAlwaysRelevant=true
 	bReplicateHealthToAll=true
+	BaseHealth=10.f
 
 	Begin Object Class=DynamicLightEnvironmentComponent Name=MyLightEnvironment
 		ModShadowFadeoutTime=0.25
