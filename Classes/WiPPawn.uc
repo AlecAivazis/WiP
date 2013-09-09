@@ -34,15 +34,17 @@ var(Stats) float WeaponRange;
 // sight range of creep
 var(Stats) const float SightRange;
 
+
 simulated event PostBeginPlay(){
     super.PostBeginPlay();
     
     if (Role == Role_Authority){
-
         //create a StatModifier
         statModifier = new class'WiPStatModifier'();
-
     }
+    
+    // set currentHealth to Health
+    currentHealth = Health
 }
 
 simulated function BeginRagdoll(){
