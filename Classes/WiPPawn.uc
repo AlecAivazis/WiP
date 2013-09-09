@@ -44,9 +44,9 @@ simulated event PostBeginPlay(){
         //create a StatModifier
         statModifier = new class'WiPStatModifier'();
     }
-    
+
     // set currentHealth to Health
-    currentHealth = Health
+    currentHealth = Health;
 }
 
 simulated function BeginRagdoll(){

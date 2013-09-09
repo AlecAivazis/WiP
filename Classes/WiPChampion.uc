@@ -10,7 +10,7 @@ simulated event PostBeginPlay(){
 	if (Role == Role_Authority)
 	{
 		SpawnDefaultController();
-        `log("should have spawned the correct controller");
+        `log("should have spawned the correct controller ============= "@ Controller);
 	}
 	
 	currentHealth = BaseHealth;

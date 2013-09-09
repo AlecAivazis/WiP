@@ -28,11 +28,15 @@ simulated function PostBeginPlay()
 
 }
 
+
+
 event Possess(Pawn inPawn, bool bVehicleTransition){
-    
+
     local WiPChampion champPawn;
     local WiPChampionController champController;
     local WiPPlayerReplicationInfo pri;
+
+    Super.Possess(inPawn, bVehicleTransition);
 
     // only allow players to posses a champion
     champPawn = WiPChampion(inPawn);
@@ -41,15 +45,15 @@ event Possess(Pawn inPawn, bool bVehicleTransition){
     // spawn the champion's controller
     champController = WiPChampionController(champPawn.Controller);
     if (champController != none){
-        champPawn.Controller = self;
-        champPawn.PlayerController = self;
+        // champPawn.Controller = self;
+        // champPawn.PlayerController = self;
     }
 
 
     // assign pri
     pri = WiPPlayerReplicationInfo(PlayerReplicationInfo);
     if (pri != none){
-        
+
         // if the pri already has a pawn,
 
 
