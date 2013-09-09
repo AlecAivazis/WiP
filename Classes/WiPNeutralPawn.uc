@@ -170,8 +170,8 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
     local int actualDamage;
     local Controller killer;
 
-    `log("my health is at =========================" @ currentHealth);
-    `log("I'm taking damage!!!!! ====================" @ Damage);
+   // `log("my health is at =========================" @ currentHealth);
+  //  `log("I'm taking damage!!!!! ====================" @ Damage);
 
     if (Role < ROLE_Authority || Health <=0){
         return;
@@ -217,7 +217,7 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
 
 	if (Health <= 0){
 		// pawn died
-		`log("This pawn has died ========================" @ self);
+	//	`log("This pawn has died ========================" @ self);
 		Killer = SetKillInstigator(InstigatedBy, DamageType);
 		TearOffMomentum = Momentum;
 		Died(Killer, DamageType, HitLocation);
@@ -248,5 +248,8 @@ defaultproperties
 	BaseAttackSpeed=1.f
 	SightRange=500.f
 	PawnDamageType=class'DamageType'
-	BaseAttackDamage=2
+	BaseAttackDamage=20
+	RewardRange = 4000
+	ExperienceToGiveOnKill = 50
+	MoneyToGiveOnKill = 25
 }
