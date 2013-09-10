@@ -93,7 +93,8 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
     local WiPChampionReplicationInfo champRepInfo;
     local WiPPlayerController playerController;
     local WiPPlayerReplicationInfo playerRepInfo, currentPlayerRepInfo;
-    local int moneyToGive;
+    local int moneyToGive, expToGive;
+
 
     `log("This pawn has died" @ self);
 
@@ -130,9 +131,18 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 
             champRepInfo = WiPChampionReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
             if (champRepInfo != none){
-                champRepInfo.GiveExperience(ExperienceToGiveOnKill/eligibleChampions);
+              
                 currentPlayerRepInfo = WiPPlayerReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
-                
+
+                expToGive =ExperienceToGiveOnKill/eligibleChampions;
+
+                // check if we're going to level the hero to give the player the appropriate amt of gold
+                if (champRepInfo.willLevel(expToGive)){
+                    currentPlayerRepInfo.GiveGold(currentPlayerRepInfo.MoneyToGiveOnLevel);
+                }
+
+                champRepInfo.GiveExperience(expToGive);
+
                 // give the killer extra gold for the last hit
                 if (CurHeroPawn.Controller == Killer){
                     currentPlayerRepInfo.GiveGold(moneyToGive * LastHitMultiplier);

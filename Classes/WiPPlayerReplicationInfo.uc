@@ -6,6 +6,8 @@ var RepNotify WiPPawnReplicationInfo pawnRepInfo;
 var RepNotify int gold;
 // the number of minions killed by the player
 var RepNotify int lastHits;
+// the amount of money to give to a player when he/she levels
+var int moneyToGiveOnLevel;
 
 // Replication block
 replication
@@ -31,4 +33,5 @@ DefaultProperties
 {
     gold = 250
     lastHits = 0
+    moneyToGiveOnLevel = 400
 }

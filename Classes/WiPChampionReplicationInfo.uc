@@ -33,6 +33,12 @@ simulated function int TriangleNumber(int n){
     return (n * (n + 1))/2 ;
 }
 
+// return if the experience is enough to level
+simulated function bool willLevel(int amount){
+
+    return ExperienceNeededForLevel(Level+1) < (Experience + amount);
+}
+
 
 // give this champion experience
 simulated function giveExperience(int exp){
