@@ -1,6 +1,14 @@
 class WiPChampion extends WiPPawn
     implements (WiPAttackable);
 
+// the amount of experience awarded to others when they kill a champion
+var(Rewards) const int ExperienceToGiveOnKill;
+// the amount of money given to the killer
+var(Rewards) const int MoneyToGiveOnKill ;
+// the money multiplier for being the killer
+var(Rewards) const float LastHitMultiplier;
+// the range to award champions
+var(Rewards) const float RewardRange;
 
 
 simulated event PostBeginPlay(){
@@ -18,9 +26,13 @@ simulated event PostBeginPlay(){
 
 // called when the pawn dies (assign a new respawn time)
 function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLocation){
-    
+    local int eligibleChampions;
+    local WiPChampion CurHeroPawn;
     local WiPChampionReplicationInfo champRepInfo;
-    local WiPPlayerReplicationInfo playerRepInfo;
+    local WiPPlayerController playerController;
+    local WiPPlayerReplicationInfo playerRepInfo, currentPlayerRepInfo;
+    local int moneyToGive, expToGive;
+
 
     // get replication information
     champRepInfo = WiPChampionReplicationinfo(PlayerReplicationInfo);
@@ -31,6 +43,46 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 
             playerRepInfo.NextRespawnTime = WorldInfo.TimeSeconds + 15.f + (champRepInfo.Level * 5.f);
             `log("player respawn time ============ " @ playerRepInfo.NextRespawnTime );
+        }
+    }
+
+    // if the killer was a player, give him 1.5 of the money instead
+    moneyToGive = MoneyToGiveOnKill;
+    
+    // count the number of champions around
+    eligibleChampions = 0;
+    foreach WorldInfo.AllPawns(class'WiPChampion', CurHeroPawn, Location, rewardRange ){
+        if (CurHeroPawn.GetTeamNum() != GetTeamNum()){
+            eligibleChampions++;
+        }
+    }
+
+    // iterate over those champions again and reward them
+    foreach WorldInfo.AllPawns(class'WiPChampion', CurHeroPawn, Location, rewardRange ){
+        // opponents only
+        if(CurHeroPawn.GetTeamNum() != GetTeamNum()){
+
+            champRepInfo = WiPChampionReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
+            if (champRepInfo != none){
+
+                currentPlayerRepInfo = WiPPlayerReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
+
+                expToGive =ExperienceToGiveOnKill/eligibleChampions;
+
+                // check if we're going to level the hero to give the player the appropriate amt of gold
+                if (champRepInfo.willLevel(expToGive)){
+                    currentPlayerRepInfo.GiveGold(currentPlayerRepInfo.MoneyToGiveOnLevel);
+                }
+
+                champRepInfo.GiveExperience(expToGive);
+
+                // give the killer extra gold for the last hit
+                if (CurHeroPawn.Controller == Killer){
+                    currentPlayerRepInfo.GiveGold(moneyToGive * LastHitMultiplier);
+                }else {
+                    currentPlayerRepInfo.GiveGold(moneyToGive);
+                }
+            }
         }
     }
 
@@ -85,9 +137,14 @@ simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, o
 
 defaultProperties
 {
+
+	RewardRange = 2000.f
     BaseHealth = 150.f
     BaseAttackDamage = 50
 	BaseAttackTime = 2.f
 	PawnDamageType = class'DamageType'
-    ControllerClass = class'WiPChampionController');
+    ControllerClass = class'WiPChampionController'
+    ExperienceToGiveOnKill = 200
+    MoneyToGiveOnKill = 400
+    LastHitMultiplier = 1.2
 }
