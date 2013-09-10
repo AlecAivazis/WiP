@@ -131,7 +131,7 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 
             champRepInfo = WiPChampionReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
             if (champRepInfo != none){
-              
+
                 currentPlayerRepInfo = WiPPlayerReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
 
                 expToGive =ExperienceToGiveOnKill/eligibleChampions;
@@ -205,84 +205,7 @@ simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, o
 	WeaponSkeletalMesh.GetSocketWorldLocationAndRotation(WeaponFiringSocketName, FireLocation, FireRotation);
 }
 
-// take damage handler
-event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector Momentum, class<DamageType> DamageType, optional TraceHitInfo HitInfo, optional Actor DamageCauser){
 
-    local int actualDamage;
-    local Controller killer;
-
-   // `log("attacked : " @ self);
-
-    //`log("my health is at =========================" @ currentHealth);
-   // `log("I'm taking damage!!!!! ====================" @ Damage);
-   // `log("This guy hurt me =============== " @ InstigatedBy);
-
-    if (Role < ROLE_Authority || Health <=0){
-        return;
-    }
-
-    if (DamageType == none){
-        DamageType = class'DamageType';
-    }
-
-    // make sure it's bigger than zero, if not do zero damage
-    Damage = Max(Damage, 0);
-
-    // set physics if its not set and we're not in a vehicle
-    if (Physics == PHYS_None && DrivenVehicle == None){
-        SetMovementPhysics();
-    }
-    
-    // if we're walking and there's extra z momentum in the damage type
-    if (Physics == PHYS_Walking && DamageType.default.bExtraMomentumZ){
-		Momentum.Z = FMax(Momentum.Z, 0.4f * VSize(Momentum));
-	}
-
-    //
-	Momentum = Momentum / Mass; // this is really velocity
-
-	if (DrivenVehicle != None){
-		DrivenVehicle.AdjustDriverDamage(Damage, InstigatedBy, HitLocation, Momentum, DamageType);
-	}
-
-	ActualDamage = Damage;
-	WorldInfo.Game.ReduceDamage(ActualDamage, Self, InstigatedBy, HitLocation, Momentum, DamageType, DamageCauser);
-	AdjustDamage(ActualDamage, Momentum, InstigatedBy, HitLocation, DamageType, HitInfo, DamageCauser);
-
-	// call Actor's version to handle any SeqEvent_TakeDamage for scripting
-	Super(Actor).TakeDamage(ActualDamage, InstigatedBy, HitLocation, Momentum, DamageType, HitInfo, DamageCauser);
-
-	currentHealth -= ActualDamage;
-	Health = int(currentHealth);
-
-	if (IsZero(HitLocation)){
-		HitLocation = Location;
-	}
-
-	if (Health <= 0){
-		// pawn died
-		Killer = SetKillInstigator(InstigatedBy, DamageType);
-		TearOffMomentum = Momentum;
-		Died(Killer, DamageType, HitLocation);
-	}
-	else{
-		HandleMomentum(Momentum, HitLocation, DamageType, HitInfo);
-		NotifyTakeHit(InstigatedBy, HitLocation, ActualDamage, DamageType, Momentum, DamageCauser);
-
-		if (DrivenVehicle != None){
-			DrivenVehicle.NotifyDriverTakeHit(InstigatedBy, HitLocation, ActualDamage, DamageType, Momentum);
-		}
-
-		if (InstigatedBy != None && InstigatedBy != Controller){
-			LastHitBy = InstigatedBy;
-		}
-	}
-
-	PlayHit(ActualDamage, InstigatedBy, HitLocation, DamageType, Momentum, HitInfo);
-	MakeNoise(1.f);
-
-
-}
 
 
 defaultproperties
