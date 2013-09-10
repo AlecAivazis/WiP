@@ -28,6 +28,13 @@ simulated event PostBeginPlay(){
 	}
 }
 
+event TakeDamage(int DamageAmount, Controller EventInstigator, vector HitLocation, vector Momentum, class<DamageType> DamageType, optional TraceHitInfo HitInfo, optional Actor DamageCauser){
+
+    `log("you attacked a tower.");
+
+	Super.TakeDamage(DamageAmount, EventInstigator, HitLocation, Momentum, DamageType, HitInfo, DamageCauser);
+}
+
 /*****************************************************************
 *   Interface - WiPAttackble                                     *
 ******************************************************************/
