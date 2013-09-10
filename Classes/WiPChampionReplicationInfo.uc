@@ -36,10 +36,11 @@ simulated function int TriangleNumber(int n){
 
 // give this champion experience
 simulated function giveExperience(int exp){
-
+    `log("I just gained " @ exp @ " experience");
     Experience = Max(Experience + exp, 0);
+    `log("I'm now at " @ Experience);
     
-    `log("I just gained experience. Current amount ========== " @ Experience);
+
 
     if (Experience >= ExperienceNeededForLevel(Level+1)){
         gainLevel();
@@ -52,6 +53,7 @@ simulated function gainLevel(){
     Level++;
     // give the champion a skill point to level an ability
     nSkillPoints++;
+    `log("I just gained a level! Current level: " @ Level);
 }
 
 

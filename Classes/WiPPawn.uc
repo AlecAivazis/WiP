@@ -85,6 +85,9 @@ function AdjustDamage(out int InDamage, out vector Momentum, Controller Instigat
 
 }
 
+
+
+// replicate variables
 simulated event ReplicatedEvent(name VarName)
 {
 	// Money was replicated
@@ -97,7 +100,7 @@ simulated function Tick(float DeltaTime){
     local WiPPawnReplicationInfo pawnRepInfo;
     
     Super.Tick(DeltaTime);
-    
+
     if (Role == Role_Authority){
 
        recalculateStats();

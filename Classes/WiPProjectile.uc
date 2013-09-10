@@ -40,7 +40,7 @@ var WiPPawn.AttackTypes AttackType;
 // If true, then the explosion effects have been triggered
 var ProtectedWrite bool HasExploded;
 
-// replication block 
+// replication block
 replication{
     if (bNetInitial)
         Enemy;
@@ -145,6 +145,7 @@ simulated function DealEnemyDamage(){
 	local Controller AttackingController;
 	local int DamageDone;
 	local WiPPawn NeutralPawn;
+ 
 
  //   `log("called dealEnemyDamage()");
 
@@ -154,18 +155,19 @@ simulated function DealEnemyDamage(){
 		DamageDone = Damage;
 		AttackingController = None;
 		if (WiPPawn(OwnerAttackInterface) != None){
-
+           // `log("CastedPawn's Team ========== " @WipPawn(OwnerAttackInterface).GetTeamNum());
 			AttackingController = WiPPawn(OwnerAttackInterface).Controller;
-			NeutralPawn = WiPPawn(Enemy);
+		//	`log("Retrieved Pawn's Controller ==========" @ AttackingController);
+            NeutralPawn = WiPPawn(Enemy);
 			if (NeutralPawn != None){
 				// DamageDone *= WiPPawn.GetArmorTypeMultiplier(AttackType);
 			     DamageDone *= 1;
             }
 		}
 
+       // `log("Attacker: " @ AttackingController);
 		Enemy.TakeDamage(DamageDone, AttackingController, Enemy.Location, Velocity, DamageType, , Self);
-
-	}
+    }
 }
 
 // explode projectile

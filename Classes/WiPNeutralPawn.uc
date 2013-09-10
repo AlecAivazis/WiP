@@ -86,38 +86,31 @@ simulated function startFire(byte FireModeNum){
 }
 
 function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLocation){
-
     local int eligibleChampions;
     local WiPChampion CurHeroPawn;
     local WiPChampionReplicationInfo champRepInfo;
 
-    if (Killer != none){
+    `log("This pawn has died" @ self);
 
-        // make sure that the killer was not on the same team as me
-        if (Killer.GetTeamNum() != GetTeamNum()){
+    if (WiPChampionController(Killer) != none){
+        `log("Killer was a player . Need to reward a last hit and extra gold");
+    }
 
-            // how many champions are within rewardRange
-            eligibleChampions = 0;
-            foreach WorldInfo.AllPawns(class'WiPChampion', CurHeroPawn, Location, rewardRange ){
-                if (CurHeroPawn.GetTeamNum() != GetTeamNum()){
-                    eligibleChampions++;
-                }
-            }
-            
-            // iterate over those champions and reward them
-            foreach WorldInfo.AllPawns(class'WiPChampion', CurHeroPawn, Location, rewardRange ){
-                if(CurHeroPawn.GetTeamNum() != GetTeamNum()){
-                    champRepInfo = WiPChampionReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
-                    if (champRepInfo != none){
-                        champRepInfo.GiveExperience(ExperienceToGiveOnKill/eligibleChampions);
-                    }
-                }
-
-            }
-
-
+    eligibleChampions = 0;
+    foreach WorldInfo.AllPawns(class'WiPChampion', CurHeroPawn, Location, rewardRange ){
+        if (CurHeroPawn.GetTeamNum() != GetTeamNum()){
+            eligibleChampions++;
         }
+    }
 
+    // iterate over those champions and reward them
+    foreach WorldInfo.AllPawns(class'WiPChampion', CurHeroPawn, Location, rewardRange ){
+        if(CurHeroPawn.GetTeamNum() != GetTeamNum()){
+            champRepInfo = WiPChampionReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
+            if (champRepInfo != none){
+                champRepInfo.GiveExperience(ExperienceToGiveOnKill/eligibleChampions);
+            }
+        }
     }
 
 
@@ -137,6 +130,15 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 	BeginRagdoll();
 	LifeSpan = 1.f;
 	return true;
+}
+
+// return teamIndex
+simulated function byte GetTeamNum(){
+    if (WiPCreepPawn(self)!=none){
+        return WiPCreepPawn(self).Factory.getTeamNum();
+    }
+
+    return 3;
 }
 
 // change the location/rotation of the projectil to that of the weapon
@@ -169,6 +171,8 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
 
     local int actualDamage;
     local Controller killer;
+
+   // `log("attacked : " @ self);
 
    // `log("my health is at =========================" @ currentHealth);
   //  `log("I'm taking damage!!!!! ====================" @ Damage);
@@ -217,7 +221,6 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
 
 	if (Health <= 0){
 		// pawn died
-	//	`log("This pawn has died ========================" @ self);
 		Killer = SetKillInstigator(InstigatedBy, DamageType);
 		TearOffMomentum = Momentum;
 		Died(Killer, DamageType, HitLocation);
@@ -248,8 +251,8 @@ defaultproperties
 	BaseAttackSpeed=1.f
 	SightRange=500.f
 	PawnDamageType=class'DamageType'
-	BaseAttackDamage=20
-	RewardRange = 4000
+	BaseAttackDamage=20.f
+	RewardRange = 2000.f
 	ExperienceToGiveOnKill = 50
 	MoneyToGiveOnKill = 25
 }
