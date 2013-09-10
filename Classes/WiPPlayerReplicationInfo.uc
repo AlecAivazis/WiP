@@ -8,6 +8,9 @@ var RepNotify int gold;
 var RepNotify int lastHits;
 // the amount of money to give to a player when he/she levels
 var int moneyToGiveOnLevel;
+// the time of the player's next respawn
+var float NextRespawnTime;
+
 
 // Replication block
 replication

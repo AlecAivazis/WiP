@@ -16,6 +16,28 @@ simulated event PostBeginPlay(){
 	currentHealth = BaseHealth;
 }
 
+// called when the pawn dies (assign a new respawn time)
+function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLocation){
+    
+    local WiPChampionReplicationInfo champRepInfo;
+    local WiPPlayerReplicationInfo playerRepInfo;
+
+    // get replication information
+    champRepInfo = WiPChampionReplicationinfo(PlayerReplicationInfo);
+    if (champRepInfo != none) {
+
+        playerRepInfo = WiPPlayerReplicationInfo(champRepInfo.PlayerReplicationInfo);
+        if (playerRepInfo != none){
+
+            playerRepInfo.NextRespawnTime = WorldInfo.TimeSeconds + 15.f + (champRepInfo.Level * 5.f);
+            `log("player respawn time ============ " @ playerRepInfo.NextRespawnTime );
+        }
+    }
+
+    return Super.Died(Killer, DamageType, HitLocation);
+
+}
+
 
 // add the default weapon
 function AddDefaultInventory(){
