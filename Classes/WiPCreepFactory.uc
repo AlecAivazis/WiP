@@ -28,13 +28,14 @@ function PostBeginPlay(){
     Super.PostBeginPlay();
 
     // for development, start spawning 5 seconds after the game starts
+
     SetTimer(5, false, NameOf(startTimer));
 }
 
 function startTimer(){
     // spawn creeps - make sure to check if the archetypes are set
-    spawnCreepTimer();
-    setTimer(spawnInterval, true, NameOf(SpawnCreepTimer));
+    spawnCreep();
+    setTimer(spawnInterval, true, NameOf(SpawnCreep));
 
 }
 
@@ -43,7 +44,7 @@ simulated function byte getTeamNum(){
 }
 
 
-function spawnCreepTimer(){
+function spawnCreep(){
 
     local WiPCreepPawn creepPawn;
 
@@ -62,10 +63,10 @@ function spawnCreepTimer(){
                 // limit one pawn per spawn
                 return;
             }
-            
+
         // check if Archetype2 is define so we can end the timer early
         } else if (pawnArchetype2 == none) {
-            ClearTimer(NameOf(SpawnCreepTimer));
+            ClearTimer(NameOf(SpawnCreep));
         }
     }
     
@@ -78,7 +79,7 @@ function spawnCreepTimer(){
                 numArchetype2_current ++;
             }
 
-        } else ClearTimer(NameOf(SpawnCreepTimer));
+        } else ClearTimer(NameOf(SpawnCreep));
     }
 }
 
