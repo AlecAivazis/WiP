@@ -58,6 +58,13 @@ function Fire(){
 
     // grab the current enemy
     currentEnemy = WiPNeutralPawn(WeaponOwner) != none ? WiPNeutralPawn(WeaponOwner).GetEnemy() : none;
+    // if if failed becaues its not a neutralPawn, try a tower
+    if (currentEnemy == none) {
+        if (WiPTower(WeaponOwner) != none){
+            currentEnemy = WiPTower(WeaponOwner).GetEnemy();
+        }
+
+    }
 
     if (currentEnemy == none){
         StopFire();
@@ -105,6 +112,12 @@ function startFire(){
             // start firing timer
             WeaponOwner.GetActor().SetTimer(firingRate, true, NameOf(Fire), self);
             bIsFiring = true;
+        
+        // the owner exists but isn't a pawn, therefore its a tower
+        } else {
+            
+
+
         }
     }
 }
