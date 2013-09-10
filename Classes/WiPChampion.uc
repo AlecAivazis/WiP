@@ -1,14 +1,7 @@
 class WiPChampion extends WiPPawn
     implements (WiPAttackable);
 
-// the amount of experience awarded to others when they kill a champion
-var(Rewards) const int ExperienceToGiveOnKill;
-// the amount of money given to the killer
-var(Rewards) const int MoneyToGiveOnKill ;
-// the money multiplier for being the killer
-var(Rewards) const float LastHitMultiplier;
-// the range to award champions
-var(Rewards) const float RewardRange;
+
 
 
 simulated event PostBeginPlay(){

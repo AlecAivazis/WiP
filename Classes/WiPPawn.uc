@@ -21,6 +21,15 @@ var(Weapon) const Name WeaponAttachmentSocketName;
 // The type of damage this pawn deals when auto-attacking
 var(Weapon) const class<DamageType> PawnDamageType<DisplayName=DamageType>;
 
+// money earned by killing the creep
+var(Misc) const int moneyToGiveOnKill;
+// money multipler for last hit
+var(Misc) const float LastHitMultiplier;
+// experience earned by the creep
+var(Misc) const int experienceToGiveOnKill;
+// range to reward gold/exp
+var(Misc) const float rewardRange;
+
 // How much health this pawn has - sync'd with 'Pawn.Health'
 var(Stats) float currentHealth;
 // How long an attack takes to do (in seconds) - doesn't change, but does combine with Attack Speed stat.

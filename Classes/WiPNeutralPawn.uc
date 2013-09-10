@@ -2,14 +2,7 @@ class WiPNeutralPawn
     extends WiPPawn
     implements(WiPAttackable);
 
-// money earned by killing the creep
-var(Creep) const int moneyToGiveOnKill;
-// money multipler for last hit
-var(Creep) const float LastHitMultiplier;
-// experience earned by the creep
-var(Creep) const int experienceToGiveOnKill;
-// range to reward gold/exp
-var(Creep) const float rewardRange;
+
 
 // weapon range trigger
 var ProtectedWrite WiPTrigger weaponRangeTrigger;
