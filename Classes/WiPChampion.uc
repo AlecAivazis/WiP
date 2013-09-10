@@ -19,7 +19,7 @@ simulated event PostBeginPlay(){
 
 // add the default weapon
 function AddDefaultInventory(){
-	InvManager.CreateInventory(class'WiPWeapon');
+	InvManager.CreateInventory(class'UTWeap_LinkGun');
 }
 
 // return attacking rate

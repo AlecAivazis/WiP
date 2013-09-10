@@ -4,6 +4,8 @@ class WiPNeutralPawn
 
 // money earned by killing the creep
 var(Creep) const int moneyToGiveOnKill;
+// money multipler for last hit
+var(Creep) const float LastHitMultiplier;
 // experience earned by the creep
 var(Creep) const int experienceToGiveOnKill;
 // range to reward gold/exp
@@ -35,7 +37,7 @@ simulated event PostBeginPlay(){
 
         }
     }
-    
+
     // set the health float
     currentHealth = float(Health);
 }
@@ -89,13 +91,31 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
     local int eligibleChampions;
     local WiPChampion CurHeroPawn;
     local WiPChampionReplicationInfo champRepInfo;
+    local WiPPlayerController playerController;
+    local WiPPlayerReplicationInfo playerRepInfo, currentPlayerRepInfo;
+    local int moneyToGive;
 
     `log("This pawn has died" @ self);
 
-    if (WiPChampionController(Killer) != none){
-        `log("Killer was a player . Need to reward a last hit and extra gold");
+    if (WiPPlayerController(Killer) != none){
+        // grab the killer's controller
+        //killerController = WiPChampionController(Killer);
+
+        playerController = WiPPlayerController(Killer);
+        playerRepInfo = WiPPlayerReplicationInfo(playerController.PlayerReplicationInfo);
+        if (playerRepInfo != none){
+
+            // give the player a last hit and
+            playerRepInfo.lastHits++;
+            `log("You got a last hit. Current amount " @ playerRepInfo.lastHits);
+
+        }
     }
 
+    // if the killer was a player, give him 1.5 of the money instead
+    moneyToGive = MoneyToGiveOnKill;
+
+    // count the number of champions around
     eligibleChampions = 0;
     foreach WorldInfo.AllPawns(class'WiPChampion', CurHeroPawn, Location, rewardRange ){
         if (CurHeroPawn.GetTeamNum() != GetTeamNum()){
@@ -103,12 +123,22 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
         }
     }
 
-    // iterate over those champions and reward them
+    // iterate over those champions again and reward them
     foreach WorldInfo.AllPawns(class'WiPChampion', CurHeroPawn, Location, rewardRange ){
+        // opponents only
         if(CurHeroPawn.GetTeamNum() != GetTeamNum()){
+
             champRepInfo = WiPChampionReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
             if (champRepInfo != none){
                 champRepInfo.GiveExperience(ExperienceToGiveOnKill/eligibleChampions);
+                currentPlayerRepInfo = WiPPlayerReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
+                
+                // give the killer extra gold for the last hit
+                if (CurHeroPawn.Controller == Killer){
+                    currentPlayerRepInfo.GiveGold(moneyToGive * LastHitMultiplier);
+                }else {
+                    currentPlayerRepInfo.GiveGold(moneyToGive);
+                }
             }
         }
     }
@@ -168,14 +198,14 @@ simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, o
 // take damage handler
 event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector Momentum, class<DamageType> DamageType, optional TraceHitInfo HitInfo, optional Actor DamageCauser){
 
-
     local int actualDamage;
     local Controller killer;
 
    // `log("attacked : " @ self);
 
-   // `log("my health is at =========================" @ currentHealth);
-  //  `log("I'm taking damage!!!!! ====================" @ Damage);
+    //`log("my health is at =========================" @ currentHealth);
+   // `log("I'm taking damage!!!!! ====================" @ Damage);
+   // `log("This guy hurt me =============== " @ InstigatedBy);
 
     if (Role < ROLE_Authority || Health <=0){
         return;
@@ -187,7 +217,7 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
 
     // make sure it's bigger than zero, if not do zero damage
     Damage = Max(Damage, 0);
-    
+
     // set physics if its not set and we're not in a vehicle
     if (Physics == PHYS_None && DrivenVehicle == None){
         SetMovementPhysics();
@@ -255,4 +285,5 @@ defaultproperties
 	RewardRange = 2000.f
 	ExperienceToGiveOnKill = 50
 	MoneyToGiveOnKill = 25
+	LastHitMultiplier = 1.5
 }

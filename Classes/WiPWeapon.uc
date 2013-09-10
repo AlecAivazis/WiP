@@ -25,7 +25,7 @@ simulated function ProcessInstantHit(byte FiringMode, ImpactInfo Impact, optiona
         cachedOwner.BuffAttack(damage, cachedOwner.PawnDamageType);
     }
 
-    target = WiPPawn(Impact.HitActor) != none ? WiPPawn(Impact.HitActor) : none;
+    target = (WiPPawn(Impact.HitActor) != none )? WiPPawn(Impact.HitActor) : none;
 
     if (target != none){
         `log("called enemies' takeDamage()");

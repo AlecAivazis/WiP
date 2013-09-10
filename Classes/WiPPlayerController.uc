@@ -46,8 +46,8 @@ event Possess(Pawn inPawn, bool bVehicleTransition){
     // spawn the champion's controller
     champController = WiPChampionController(champPawn.Controller);
     if (champController != none){
-        // champPawn.Controller = self;
-        // champPawn.PlayerController = self;
+        champController.Controller = self;
+        champController.PlayerController = self;
     }
 
 
