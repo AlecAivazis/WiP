@@ -1,6 +1,8 @@
 class WiPChampion extends WiPPawn
     implements (WiPAttackable);
 
+// the array of spells castable by this champion
+
 
 
 
@@ -42,7 +44,9 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 
 // add the default weapon
 function AddDefaultInventory(){
-	InvManager.CreateInventory(class'UTWeap_LinkGun');
+    // add the default weapon for the champion to handle white damage
+	InvManager.CreateInventory(class'WiPDefaultWeapon');
+	// add the
 }
 
 // return attacking rate
