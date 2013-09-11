@@ -15,7 +15,8 @@ var(Tower) const ParticleSystemComponent ParticleSystem;
 var(Tower) const LightComponent Light;
 // Tower detection radius
 var(Tower) const float SightRadius;
-
+// Explosion particle effect to spawn when destroyed
+var(Tower) const ParticleSystem ExplosionTemplate;
 
 // all of the enemies that are in range
 var ProtectedWrite array<WiPAttackable> TargetsInSight;
@@ -163,6 +164,17 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 	return Super.Died(Killer, DamageType, HitLocation);
 }
 
+// perform client side stuff that represents this tower dying
+simulated function PlayDying(class<DamageType> DamageType, vector HitLoc){
+	Super.PlayDying(DamageType, HitLoc);
+
+	if (ExplosionTemplate != None && WorldInfo.MyEmitterPool != None)
+	{
+		WorldInfo.MyEmitterPool.SpawnEmitter(ExplosionTemplate, Location);
+	}
+
+	SetHidden(true);
+}
 
 
 // removed for immovable objects
