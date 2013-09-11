@@ -50,14 +50,12 @@ simulated event PostBeginPlay(){
 // called when this pawn is destroyed
 simulated event Destroyed(){
 
+    `log("called destroyed");
+
+
+
     Super.Destroyed();
 
-    // delete the sight trigger
-    if (SightTrigger != none){
-        SightTrigger.OnTouch = none;
-        SightTrigger.OnUnTouch = none;
-        SightTrigger.Destroy();
-    }
 }
 
 // called whenever a pawn touches the sight detector
@@ -149,11 +147,32 @@ event Tick(float DeltaTime){
     }
 }
 
+function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLocation){
+
+    if (Super.Died(Killer, DamageType, HitLocation)){
+        // delete the sight trigger
+        if (SightTrigger != none){
+            SightTrigger.OnTouch = none;
+            SightTrigger.OnUnTouch = none;
+            SightTrigger.Destroy();
+        }
+        
+        // delete the weapon
+        if (WeaponFireMode != none){
+            WeaponFireMode.Destroy();   
+        }
+    	return true;
+    }
+}
+
+
+
 // removed for immovable objects
 
 function HandleMomentum(vector Momentum, Vector HitLocation, class<DamageType> DamageType, optional TraceHitInfo HitInfo);
 
 function AddVelocity(vector NewVelocity, vector HitLocation, class<DamageType> DamageType, optional TraceHitInfo HitInfo);
+
 
 
 /*****************************************************************
@@ -220,7 +239,7 @@ defaultproperties
 	HealthMax=4250
 	Health=40
 	SightRadius=512.f
-	BaseAttackDamage=50.f
+	BaseAttackDamage=2.f
 	PawnDamageType=class'DamageType'
 	MoneyToGiveOnKill = 1200
 	LastHitMultiplier = 1.2

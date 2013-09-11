@@ -97,7 +97,7 @@ function bool canReachDestination(Vector loc){
         return false;
     }
 
-    /* check for specific actors if necessary - TBI
+    // check for specific actors if necessary
     foreach TraceActors(class'Actor', actorHit, hitNormal, loc, Pawn.Location, extent){
 
         // can't walk through towers
@@ -105,7 +105,7 @@ function bool canReachDestination(Vector loc){
             return false;
         }
     }
-    */
+
 
     return true;
 }

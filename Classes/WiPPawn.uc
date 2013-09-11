@@ -274,6 +274,7 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
 
 }
 
+
 defaultproperties
 {
 	Components.Remove(Sprite)

@@ -157,7 +157,7 @@ simulated function DealEnemyDamage(){
 		if (WiPPawn(OwnerAttackInterface) != None){
            // `log("CastedPawn's Team ========== " @WipPawn(OwnerAttackInterface).GetTeamNum());
 			AttackingController = WiPPawn(OwnerAttackInterface).Controller;
-		//	`log("Retrieved Pawn's Controller ==========" @ AttackingController);
+		    //  `log("Retrieved Pawn's Controller ==========" @ AttackingController);
             NeutralPawn = WiPPawn(Enemy);
 			if (NeutralPawn != None){
 				// DamageDone *= WiPPawn.GetArmorTypeMultiplier(AttackType);

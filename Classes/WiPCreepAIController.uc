@@ -86,6 +86,8 @@ simulated function internalOnSightTrigger(Actor Caller, Actor Other, PrimitiveCo
         wipAttackable = WiPAttackable(Other);
         if (wipAttackable != none && wipAttackable.IsValidToAttack() && creepPawn.GetTeamNum() != wipAttackable.GetTeamNum() && visibleAttackables.Find(wipAttackable) == INDEX_NONE){
             visibleAttackables.AddItem(wipAttackable);
+        } else {
+            `log("target is not valid to attack");
         }
     }
 }
