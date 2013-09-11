@@ -148,22 +148,19 @@ event Tick(float DeltaTime){
 }
 
 function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLocation){
-
-    if (Super.Died(Killer, DamageType, HitLocation)){
-        // delete the sight trigger
-        if (SightTrigger != none){
-            SightTrigger.OnTouch = none;
-            SightTrigger.OnUnTouch = none;
-            SightTrigger.Destroy();
-        }
-        
-        // delete the weapon
-        if (WeaponFireMode != none){
-            WeaponFireMode.Destroy();
-        }
-        
-    	return true;
+   
+    if (SightTrigger != none){
+        SightTrigger.OnTouch = none;
+        SightTrigger.OnUnTouch = none;
+        SightTrigger.Destroy();
     }
+    
+    // delete the weapon
+    if (WeaponFireMode != none){
+        WeaponFireMode.Destroy();
+    }
+
+	return Super.Died(Killer, DamageType, HitLocation);
 }
 
 
@@ -243,6 +240,7 @@ defaultproperties
 	BaseAttackDamage=2.f
 	PawnDamageType=class'DamageType'
 	MoneyToGiveOnKill = 1200
+	ExperienceToGiveOnKill = 200
 	LastHitMultiplier = 1.2
 
 }
