@@ -78,6 +78,8 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
             }
         }
     }
+    
+    Destroy();
 
     return Super.Died(Killer, DamageType, HitLocation);
 
