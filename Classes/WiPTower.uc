@@ -72,7 +72,6 @@ simulated function InternalOnUnTouch(Actor Caller, Actor Other){
     if (otherAttackable != none){
         TargetsInSight.RemoveItem(otherAttackable);
     }
-
 }
 
 
@@ -88,27 +87,66 @@ simulated function InternalOnTouch(Actor Caller, Actor Other){
     if (otherAttackable != none){
         TargetsInSight.AddItem(otherAttackable);
     }
-
 }
 
 // called everytime the tower updates
 event Tick(float DeltaTime){
 
+    local int i, highestPriority;
+    local array<WiPAttackable> potentialTargets;
+    local WiPAttackable highestPriorityInterface;
+
     Super.Tick(DeltaTime);
-    
+
     // only perform currentEnemy assignment on the server
     if (Role != Role_Authority) continue;
-    
+
     // validate currentEnemy
     if (currentEnemy != none){
         if (!currentEnemy.IsValidToAttack() || currentEnemy.GetTeamNum() == GetTeamNum() || TargetsInRange.Find(currentEnemy) == INDEX_NONE)
             currentEnemy = none;
     }
-    
-    
-    
 
+    // if there isn't a currentEnemy, find one out of visibleAttackables
+    if (currentEnemy == none){
 
+        // reset the priority count
+        highestPriority = 0;
+
+        // filter out those visible that are on the same team
+        for (i = 0; i < visibleAttackables.Length; i++){
+            if (visibleAttackables[i].GetTeamNum() != GetTeamNum())
+                potentialTargets.AddItem(visibleAttackables[i]);
+        }
+
+        // only move on if there is a potentialTarget
+        if (potentialTargets.Length == 0 ) continue
+
+        // loop over potentialTargets
+        for (i =0; i < potentialTargets.Length; i++ ){
+            
+            // grab the highest priority
+            if (potentialTargets[i].getAttackPriority(self) > highestPriority){
+                highestPriorityInterface = potentialTargets[i];
+                highestPriority = potentialTargets[i].getAttackPriority(self);
+            }
+        }
+
+        // assign highestPriorityInterface to the currentEnemy
+        if (highestPriorityInterface != none) currentEnemy = highestPriorityInterface;
+    }
+    
+    // if there is a weapon
+    if (WeaponFireMode != none){
+
+        // if there is a targetted enemy - attack
+        if(currentEnemy != none){
+            if (!WeaponFireMode.IsFiring()) WeaponFireMode.StartFire();
+        // otherwise - stop firing
+        } else{
+            if (WeaponFireMode.IsFiring()) WeaponFireMode.StopFire();
+        }
+    }
 }
 
 // removed for immovable objects
