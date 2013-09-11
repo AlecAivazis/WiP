@@ -19,12 +19,8 @@ simulated event PostBeginPlay(){
 
 // called when the pawn dies (assign a new respawn time)
 function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLocation){
-    local int eligibleChampions;
-    local WiPChampion CurHeroPawn;
     local WiPChampionReplicationInfo champRepInfo;
-    local WiPPlayerController playerController;
-    local WiPPlayerReplicationInfo playerRepInfo, currentPlayerRepInfo;
-    local int moneyToGive, expToGive;
+    local WiPPlayerReplicationInfo playerRepInfo;
 
 
     // get replication information
@@ -38,47 +34,6 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
             `log("player respawn time ============ " @ playerRepInfo.NextRespawnTime );
         }
     }
-
-    // if the killer was a player, give him 1.5 of the money instead
-    moneyToGive = MoneyToGiveOnKill;
-    
-    // count the number of champions around
-    eligibleChampions = 0;
-    foreach WorldInfo.AllPawns(class'WiPChampion', CurHeroPawn, Location, rewardRange ){
-        if (CurHeroPawn.GetTeamNum() != GetTeamNum()){
-            eligibleChampions++;
-        }
-    }
-
-    // iterate over those champions again and reward them
-    foreach WorldInfo.AllPawns(class'WiPChampion', CurHeroPawn, Location, rewardRange ){
-        // opponents only
-        if(CurHeroPawn.GetTeamNum() != GetTeamNum()){
-
-            champRepInfo = WiPChampionReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
-            if (champRepInfo != none){
-
-                currentPlayerRepInfo = WiPPlayerReplicationInfo(CurHeroPawn.PlayerReplicationInfo);
-
-                expToGive =ExperienceToGiveOnKill/eligibleChampions;
-
-                // check if we're going to level the hero to give the player the appropriate amt of gold
-                if (champRepInfo.willLevel(expToGive)){
-                    currentPlayerRepInfo.GiveGold(currentPlayerRepInfo.MoneyToGiveOnLevel);
-                }
-
-                champRepInfo.GiveExperience(expToGive);
-
-                // give the killer extra gold for the last hit
-                if (CurHeroPawn.Controller == Killer){
-                    currentPlayerRepInfo.GiveGold(moneyToGive * LastHitMultiplier);
-                }else {
-                    currentPlayerRepInfo.GiveGold(moneyToGive);
-                }
-            }
-        }
-    }
-    
 
     return Super.Died(Killer, DamageType, HitLocation);
 
