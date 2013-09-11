@@ -1,4 +1,4 @@
-class WiPWeapon extends UDKWeapon;
+class WiPDefaultWeapon extends UTWeap_PhysicsGun;
 
 // cached a typecasted version of owner
 var WiPPawn cachedOwner;
@@ -16,8 +16,8 @@ simulated function ProcessInstantHit(byte FiringMode, ImpactInfo Impact, optiona
     pawnRepInfo = WipPawnReplicationInfo(cachedOwner.PlayerReplicationInfo);
 
     damage = cachedOwner.BaseAttackDamage;
-    
-    // if there is valid replication info 
+
+    // if there is valid replication info
     // potentially add if owner is still alive (currentHealth > 0)
     if (pawnRepInfo != none){
 
@@ -68,12 +68,21 @@ reliable client function ClientGivenTo (Pawn NewOwner, bool bDoNotActivate){
     cachedOwner = (WiPPawn(NewOwner) != none) ? WiPPawn(NewOwner) : none;
 }
 
+simulated function TimeWeaponEquipping(){
+    AttachWeaponTo( Instigator.Mesh,'WeaponPoint' );
+    super.TimeWeaponEquipping();
+}
+
+simulated function AttachWeaponTo( SkeletalMeshComponent MeshCpnt, optional Name SocketName ){
+    MeshCpnt.AttachComponentToSocket(Mesh,SocketName);
+}
+
 DefaultProperties
 {
     FiringStatesArray(0)=WeaponFiring
     Spread(0)=0
 
-	Begin Object Class=UDKSkeletalMeshComponent Name=GunMesh
+ Begin Object Class=UDKSkeletalMeshComponent Name=GunMesh
         SkeletalMesh=SkeletalMesh'WP_LinkGun.Mesh.SK_WP_Linkgun_3P'
         HiddenGame=FALSE
         HiddenEditor=FALSE
@@ -81,8 +90,7 @@ DefaultProperties
     Mesh=GunMesh
     Components.Add(GunMesh)
 
-	WeaponFireTypes(0)=EWFT_InstantHit
-	WeaponProjectiles(0)=class'UTProj_Rocket' // UTProj_LinkPowerPlasma if linked (see GetProjectileClass() )
+	WeaponFireTypes(0)=EWFT_Projectile
+    Rocket' // UTProj_LinkPowerPlasma if linked (see GetProjectileClass() )
 
-	WeaponRange=500
 }

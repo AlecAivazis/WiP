@@ -92,7 +92,7 @@ function UpdateRotation( float DeltaTime )
 
     ProcessViewRotation( DeltaTime, ViewRotation, DeltaRot );
     SetRotation(ViewRotation);
-    
+
     NewRotation = ViewRotation;
     NewRotation.Roll = Rotation.Roll;
 

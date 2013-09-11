@@ -54,13 +54,13 @@ function UpdateViewTarget(out TViewTarget OutVT, float DeltaTime)
 
             CamStart = Controller.Pawn.Location;
             CamStart.Z += CameraZOffset;
-        
+
             GetAxes(OutVT.POV.Rotation, X, Y, Z);
             X *= CollisionRadius * CameraTranslateScale.X;
             Y *= CollisionRadius * CameraTranslateScale.Y;
             Z *= CollisionRadius * -1.0f;
             CamDir = X + Y + Z;
-        
+
             OutVT.POV.Location = CamStart - CamDir;
 			
 		}
@@ -78,6 +78,6 @@ function UpdateViewTarget(out TViewTarget OutVT, float DeltaTime)
 
 DefaultProperties
 {
-	CameraZOffset=48
-    CameraTranslateScale=(X=10,Y=-2,Z=1)
+	CameraZOffset=30
+    CameraTranslateScale=(X=5,Y=-1,Z=1)
 }

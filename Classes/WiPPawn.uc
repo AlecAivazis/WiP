@@ -164,12 +164,8 @@ simulated function bool isValidToAttack(){
 //fix aiming to a plane
 simulated singular event Rotator GetBaseAimRotation(){
 
-   local rotator   POVRot, tempRot;
+   local rotator   POVRot;
 
-
-   tempRot = Rotation;
-   tempRot.Pitch = 0;
-   SetRotation(tempRot);
    POVRot = Rotation;
    POVRot.Pitch = 0;
 
@@ -177,7 +173,7 @@ simulated singular event Rotator GetBaseAimRotation(){
    return POVRot;
 }
 
-
+/*
 //override to make player mesh visible by default
 simulated event BecomeViewTarget( PlayerController PC )
 {
@@ -191,12 +187,13 @@ simulated event BecomeViewTarget( PlayerController PC )
       if (UTPC != None)
       {
          //set player controller to behind view and make mesh visible
-         // UTPC.SetBehindView(true);
+         UTPC.SetBehindView(true);
          UTPawn(PC.Pawn).SetMeshVisibility(UTPC.bBehindView);
          UTPC.bNoCrosshair = true;
       }
    }
 }
+*/
 
 // take damage handler
 event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector Momentum, class<DamageType> DamageType, optional TraceHitInfo HitInfo, optional Actor DamageCauser){

@@ -48,17 +48,6 @@ simulated event PostBeginPlay(){
     }
 }
 
-// called when this pawn is destroyed
-simulated event Destroyed(){
-
-    `log("called destroyed");
-
-
-
-    Super.Destroyed();
-
-}
-
 // called whenever a pawn touches the sight detector
 simulated function InternalOnUnTouch(Actor Caller, Actor Other){
 
