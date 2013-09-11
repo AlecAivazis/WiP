@@ -177,6 +177,9 @@ simulated function byte GetTeamNum(){
 // change the location/rotation of the projectil to that of the weapon
 simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, out Rotator FireRotation){
 	local Actor currentEnemy;
+	currentEnemy = GetEnemy();
+	
+	/*
 
 	// Grab the skeletal mesh component, abort if it doesn't exist
 	if (WeaponSkeletalMesh == None || WeaponSkeletalMesh.SkeletalMesh == None){
@@ -196,6 +199,12 @@ simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, o
 
 	// Grab the world socket location and rotation and forward this to begin fire
 	WeaponSkeletalMesh.GetSocketWorldLocationAndRotation(WeaponFiringSocketName, FireLocation, FireRotation);
+
+	*/
+
+	FireLocation = Location;
+	FireRotation = Rotator(CurrentEnemy.Location - FireLocation);
+
 }
 
 

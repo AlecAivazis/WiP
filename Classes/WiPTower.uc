@@ -159,8 +159,9 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
         
         // delete the weapon
         if (WeaponFireMode != none){
-            WeaponFireMode.Destroy();   
+            WeaponFireMode.Destroy();
         }
+        
     	return true;
     }
 }
