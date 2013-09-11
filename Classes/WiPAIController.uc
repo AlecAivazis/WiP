@@ -133,7 +133,6 @@ function bool isWithinAttackingAngle(Actor target){
 // return if the target is within range
 function bool isWithinAttackingRange(Actor target){
 
-
     // if the current enemy or pawn is invalid, no
     if (currentEnemy == none || cachedPawn == none) return false;
 

@@ -198,13 +198,12 @@ simulated event BecomeViewTarget( PlayerController PC )
 
 // take damage handler
 event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector Momentum, class<DamageType> DamageType, optional TraceHitInfo HitInfo, optional Actor DamageCauser){
-
     local int actualDamage;
     local Controller killer;
 
    // `log("attacked : " @ self);
 
-    //`log("my health is at =========================" @ currentHealth);
+   // `log("my health is at =========================" @ currentHealth);
    // `log("I'm taking damage!!!!! ====================" @ Damage);
    // `log("This guy hurt me =============== " @ InstigatedBy);
 

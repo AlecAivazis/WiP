@@ -115,7 +115,8 @@ function startFire(){
         
         // the owner exists but isn't a pawn, therefore its a tower
         } else {
-            
+            WeaponOwner.GetActor().SetTimer(1, true, NameOf(Fire), self);
+            bIsFiring = true;
 
 
         }
