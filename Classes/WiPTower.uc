@@ -14,11 +14,17 @@ var(Tower) const ParticleSystemComponent ParticleSystem;
 // Point light used to light the area around the tower
 var(Tower) const LightComponent Light;
 // Tower detection radius
-var(Tower) const float DetectionRadius;
+var(Tower) const float SightRadius;
 
+
+// all of the enemies that are in range
+var ProtectedWrite array<WiPAttackable> TargetsInSight;
 // current targetted enemy
 var ProtectedWrite WiPAttackable currentEnemy;
+// Sight trigger
+var ProtectedWrite WiPTrigger SightTrigger;
 
+// called when this pawn is instantiated
 simulated event PostBeginPlay(){
 	Super(WiPPawn).PostBeginPlay();
 
@@ -26,14 +32,91 @@ simulated event PostBeginPlay(){
 	if (WeaponFireMode != None){
 		WeaponFireMode.SetOwner(Self);
 	}
+
+	// create the detection trigger
+	SightTrigger = Spawn(class'WiPTrigger',,,Location);
+	if (SightTrigger != none){
+
+        if (SightTrigger.CollisionCylinderComponent != none){
+            SightTrigger.CollisionCyllinder.Component.SetCylinderSize(SightRadius, 64.f);
+        }
+
+        SightTrigger.OnTouch = InternalOnTouch;
+        SightOnUnTouch = InternalOnUnTouch;
+
+    }
 }
 
-event TakeDamage(int DamageAmount, Controller EventInstigator, vector HitLocation, vector Momentum, class<DamageType> DamageType, optional TraceHitInfo HitInfo, optional Actor DamageCauser){
+// called when this pawn is destroyed
+simulated event Destroyed(){
 
-    `log("you attacked a tower.");
+    Super.Destroyed();
 
-	Super.TakeDamage(DamageAmount, EventInstigator, HitLocation, Momentum, DamageType, HitInfo, DamageCauser);
+    // delete the sight trigger
+    if (SightTrigger != none){
+        SightTrigger.OnTouch = none;
+        SightTrigger.OnUnTouch = none;
+        SightTrigger.Destroy();
+    }
 }
+
+// called whenever a pawn touches the sight detector
+simulated function InternalOnUnTouch(Actor Caller, Actor Other){
+
+    local WiPAttackable otherAttackable;
+
+    // make sure the caller is the SightTrigger
+    if (Caller != SightTrigger) return;
+
+    otherAttackable = WiPAttackable(Other);
+    if (otherAttackable != none){
+        TargetsInSight.RemoveItem(otherAttackable);
+    }
+
+}
+
+
+// called whenever a pawn leaves the sight detector
+simulated function InternalOnTouch(Actor Caller, Actor Other){
+    
+    local WiPAttackable otherAttackable;
+
+    // make sure the caller is the SightTrigger
+    if (Caller != SightTrigger) return;
+
+    otherAttackable = WiPAttackable(Other);
+    if (otherAttackable != none){
+        TargetsInSight.AddItem(otherAttackable);
+    }
+
+}
+
+// called everytime the tower updates
+event Tick(float DeltaTime){
+
+    Super.Tick(DeltaTime);
+    
+    // only perform currentEnemy assignment on the server
+    if (Role != Role_Authority) continue;
+    
+    // validate currentEnemy
+    if (currentEnemy != none){
+        if (!currentEnemy.IsValidToAttack() || currentEnemy.GetTeamNum() == GetTeamNum() || TargetsInRange.Find(currentEnemy) == INDEX_NONE)
+            currentEnemy = none;
+    }
+    
+    
+    
+
+
+}
+
+// removed for immovable objects
+
+function HandleMomentum(vector Momentum, Vector HitLocation, class<DamageType> DamageType, optional TraceHitInfo HitInfo);
+
+function AddVelocity(vector NewVelocity, vector HitLocation, class<DamageType> DamageType, optional TraceHitInfo HitInfo);
+
 
 /*****************************************************************
 *   Interface - WiPAttackble                                     *
@@ -98,7 +181,7 @@ defaultproperties
 	bEdShouldSnap=true
 	HealthMax=4250
 	Health=4250
-	DetectionRadius=512.f
+	SightRadius=512.f
 	BaseAttackDamage=50.f
 	PawnDamageType=class'DamageType'
 	MoneyToGiveOnKill = 1200

@@ -101,7 +101,7 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 
             // give the player a last hit and
             playerRepInfo.lastHits++;
-            `log("You got a last hit. Current amount " @ playerRepInfo.lastHits);
+           // `log("You got a last hit. Current amount " @ playerRepInfo.lastHits);
 
         }
     }
