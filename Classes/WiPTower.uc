@@ -37,12 +37,12 @@ simulated event PostBeginPlay(){
 	SightTrigger = Spawn(class'WiPTrigger',,,Location);
 	if (SightTrigger != none){
 
-        if (SightTrigger.CollisionCylinderComponent != none){
-            SightTrigger.CollisionCyllinder.Component.SetCylinderSize(SightRadius, 64.f);
+        if (SightTrigger.triggerCollisionComponent != none){
+            SightTrigger.triggerCollisionComponent.SetCylinderSize(SightRadius, 64.f);
         }
 
         SightTrigger.OnTouch = InternalOnTouch;
-        SightOnUnTouch = InternalOnUnTouch;
+        SightTrigger.OnUnTouch = InternalOnUnTouch;
 
     }
 }
@@ -76,8 +76,8 @@ simulated function InternalOnUnTouch(Actor Caller, Actor Other){
 
 
 // called whenever a pawn leaves the sight detector
-simulated function InternalOnTouch(Actor Caller, Actor Other){
-    
+simulated function InternalOnTouch(Actor Caller, Actor Other, PrimitiveComponent OtherComp, vector HitLocation, vector HitNormal){
+
     local WiPAttackable otherAttackable;
 
     // make sure the caller is the SightTrigger
@@ -99,11 +99,11 @@ event Tick(float DeltaTime){
     Super.Tick(DeltaTime);
 
     // only perform currentEnemy assignment on the server
-    if (Role != Role_Authority) continue;
+    if (Role != Role_Authority) return;
 
     // validate currentEnemy
     if (currentEnemy != none){
-        if (!currentEnemy.IsValidToAttack() || currentEnemy.GetTeamNum() == GetTeamNum() || TargetsInRange.Find(currentEnemy) == INDEX_NONE)
+        if (!currentEnemy.IsValidToAttack() || currentEnemy.GetTeamNum() == GetTeamNum() || TargetsInSight.Find(currentEnemy) == INDEX_NONE)
             currentEnemy = none;
     }
 
@@ -114,13 +114,13 @@ event Tick(float DeltaTime){
         highestPriority = 0;
 
         // filter out those visible that are on the same team
-        for (i = 0; i < visibleAttackables.Length; i++){
-            if (visibleAttackables[i].GetTeamNum() != GetTeamNum())
-                potentialTargets.AddItem(visibleAttackables[i]);
+        for (i = 0; i<TargetsInSight.Length ; i++){
+            if (TargetsInSight[i].GetTeamNum() != GetTeamNum())
+                potentialTargets.AddItem(TargetsInSight[i]);
         }
 
         // only move on if there is a potentialTarget
-        if (potentialTargets.Length == 0 ) continue
+        if (potentialTargets.Length == 0 ) return;
 
         // loop over potentialTargets
         for (i =0; i < potentialTargets.Length; i++ ){
@@ -218,7 +218,7 @@ defaultproperties
 	bDontPossess=true
 	bEdShouldSnap=true
 	HealthMax=4250
-	Health=4250
+	Health=40
 	SightRadius=512.f
 	BaseAttackDamage=50.f
 	PawnDamageType=class'DamageType'
