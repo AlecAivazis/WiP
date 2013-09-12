@@ -78,7 +78,7 @@ simulated function Init(Vector Direction){
 simulated function HomingTimer(){
     local WiPAttackable WipAttackable;
 
-    
+
     // if the enemy doesn't exist, destroy the projectile
     if (Enemy == None){
         `log("Enemy doesn't exist");
@@ -117,6 +117,7 @@ simulated event Touch(Actor Other, PrimitiveComponent OtherComp, vector HitLocat
 		Super.Touch(Other, OtherComp, HitLocation, HitNormal);
 	}
 }
+
 
 // touch event processor
 simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNormal)
@@ -221,7 +222,7 @@ simulated function SpawnExplosionEffects(vector HitLocation, vector HitNormal){
 			
 					// Spawn the decal
 					WorldInfo.MyDecalManager.SpawnDecal(MaterialInstanceTimeVarying, TraceHitLocation + TraceHitNormal * 8.f, Rotator(-TraceHitNormal), Width, Height, 32.f, false);
-			
+
 					// Set the scalar start time; so that the decal doesn't start fading away immediately
 					MaterialInstanceTimeVarying.SetScalarStartTime(ImpactDecalOpacityScalarParameterName, ImpactDecalLifeSpan);
 				}
@@ -248,7 +249,5 @@ defaultproperties
 	bNetTemporary=false
 	bAlwaysRelevant=true
 
-	WiPMaxSpeed=+02000.000000
-	WiPSpeed=+02000.000000
 	AttackType=ATT_Magic
 }

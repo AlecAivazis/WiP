@@ -93,7 +93,7 @@ function bool canReachDestination(Vector loc){
 
     // check for line of sight -- just see if there's anything. no need to loop
     if (!FastTrace(loc, Pawn.Location, extent)){
-        `log("No line of site...");
+        // `log("No line of site...");
         return false;
     }
 

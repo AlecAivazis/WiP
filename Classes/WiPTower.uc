@@ -94,8 +94,13 @@ event Tick(float DeltaTime){
         if (!currentEnemy.IsValidToAttack() || currentEnemy.GetTeamNum() == GetTeamNum() || TargetsInSight.Find(currentEnemy) == INDEX_NONE)
             currentEnemy = none;
     }
+    
+    // remove targets who are none
+    for( i = 0 ; i < TargetsInSight.Length; i++){
+        if (TargetsInSight[i] == none) TargetsInSight.RemoveItem(TargetsInSight[i]);
+    }
 
-    // if there isn't a currentEnemy, find one out of visibleAttackables
+    // if there isn't a currentEnemy, find one out of TargetsInSight
     if (currentEnemy == none){
 
         // reset the priority count
@@ -144,7 +149,7 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
         SightTrigger.OnUnTouch = none;
         SightTrigger.Destroy();
     }
-    
+
     // delete the weapon
     if (WeaponFireMode != none){
         WeaponFireMode.Destroy();

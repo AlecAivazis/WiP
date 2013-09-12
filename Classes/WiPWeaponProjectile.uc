@@ -1,7 +1,5 @@
 class WiPWeaponProjectile extends UDKProjectile;
 
-// the damage of damage done by the projectile
-var const int Damage;
 // wether this projectile passes through enemies 
 var const bool PassThrough;
 
@@ -13,7 +11,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNorma
     // only handle actors that are WiPAttackable
     target = WiPAttackable(Other);
     if (target == none) return;
-    
+
     // only deal damage if it is okay to do so
     if (!target.isValidToAttack()) return;
 
@@ -30,13 +28,14 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNorma
 }
 
 
+
 /**
  * Initialize the Projectile
  */
 function Init(vector Direction)
 {
 	SetRotation(rotator(Direction));
-    
+
     //
 	Velocity = Speed * Direction;
 	Velocity.Z = 0;
@@ -56,7 +55,9 @@ DefaultProperties
     end object
 
     Components.Add(BaseMesh)
-    
+
     Damage = 20
     DamageRadius =0
+    LifeSpan = 0.5f
+
 }
