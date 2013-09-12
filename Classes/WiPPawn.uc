@@ -169,7 +169,7 @@ simulated singular event Rotator GetBaseAimRotation(){
    POVRot = Rotation;
    POVRot.Pitch = 0;
 
-
+    SetRotation(POVRot);
    return POVRot;
 }
 
@@ -202,9 +202,9 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
 
    // `log("attacked : " @ self);
 
-   // `log("my health is at =========================" @ currentHealth);
-   // `log("I'm taking damage!!!!! ====================" @ Damage);
-   // `log("This guy hurt me =============== " @ InstigatedBy);
+    //`log("my health is at =========================" @ currentHealth);
+    //`log("I'm taking damage!!!!! ====================" @ Damage);
+    //`log("This guy hurt me =============== " @ InstigatedBy);
 
     if (Role < ROLE_Authority || Health <=0){
         return;
@@ -339,7 +339,7 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
             }
         }
     }
-    
+    Mesh.SetHidden(true);
     return Super.Died(Killer, DamageType, HitLocation);
 }
 

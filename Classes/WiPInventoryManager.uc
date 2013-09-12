@@ -1,4 +1,4 @@
-class WiPInventoryManager extends UTInventoryManager;
+class WiPInventoryManager extends InventoryManager;
 
 DefaultProperties
 {

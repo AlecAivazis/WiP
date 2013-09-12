@@ -55,7 +55,7 @@ function UpdateViewTarget(out TViewTarget OutVT, float DeltaTime)
             CamStart = Controller.Pawn.Location;
             CamStart.Z += CameraZOffset;
 
-            GetAxes(OutVT.POV.Rotation, X, Y, Z);
+            Controller.Pawn.GetAxes(OutVT.POV.Rotation, X, Y, Z);
             X *= CollisionRadius * CameraTranslateScale.X;
             Y *= CollisionRadius * CameraTranslateScale.Y;
             Z *= CollisionRadius * -1.0f;
