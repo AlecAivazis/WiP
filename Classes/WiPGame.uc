@@ -29,4 +29,5 @@ DefaultProperties
 	PlayerReplicationInfoClass=class'WiPPlayerReplicationInfo'
 	GameReplicationInfoClass=class'WiPGameReplicationInfo'
 	DefaultPawnClass=class'WiPChampion'
+	
 }

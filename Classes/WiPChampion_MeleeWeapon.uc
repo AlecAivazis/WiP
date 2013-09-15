@@ -27,9 +27,6 @@ reliable client function ClientGivenTo(pawn NewOwner, bool bDoNotActivate){
         Mesh.SetLightEnvironment(wipPawn.LightEnvironment);
         wipPawn.Mesh.AttachComponentToSocket(Mesh, wipPawn.meleeSocketName);
     }
-
-    `log("You equipped a melee weapon!");
-
 }
 
 // restore the "ammo" (Swings remaining)

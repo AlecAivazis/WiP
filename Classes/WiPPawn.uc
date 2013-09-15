@@ -393,10 +393,10 @@ defaultproperties
 		AnimSets(0)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_AimOffset'
 		AnimSets(1)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_BaseMale'
 		AnimSets(2)=AnimSet'WiP_ASSESTS.Animations.MeleeWeaponAnimSet'
-	    //AnimTreeTemplate=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
+	    	//AnimTreeTemplate=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
 		AnimTreeTemplate=AnimTree'WiP_ASSESTS.Animations.DefaultAnimTree'
-		SkeletalMesh=SkeletalMesh'CH_LIAM_Cathode.Mesh.SK_CH_LIAM_Cathode'
-		//SkeletalMesh=SkeletalMesh'WiP_ASSESTS.Characters.attempt13'
+		//SkeletalMesh=SkeletalMesh'CH_LIAM_Cathode.Mesh.SK_CH_LIAM_Cathode'
+		SkeletalMesh=SkeletalMesh'WiP_ASSESTS.Characters.Bane'
 	End Object
 
  Begin Object Class=SkeletalMeshComponent Name=MyWeaponSkeletalMeshComponent

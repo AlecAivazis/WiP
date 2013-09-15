@@ -28,6 +28,10 @@ simulated function PostBeginPlay()
 
 }
 
+exec function SaySomething(){
+     `log("Something....");
+}
+
 
 
 event Possess(Pawn inPawn, bool bVehicleTransition){
@@ -105,7 +109,8 @@ function UpdateRotation( float DeltaTime )
 
 DefaultProperties
 {
-	CameraClass=class'WiPCamera'
-
-	//RemoteRole=ROLE_AutonomousProxy
+	CameraClass=class'WiP.WiPCamera'
+	
+        InputClass=WiPInput
+	// RemoteRole=ROLE_AutonomousProxy
 }
