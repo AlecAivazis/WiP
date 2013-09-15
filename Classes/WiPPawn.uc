@@ -403,4 +403,6 @@ defaultproperties
     CollisionHeight=+0062.000000
     End Object
     CylinderComponent=CollisionCylinder
+    
+    meleeSocketName = WeaponPoint
 }

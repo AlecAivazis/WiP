@@ -1,9 +1,10 @@
 class WiPChampion extends WiPPawn
     implements (WiPAttackable);
 
+// the default melee weapon archetype
+var() const archetype WiPChampion_MeleeWeapon DefaultMeleeWeaponArchetype;
+
 // the array of spells castable by this champion
-
-
 
 
 simulated event PostBeginPlay(){
@@ -44,8 +45,18 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 
 // add the default weapon
 function AddDefaultInventory(){
+
+    local WiPInventoryManager wipInvManager;
+
     // add the default weapon for the champion to handle white damage
-	InvManager.CreateInventory(class'WiPDefaultWeapon');
+    wipInvManager = WiPInventoryManager(InvManager);
+    if (wipInvManager != none){
+
+        wipInvManager.CreateInventoryByArchetype(defaultMeleeWeaponArchetype, false);
+    }
+
+    // InvManager.CreateInventory(class'WiPChampion_MeleeWeapon');
+    // InvManager.CreateInventory(class'WiPChampion_RangedWeapon');
 	// add the
 }
 
@@ -108,4 +119,6 @@ defaultProperties
     ExperienceToGiveOnKill = 200
     MoneyToGiveOnKill = 400
     LastHitMultiplier = 1.2
+    
+    DefaultMeleeWeaponArchetype = WiPChampion_MeleeWeapon'WiP_ASSESTS.Archetypes.DefaultChampionMeleeWeapon'
 }
