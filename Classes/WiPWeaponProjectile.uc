@@ -3,7 +3,6 @@ class WiPWeaponProjectile extends UDKProjectile;
 // wether this projectile passes through enemies 
 var const bool PassThrough;
 
-
 // Called every time the projectile hits an actor
 simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNormal){
     local WiPAttackable target;
@@ -34,11 +33,10 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNorma
  */
 function Init(vector Direction)
 {
-	SetRotation(rotator(Direction));
 
-    //
+    SetRotation(rotator(Direction));
+
 	Velocity = Speed * Direction;
-	Velocity.Z = 0;
 	Acceleration = AccelRate * Normal(Velocity);
 }
 

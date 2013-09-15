@@ -13,8 +13,6 @@ var(Tower) const editinline instanced WiPWeaponFireMode WeaponFireMode;
 var(Tower) const ParticleSystemComponent ParticleSystem;
 // Point light used to light the area around the tower
 var(Tower) const LightComponent Light;
-// Tower detection radius
-var(Tower) const float SightRadius;
 // Explosion particle effect to spawn when destroyed
 var(Tower) const ParticleSystem ExplosionTemplate;
 
@@ -78,7 +76,7 @@ simulated function InternalOnTouch(Actor Caller, Actor Other, PrimitiveComponent
 }
 
 // called everytime the tower updates
-event Tick(float DeltaTime){
+simulated event Tick(float DeltaTime){
 
     local int i, highestPriority;
     local array<WiPAttackable> potentialTargets;

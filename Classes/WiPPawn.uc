@@ -29,6 +29,10 @@ var(Misc) const float LastHitMultiplier;
 var(Misc) const int experienceToGiveOnKill;
 // range to reward gold/exp
 var(Misc) const float rewardRange;
+// the name of the melee socket
+var(Misc) const Name meleeSocketName;
+// the lighting environment for the pawn
+var(Misc) const DynamicLightEnvironmentComponent LightEnvironment;
 
 // How much health this pawn has - sync'd with 'Pawn.Health'
 var(Stats) float currentHealth;
@@ -346,7 +350,7 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 defaultproperties
 {
 	Components.Remove(Sprite)
-	
+
 	Physics=PHYS_Walking
 	bAlwaysRelevant=true
 	bReplicateHealthToAll=true
@@ -360,20 +364,22 @@ defaultproperties
 		bSynthesizeSHLight=TRUE
 	End Object
 	Components.Add(MyLightEnvironment)
+    LightEnvironment=MyLightEnvironment
 
     Begin Object Class=SkeletalMeshComponent Name=InitialSkeletalMesh
 		CastShadow=true
 		bCastDynamicShadow=true
 		bOwnerNoSee=false
-		LightEnvironment=MyLightEnvironment;
-        BlockRigidBody=true;
-        CollideActors=true;
-        BlockZeroExtent=true;
+		LightEnvironment=MyLightEnvironment
+        BlockRigidBody=true
+        CollideActors=true
+        BlockZeroExtent=true
 		PhysicsAsset=PhysicsAsset'CH_AnimCorrupt.Mesh.SK_CH_Corrupt_Male_Physics'
 		AnimSets(0)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_AimOffset'
 		AnimSets(1)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_BaseMale'
 		AnimTreeTemplate=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
 		SkeletalMesh=SkeletalMesh'CH_LIAM_Cathode.Mesh.SK_CH_LIAM_Cathode'
+		//SkeletalMesh=SkeletalMesh'WiP_ASSESTS.Characters.attempt13'
 	End Object
 
  Begin Object Class=SkeletalMeshComponent Name=MyWeaponSkeletalMeshComponent
@@ -391,9 +397,10 @@ defaultproperties
 	Components.Add(InitialSkeletalMesh);
 
 	InventoryManagerClass=class'WiPInventoryManager';
-
-	// Collision
-	BaseEyeHeight=+00008.000000
-	EyeHeight=+00008.000000
 	
+    Begin Object Name=CollisionCylinder
+    CollisionRadius=+0030.000000
+    CollisionHeight=+0062.000000
+    End Object
+    CylinderComponent=CollisionCylinder
 }
