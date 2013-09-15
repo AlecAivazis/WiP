@@ -50,6 +50,13 @@ simulated function FireAmmunition(){
 
    SwingHitActors.Remove(0, SwingHitActors.Length);
 
+    if (MaxSwings - Swings[0] == 0){
+        WiPPawn(Owner).SwingAnim.PlayCustomAnim('SwingOne', 1.0);
+    
+    }else{
+        WiPPawn(Owner).SwingAnim.PlayCustomAnim('SwingTwo', 1.0);
+    }
+
    if (HasAmmo(CurrentFireMode)){
       super.FireAmmunition();
    }

@@ -49,6 +49,9 @@ var(Stats) const float SightRange;
 // How many hit points this unit has at level 1 (minus strength hitpoints)
 var(Stats) const float BaseHealth;
 
+// the swinging animation (to play during a swing)
+var AnimNodePlayCustomAnim SwingAnim;
+
 
 simulated event PostBeginPlay(){
     super.PostBeginPlay();
@@ -277,6 +280,18 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
 
 }
 
+// start the animTree
+simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp){
+    super.PostInitAnimTree(SkelComp);
+
+    if (SkelComp == Mesh){
+        SwingAnim = AnimNodePlayCustomAnim(SkelComp.FindAnimNode('SwingCustomAnim'));
+    }
+}
+
+
+
+// called when the pawn dies
 function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLocation){
     local int eligibleChampions;
     local WiPChampion CurHeroPawn;
@@ -377,7 +392,9 @@ defaultproperties
 		PhysicsAsset=PhysicsAsset'CH_AnimCorrupt.Mesh.SK_CH_Corrupt_Male_Physics'
 		AnimSets(0)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_AimOffset'
 		AnimSets(1)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_BaseMale'
-		AnimTreeTemplate=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
+		AnimSets(2)=AnimSet'WiP_ASSESTS.Animations.MeleeWeaponAnimSet'
+	    //AnimTreeTemplate=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
+		AnimTreeTemplate=AnimTree'WiP_ASSESTS.Animations.DefaultAnimTree'
 		SkeletalMesh=SkeletalMesh'CH_LIAM_Cathode.Mesh.SK_CH_LIAM_Cathode'
 		//SkeletalMesh=SkeletalMesh'WiP_ASSESTS.Characters.attempt13'
 	End Object
@@ -397,7 +414,7 @@ defaultproperties
 	Components.Add(InitialSkeletalMesh);
 
 	InventoryManagerClass=class'WiPInventoryManager';
-	
+
     Begin Object Name=CollisionCylinder
     CollisionRadius=+0030.000000
     CollisionHeight=+0062.000000
