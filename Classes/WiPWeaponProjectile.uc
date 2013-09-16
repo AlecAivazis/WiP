@@ -57,7 +57,7 @@ DefaultProperties
 
     Components.Add(BaseMesh)
 
-    Damage = 20
+    Damage = 50
     DamageRadius =0
     LifeSpan = 0.5f
 
