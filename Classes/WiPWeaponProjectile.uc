@@ -14,6 +14,8 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNorma
     // only deal damage if it is okay to do so
     if (!target.isValidToAttack()) return;
 
+    `log("I hit a valid target");
+
 	if (DamageRadius > 0.0){
 		Explode( HitLocation, HitNormal );
 
@@ -33,6 +35,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNorma
  */
 function Init(vector Direction)
 {
+
 
     SetRotation(rotator(Direction));
 

@@ -1,5 +1,20 @@
 class WiPChampion_RangedWeapon extends WiPWeapon;
 
+simulated event vector GetPhysicalFireStartLoc(optional vector AimDir){
+
+     local vector newLoc;
+
+
+     if (cachedOwner == none)
+        cachedOwner = WiPPawn(Instigator);
+
+     newLoc = cachedOwner.GetPawnViewLocation();
+     newLoc.Z = 310;
+
+     return newLoc;
+
+}
+
 
 DefaultProperties
 {

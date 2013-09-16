@@ -110,17 +110,6 @@ simulated function class<DamageType> GetDamageType(){
     return PawnDamageType;
 }
 
-// need to impliment
-simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, out Rotator FireRotation){
-    local vector newLoc;
-    newLoc = Location;
-    newLoc.Z = 10;
-
-    FireLocation = newLoc;
-	FireRotation = Rotation;
-}
-
-
 defaultProperties
 {
 
