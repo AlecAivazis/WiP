@@ -18,8 +18,9 @@ simulated event PostBeginPlay(){
 	{
 		SpawnDefaultController();
 	}
-	
+
 	currentHealth = BaseHealth;
+
 
 }
 
@@ -66,13 +67,6 @@ function float getAttackingRate(){
     return 0.1f;
 }
 
-// return the spell in a given slot
-simulated function WiPAbility GetAbility(byte slot){
-
-    `log("called getSpell. returning "@ defaultMeleeWeaponArchetype);
-
-    return abilities[slot];
-}
 
 simulated function float AbilityTargetCenterFromRot(byte slot){
 
@@ -80,7 +74,7 @@ simulated function float AbilityTargetCenterFromRot(byte slot){
 	local rotator	POVRot;
     local float fracAngle, maxRange;
 
-    maxRange = GetAbility(slot).GetRange();
+    maxRange = Abilities[slot].GetRange();
 
 
 	if( Controller != None)
@@ -106,7 +100,7 @@ simulated function float AbilityTargetCenterFromRot(byte slot){
 simulated function CastSpell(byte slot){
     local float spellCenter;
 
-    `log("Called cast spell");
+    `log("Called cast spell " @ slot);
 
     spellCenter = AbilityTargetCenterFromRot(slot);
     

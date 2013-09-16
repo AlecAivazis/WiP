@@ -1,5 +1,7 @@
 class WiPGame extends SimpleGame;
 
+var const WiPChampion testChampionArchetype;
+
 var WiPTeamInfo teams[3];
 
 function PreBeginPlay(){
@@ -21,6 +23,20 @@ function WiPTeamInfo getTeam(int teamIndex){
     return teams[teamIndex];
 }
 
+function Pawn SpawnDefaultPawnFor(Controller NewPlayer, NavigationPoint StartSpot)
+{
+    local Pawn SpawnedPawn;
+
+    if (NewPlayer == none || StartSpot == none)
+    {
+        return none;
+    }
+
+    SpawnedPawn = Spawn(testChampionArchetype.Class,,, StartSpot.Location,, testChampionArchetype);
+
+    return SpawnedPawn;
+}
+
 DefaultProperties
 {
     bTeamGame=true
@@ -28,6 +44,7 @@ DefaultProperties
 	PlayerControllerClass=class'WiPPlayerController'
 	PlayerReplicationInfoClass=class'WiPPlayerReplicationInfo'
 	GameReplicationInfoClass=class'WiPGameReplicationInfo'
-	DefaultPawnClass=class'WiPChampion'
-	
+
+	testChampionArchetype = WiPChampion'WiP_ASSETS.Champions.TestChampion'
+
 }

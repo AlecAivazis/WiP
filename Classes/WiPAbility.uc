@@ -13,7 +13,10 @@ var(Ability) const array<float> Multipliers;
 
 
 simulated function float GetRange(){
-          return MaxRanges[Level];
+    if (Level > 0)
+       return MaxRanges[Level-1];
+    else
+        return 0;
 }
 
 
