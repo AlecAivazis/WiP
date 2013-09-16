@@ -2,7 +2,9 @@ class WiPChampion extends WiPPawn
     implements (WiPAttackable);
 
 // the default melee weapon archetype
-var() const archetype WiPChampion_MeleeWeapon DefaultMeleeWeaponArchetype;
+var(Weapon) const archetype WiPChampion_MeleeWeapon DefaultMeleeWeaponArchetype;
+// the default melee weapon archetype
+var(Weapon) const archetype WiPChampion_RangedWeapon DefaultRangedWeaponArchetype;
 
 // the array of spells castable by this champion
 
@@ -42,7 +44,6 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 
 }
 
-
 // add the default weapon
 function AddDefaultInventory(){
 
@@ -51,12 +52,11 @@ function AddDefaultInventory(){
     // add the default weapon for the champion to handle white damage
     wipInvManager = WiPInventoryManager(InvManager);
     if (wipInvManager != none){
+        //wipInvManager.CreateInventoryByArchetype(defaultMeleeWeaponArchetype, false);
+        wipInvManager.CreateInventoryByArchetype(defaultRangedWeaponArchetype, false);
 
-        wipInvManager.CreateInventoryByArchetype(defaultMeleeWeaponArchetype, false);
     }
 
-    // InvManager.CreateInventory(class'WiPChampion_MeleeWeapon');
-    // InvManager.CreateInventory(class'WiPChampion_RangedWeapon');
 	// add the
 }
 
@@ -65,6 +65,20 @@ function float getAttackingRate(){
     return 0.1f;
 }
 
+// return the spell in a given slot
+simulated function WiPWeapon GetSpell(byte slot){
+    `log("called getSpell. returning "@ defaultMeleeWeaponArchetype);
+    return defaultMeleeWeaponArchetype;
+}
+
+//
+simulated function SwitchWeapon(byte slot){
+    
+
+
+    `log("Called cast spell");
+
+}
 
 // return the team number of this pawn
 simulated function byte GetTeamNum(){
@@ -119,6 +133,7 @@ defaultProperties
     ExperienceToGiveOnKill = 200
     MoneyToGiveOnKill = 400
     LastHitMultiplier = 1.2
-    
+
     DefaultMeleeWeaponArchetype = WiPChampion_MeleeWeapon'WiP_ASSESTS.Archetypes.DefaultChampionMeleeWeapon'
+    DefaultRangedWeaponArchetype = WiPChampion_RangedWeapon'WiP_ASSESTS.Archetypes.DefaultChampionRangedWeapon'
 }
