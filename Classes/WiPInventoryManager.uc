@@ -22,6 +22,6 @@ function Inventory CreateInventoryByArchetype(Inventory NewInventoryItemArchetyp
 
 DefaultProperties
 {
-	PendingFire(0)=0
+    PendingFire(0)=0
     PendingFire(1)=0
 }

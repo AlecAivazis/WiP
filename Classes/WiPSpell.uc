@@ -1,4 +1,4 @@
-class WiPSpell extends Weapon;
+class WiPSpell extends Object;
 
 // the current level of the spell
 var RepNotify int level;

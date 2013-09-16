@@ -74,9 +74,18 @@ event Possess(Pawn inPawn, bool bVehicleTransition){
 
 
     }
-    
+
     // Restart the player controller
 	Restart(bVehicleTransition);
+}
+
+
+
+// switch equipped weapon
+exec function SwitchWeapon(byte slot){
+    if (WiPChampion(Pawn) != none){
+        WiPChampion(pawn).SwitchWeapon(slot);
+    }
 }
 
 

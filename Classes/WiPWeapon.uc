@@ -9,16 +9,21 @@ simulated function float GetFireInterval( byte FireModeNum ){
 
     local float firingRate;
 	local WiPPawnReplicationInfo pawnRepInfo;
+	
+	if (cachedOwner == none){
+       cachedOwner = WiPPawn(Instigator);
+    //   `log("Cached owner was none....");
+    }
 
 	firingRate = cachedOwner.BaseAttackTime;
-    // `log("Base firing rate ========================" @ firingRate);
+    //`log("Base firing rate ========================" @ firingRate);
     pawnRepInfo = WiPPawnReplicationInfo(cachedOwner.PlayerReplicationInfo);
     if (pawnRepInfo != none && pawnRepInfo.AttackSpeed > -1.f){
         firingRate /= (1.f + pawnRepInfo.AttackSpeed);
-    // `log("Attack Speed ======================" @ pawnRepInfo.AttackSpeed);
+    //`log("Attack Speed ======================" @ pawnRepInfo.AttackSpeed);
     }
 
-   // `log("Final firing rate =================" @firingRate);
+   //`log("Final firing rate =================" @firingRate);
 
     return firingRate;
 }
@@ -29,6 +34,7 @@ reliable client function ClientGivenTo (Pawn NewOwner, bool bDoNotActivate){
     Super.ClientGivenTo(NewOwner, bDoNotActivate);
     cachedOwner = (WiPPawn(NewOwner) != none) ? WiPPawn(NewOwner) : none;
 }
+
 
 
 defaultproperties
