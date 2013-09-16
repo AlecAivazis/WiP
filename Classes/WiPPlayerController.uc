@@ -28,12 +28,6 @@ simulated function PostBeginPlay()
 
 }
 
-exec function SaySomething(){
-     `log("Something....");
-}
-
-
-
 event Possess(Pawn inPawn, bool bVehicleTransition){
 
     local WiPChampion champPawn;
@@ -82,9 +76,9 @@ event Possess(Pawn inPawn, bool bVehicleTransition){
 
 
 // switch equipped weapon
-exec function SwitchWeapon(byte slot){
+exec function CastSpell(byte slot){
     if (WiPChampion(Pawn) != none){
-        WiPChampion(pawn).SwitchWeapon(slot);
+        WiPChampion(pawn).CastSpell(slot);
     }
 }
 

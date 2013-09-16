@@ -6,7 +6,7 @@ var(Weapon) const archetype WiPChampion_MeleeWeapon DefaultMeleeWeaponArchetype;
 // the default melee weapon archetype
 var(Weapon) const archetype WiPChampion_RangedWeapon DefaultRangedWeaponArchetype;
 
-// the array of spells castable by this champion
+var(Champion) archetype array<WiPAbility>  Abilities;
 
 
 simulated event PostBeginPlay(){
@@ -20,6 +20,7 @@ simulated event PostBeginPlay(){
 	}
 	
 	currentHealth = BaseHealth;
+
 }
 
 // called when the pawn dies (assign a new respawn time)
@@ -66,17 +67,50 @@ function float getAttackingRate(){
 }
 
 // return the spell in a given slot
-simulated function WiPWeapon GetSpell(byte slot){
+simulated function WiPAbility GetAbility(byte slot){
+
     `log("called getSpell. returning "@ defaultMeleeWeaponArchetype);
-    return defaultMeleeWeaponArchetype;
+
+    return abilities[slot];
 }
 
-//
-simulated function SwitchWeapon(byte slot){
-    
+simulated function float AbilityTargetCenterFromRot(byte slot){
 
+    local vector	POVLoc;
+	local rotator	POVRot;
+    local float fracAngle, maxRange;
+
+    maxRange = GetAbility(slot).GetRange();
+
+
+	if( Controller != None)
+	{
+		Controller.GetPlayerViewPoint(POVLoc, POVRot);
+	}
+
+    fracAngle = POVRot.Pitch/65536.f;
+
+    // if we are aiming in the first quadrant, return max range
+    if (fracAngle > 0 && fracAngle < 0.25f)
+       return maxRange;
+    
+    // if we are aiming in the 4th quadrant, return the correct range
+    if (fracAngle > 0.75 && fracAngle < 1){
+       return 10;
+    }
+
+    return 0;
+}
+
+
+simulated function CastSpell(byte slot){
+    local float spellCenter;
 
     `log("Called cast spell");
+
+    spellCenter = AbilityTargetCenterFromRot(slot);
+    
+    `log("Spell center: " @ spellCenter);
 
 }
 
@@ -137,6 +171,6 @@ defaultProperties
     MoneyToGiveOnKill = 400
     LastHitMultiplier = 1.2
 
-    DefaultMeleeWeaponArchetype = WiPChampion_MeleeWeapon'WiP_ASSESTS.Archetypes.DefaultChampionMeleeWeapon'
-    DefaultRangedWeaponArchetype = WiPChampion_RangedWeapon'WiP_ASSESTS.Archetypes.DefaultChampionRangedWeapon'
+    DefaultMeleeWeaponArchetype = WiPChampion_MeleeWeapon'WiP_ASSETS.Archetypes.DefaultChampionMeleeWeapon'
+    DefaultRangedWeaponArchetype = WiPChampion_RangedWeapon'WiP_ASSETS.Archetypes.DefaultChampionRangedWeapon'
 }

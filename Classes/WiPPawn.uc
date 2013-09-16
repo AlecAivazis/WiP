@@ -180,7 +180,7 @@ simulated singular event Rotator GetBaseAimRotation(){
    return POVRot;
 }
 
-/*
+     /*
 //override to make player mesh visible by default
 simulated event BecomeViewTarget( PlayerController PC )
 {
@@ -209,9 +209,9 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
 
    // `log("attacked : " @ self);
 
-    `log("my health is at =========================" @ currentHealth);
-    `log("I'm taking damage!!!!! ====================" @ Damage);
-    `log("This guy hurt me =============== " @ InstigatedBy);
+   // `log("my health is at =========================" @ currentHealth);
+   // `log("I'm taking damage!!!!! ====================" @ Damage);
+   // `log("This guy hurt me =============== " @ InstigatedBy);
 
     if (Role < ROLE_Authority || Health <=0){
         return;
@@ -392,11 +392,11 @@ defaultproperties
 		PhysicsAsset=PhysicsAsset'CH_AnimCorrupt.Mesh.SK_CH_Corrupt_Male_Physics'
 		AnimSets(0)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_AimOffset'
 		AnimSets(1)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_BaseMale'
-		AnimSets(2)=AnimSet'WiP_ASSESTS.Animations.MeleeWeaponAnimSet'
+		AnimSets(2)=AnimSet'WiP_ASSETS.Animations.MeleeWeaponAnimSet'
 	    	//AnimTreeTemplate=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
-		AnimTreeTemplate=AnimTree'WiP_ASSESTS.Animations.DefaultAnimTree'
+		AnimTreeTemplate=AnimTree'WiP_ASSETS.Animations.DefaultAnimTree'
 		//SkeletalMesh=SkeletalMesh'CH_LIAM_Cathode.Mesh.SK_CH_LIAM_Cathode'
-		SkeletalMesh=SkeletalMesh'WiP_ASSESTS.Characters.Bane'
+		SkeletalMesh=SkeletalMesh'WiP_ASSETS.Characters.Bane'
 	End Object
 
  Begin Object Class=SkeletalMeshComponent Name=MyWeaponSkeletalMeshComponent
