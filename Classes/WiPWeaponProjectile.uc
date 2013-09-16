@@ -21,12 +21,35 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNorma
 
     }else{
 
-		Other.TakeDamage(Damage,InstigatorController,HitLocation,MomentumTransfer * Normal(Velocity), MyDamageType,, self);
+		Other.TakeDamage(GetDamage(),InstigatorController,HitLocation,MomentumTransfer * Normal(Velocity), MyDamageType,, self);
         if(! passThrough){
             destroy();
         }
 	}
 }
+
+simulated function float GetDamage(){
+    
+    local WiPChampion instigatorChampion;
+
+    `log("Instigator = " @ Instigator);
+    
+    if (Instigator == none){
+       `log("Instigator was none (GetDamage - WiPWeaponProjectile)");
+       return 50;
+    }
+
+    instigatorChampion = WiPChampion(Instigator);
+    if (instigatorChampion == none ){
+       `log("Could not cast instigator to champion (GetDamage - WiPWeaponProjectile)");
+       return 50;
+    }
+    
+    `log("Returned " @instigatorChampion.BaseAttackDamage @ " damage");
+    return instigatorChampion.BaseAttackDamage;
+
+}
+
 
 
 

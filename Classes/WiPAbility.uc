@@ -100,10 +100,31 @@ simulated function cast(WiPChampion source, vector HitLocation){
     }
 
     shot = Spawn(class'WiPAbility_SkillShotProjectile', self,, caster.Location);
+    shot.Ability = self;
     shot.init(HitLocation - caster.Location);
 
     //SpawnEffects(HitLocation);
     startCooldown();
+}
+
+simulated function float GetDamage(){
+    
+    local WiPPawnReplicationInfo pawnRepInfo;
+    
+    `log("Instigator = " @ Instigator);
+    
+    if (Instigator == none){
+       `log("Instigator was none (GetDamage - WiPWeaponProjectile)");
+       return 50;
+    }
+
+    pawnRepInfo =  WiPPawnReplicationInfo(Instigator.PlayerReplicationInfo);
+
+    if (pawnRepInfo == none){
+       
+       `log("Could not get Pawn Rep Info (GetDamage - WiPWeaponProjectile)");
+       return 50;
+    }
 }
 
 

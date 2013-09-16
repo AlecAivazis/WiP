@@ -1,29 +1,25 @@
 class WiPAbility_SkillShotProjectile extends UTProjectile;
 
-simulated function PostBeginPlay()
-{
-	// force ambient sound if not vehicle game mode
-	bImportantAmbientSound = !WorldInfo.bDropDetail;
+// the ability that created this projectile
+var WiPAbility Ability;
+
+simulated function PostBeginPlay(){
+
 	Super.PostBeginPlay();
+
 	`log("Instigator = " @ Instigator );
 }
 
 // called when the projectile touches an actor
-simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNormal)
-{
-	if (DamageRadius > 0.0)
-	{
+simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNormal){
+	
+    if (DamageRadius > 0.0)
 		Explode( HitLocation, HitNormal );
-	}
-	else
-	{
+
+	else{
 		Other.TakeDamage(Damage,InstigatorController,HitLocation,MomentumTransfer * Normal(Velocity), MyDamageType,, self);
 		Shutdown();
 	}
-}
-
-simulated static function float GetRange(){
-          return 400;
 }
 
 defaultproperties
