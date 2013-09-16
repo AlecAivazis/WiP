@@ -68,13 +68,15 @@ function float getAttackingRate(){
 }
 
 
-simulated function float AbilityTargetCenterFromRot(byte slot){
+simulated function float AbilityTargetCenterFromRot(){
 
     local vector	POVLoc;
 	local rotator	POVRot;
     local float fracAngle, maxRange;
 
-    maxRange = Abilities[slot].GetRange();
+    if (ActivatedAbility == none) return 0;
+
+    maxRange = ActivatedAbility.GetRange();
 
 
 	if( Controller != None)
@@ -90,7 +92,7 @@ simulated function float AbilityTargetCenterFromRot(byte slot){
     
     // if we are aiming in the 4th quadrant, return the correct range
     if (fracAngle > 0.75 && fracAngle < 1){
-       return 10;
+       return 100;
     }
 
     return 0;
@@ -163,7 +165,19 @@ state ActiveAbility{
 
     // overwrite so that click casts the weapon
     simulated function StartFire(byte FireModeNum){
+
+        local vector target;
+
+        target.X = AbilityTargetCenterFromRot();
+        
+        target = (target >> Rotation) + Location;
+
         `log("Casted an ability");
+
+        if (activatedAbility == none) GoToState('');
+
+        ActivatedAbility.Cast(self, target);
+
         GoToState('');
     }
 }
