@@ -1,17 +1,25 @@
 class WiPChampion extends WiPPawn
     implements (WiPAttackable);
 
+
+
+
 // the default melee weapon archetype
 var(Weapon) const archetype WiPChampion_MeleeWeapon DefaultMeleeWeaponArchetype;
 // the default melee weapon archetype
 var(Weapon) const archetype WiPChampion_RangedWeapon DefaultRangedWeaponArchetype;
 // an array of this champions abilities
-var(Champion) archetype array<WiPAbility>  Abilities;
+var(Champion) array<WiPAbility>  Abilities;
 // the spell currently activated by the champion
 var WiPAbility activatedAbility;
 
+var RepNotify bool test;
+
+
 
 simulated event PostBeginPlay(){
+
+    test = false          ;
 
     super.PostBeginPlay();
 
@@ -76,8 +84,8 @@ simulated function float AbilityTargetCenterFromRot(){
 
     if (ActivatedAbility == none) return 0;
 
-    maxRange = ActivatedAbility.GetRange();
-
+    //maxRange = ActivatedAbility.GetRange();
+    maxRange = 200;
 
 	if( Controller != None)
 	{
@@ -103,7 +111,10 @@ simulated function ActivateSpell(byte slot){
 
     `log("Activated Spell at Slot " @ slot);
 
-    activatedAbility = Abilities[slot];
+    activatedAbility = Spawn(Abilities[slot].class,,,Location);
+
+
+    test = true;
 
     GoToState('ActiveAbility');
 }
@@ -113,6 +124,8 @@ simulated function byte GetTeamNum(){
 
     return 0;
 }
+
+
 
 /*****************************************************************
 *   Interface - WiPAttackble                                     *
@@ -161,18 +174,20 @@ state ActiveAbility{
 
         `log("Activated an ability = " @ activatedAbility );
 
+        if (activatedAbility == none) GoToState();
+
     }
 
     // overwrite so that click casts the weapon
     simulated function StartFire(byte FireModeNum){
 
-        local vector target;
+       local vector target;
 
-        target.X = AbilityTargetCenterFromRot();
-        
-        target = (target >> Rotation) + Location;
+       target.X = AbilityTargetCenterFromRot();
 
-        `log("Casted an ability");
+       target = (target >> Rotation) + Location;
+
+        `log("Casted an ability " @ activatedAbility);
 
         if (activatedAbility == none) GoToState('');
 
