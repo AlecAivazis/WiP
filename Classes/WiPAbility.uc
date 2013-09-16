@@ -20,8 +20,10 @@ var(Ability) const array<float> Damages;
 var(Ability) const array<float> MaxRanges;
 // the damage multipliers (a percentage of ability power)
 var(Ability) const array<float> Multipliers;
+// the ability's cooldown
+var(Ability) const array<float> Cooldowns;
 // the particle system associated with this ability
-var (Ability) const ParticleSystem AbilityParticleSystem;
+var(Ability) const ParticleSystem AbilityParticleSystem;
 
 var WiPChampion caster;
 
@@ -37,6 +39,23 @@ replication
     // Whenever changed on the server
     if (bNetDirty)
        AbilityEffectsReplicated, test;
+}
+
+// return if not on cooldown
+simulated function bool CanActivate(){
+    //`log("time left on cooldown: " @  GetTimerCount(NameOf(CooldownTimer)));
+    return !IsTimerActive(NameOf(Cooldowntimer)) && Level > 0;
+}
+
+// start the cooldown timer
+simulated function startCooldown(){        
+    //`log("Setting cooldown" @ Cooldowns[Level-1]);
+    SetTimer(Cooldowns[Level-1], false, NameOf(CooldownTimer));
+}
+
+// cooldown timer
+simulated function CooldownTimer(){
+    `log("Resetting cooldown");
 }
 
 // called when a RepNotify variable is changed
@@ -64,7 +83,7 @@ simulated function float GetRange(){
     else
         return 0;
 }
-              
+
 
 // perform the actual cast of the ability
 simulated function cast(WiPChampion source, vector HitLocation){
@@ -84,6 +103,7 @@ simulated function cast(WiPChampion source, vector HitLocation){
     shot.init(HitLocation - caster.Location);
 
     //SpawnEffects(HitLocation);
+    startCooldown();
 }
 
 

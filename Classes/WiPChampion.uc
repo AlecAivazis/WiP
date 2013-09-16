@@ -17,7 +17,10 @@ var RepNotify bool test;
 
 
 
+
 simulated event PostBeginPlay(){
+    
+    local int i;
 
     test = false          ;
 
@@ -31,6 +34,11 @@ simulated event PostBeginPlay(){
 
 	currentHealth = BaseHealth;
 
+	// replace abilities with instantiated version of their archetype
+	for (i=0; i< Abilities.Length ; i++){
+        Abilities[i] = Spawn(Abilities[i].class,,,Location, ,Abilities[i]);
+
+    }
 
 }
 
@@ -111,12 +119,12 @@ simulated function ActivateSpell(byte slot){
 
     `log("Activated Spell at Slot " @ slot);
 
-    activatedAbility = Spawn(Abilities[slot].class,,,Location);
-
+    activatedAbility = Abilities[slot];
 
     test = true;
 
-    GoToState('ActiveAbility');
+    if (activatedAbility.CanActivate())
+       GoToState('ActiveAbility');
 }
 
 // return the team number of this pawn

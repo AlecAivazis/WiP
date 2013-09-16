@@ -70,8 +70,6 @@ function Fire(){
         StopFire();
         return;
     } 
-   
-    /* implement this!!!! *************************/
 
     weaponOwner.GetWeaponFiringLocationAndRotation(targetLoc, targetRot);
 
