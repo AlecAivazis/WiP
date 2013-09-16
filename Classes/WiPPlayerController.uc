@@ -78,7 +78,7 @@ event Possess(Pawn inPawn, bool bVehicleTransition){
 // switch equipped weapon
 exec function CastSpell(byte slot){
     if (WiPChampion(Pawn) != none){
-        WiPChampion(pawn).CastSpell(slot);
+        WiPChampion(pawn).ActivateSpell(slot);
     }
 }
 

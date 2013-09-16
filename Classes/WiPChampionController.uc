@@ -5,6 +5,8 @@ var WiPPlayerController PlayerController;
 // Link to the controller that this hero controller is owned by
 var Controller Controller;
 
+
+
 defaultproperties
 {
     	bIsPlayer=true

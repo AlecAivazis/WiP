@@ -5,8 +5,10 @@ class WiPChampion extends WiPPawn
 var(Weapon) const archetype WiPChampion_MeleeWeapon DefaultMeleeWeaponArchetype;
 // the default melee weapon archetype
 var(Weapon) const archetype WiPChampion_RangedWeapon DefaultRangedWeaponArchetype;
-
+// an array of this champions abilities
 var(Champion) archetype array<WiPAbility>  Abilities;
+// the spell currently activated by the champion
+var WiPAbility activatedAbility;
 
 
 simulated event PostBeginPlay(){
@@ -58,8 +60,6 @@ function AddDefaultInventory(){
         wipInvManager.CreateInventoryByArchetype(defaultRangedWeaponArchetype, false);
 
     }
-
-	// add the
 }
 
 // return attacking rate
@@ -97,15 +97,13 @@ simulated function float AbilityTargetCenterFromRot(byte slot){
 }
 
 
-simulated function CastSpell(byte slot){
-    local float spellCenter;
+simulated function ActivateSpell(byte slot){
 
-    `log("Called cast spell " @ slot);
+    `log("Activated Spell at Slot " @ slot);
 
-    spellCenter = AbilityTargetCenterFromRot(slot);
-    
-    `log("Spell center: " @ spellCenter);
+    activatedAbility = Abilities[slot];
 
+    GoToState('ActiveAbility');
 }
 
 // return the team number of this pawn
@@ -140,16 +138,36 @@ simulated function class<DamageType> GetDamageType(){
 
 // need to impliment
 simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, out Rotator FireRotation){
-    
-    local vector newLoc;
 
-    `log("asked for projectile position");
-        newLoc = Location;
+    local vector newLoc;
+    
+    newLoc = Location;
     newLoc.Z = 10;
 
     FireLocation = newLoc;
 	FireRotation = Rotation;
 }
+
+/*****************************************************************
+*   State - Active Ability                                       *
+******************************************************************/
+
+state ActiveAbility{
+
+    // called when the state is first entered
+    function BeginState(Name PreviousStateName){
+
+        `log("Activated an ability = " @ activatedAbility );
+
+    }
+
+    // overwrite so that click casts the weapon
+    simulated function StartFire(byte FireModeNum){
+        `log("Casted an ability");
+        GoToState('');
+    }
+}
+
 
 
 defaultProperties
