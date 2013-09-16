@@ -68,6 +68,9 @@ simulated function float GetRange(){
 
 // perform the actual cast of the ability
 simulated function cast(WiPChampion source, vector HitLocation){
+    
+    local WiPAbility_SkillShotProjectile shot;
+
     `log("called cast");
     // only castable on the server
     if (source == none) return;
@@ -77,7 +80,10 @@ simulated function cast(WiPChampion source, vector HitLocation){
        return;
     }
 
-    SpawnEffects(HitLocation);
+    shot = Spawn(class'WiPAbility_SkillShotProjectile', self,, caster.Location);
+    shot.init(HitLocation - caster.Location);
+
+    //SpawnEffects(HitLocation);
 }
 
 
