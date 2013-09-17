@@ -6,14 +6,13 @@ var ProtectedWrite RepNotify int Level;
 var ProtectedWrite RepNotify int Experience;
 // Number of Abilities that the champion can level up
 var ProtectedWrite RepNotify int nSkillPoints;
-// the maximum amount of mana that this champion can have
-var ProtectedWrite RepNotify float MaxMana;
 // How long (in seconds) the hero will remain dead after a death before reviving.
 var ProtectedWrite float ReviveTime;
 
-
+// the maximum amount of mana that this champion can have
+var RepNotify float MaxMana;
 // The amount of mana (per second) regernerated by this champion
-var RepNotify float BaseManaRegen;
+var RepNotify float ManaRegen;
 
 
 replication
@@ -24,7 +23,7 @@ replication
 
 	// Replicate only if the values are dirty and from server to client
 	if (bNetDirty)
-		ReviveTime, BaseManaRegen, MaxMana;
+		ReviveTime, ManaRegen, MaxMana;
 }
 
 

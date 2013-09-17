@@ -40,6 +40,14 @@ replication
        AbilityEffectsReplicated;
 }
 
+// return the mana cost of the ability
+simulated function float GetManaCost(){
+     if (Level > 0)
+        return ResourceCosts[Level-1];
+     else
+        return -1;
+}
+
 // return if not on cooldown
 simulated function bool CanActivate(){
     //`log("time left on cooldown: " @  GetTimerCount(NameOf(CooldownTimer)));

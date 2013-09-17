@@ -12,6 +12,10 @@ var(Champion) array<WiPAbility>  Abilities;
 var WiPAbility activatedAbility;
 // How much mana the hero has
 var float Mana;
+// the base mana regen rate
+var(Stats) const float BaseManaRegen;
+// the base maximum mana amount
+var(Stats) const float BaseMaxMana;
 
 replication
 {
@@ -55,26 +59,33 @@ function recalculateStats(){
 
     Super.recalculateStats();
 
+
+    champRepInfo = WiPChampionReplicationInfo(PlayerReplicationInfo);
+    
+    if (champRepInfo != none){
+       champRepInfo.ManaRegen = BaseManaRegen;
+       champRepInfo.MaxMana = BaseMaxMana;
+    }
+
     JustSpawned = (Abs(WorldInfo.TimeSeconds - SpawnTime) < 0.05f);
-   	// If just spawned, then set Health to HealthMax
-	if (JustSpawned)
+   	
+    // If just spawned, then set Health to HealthMax
+	// and mana to maxMana
+
+    if (JustSpawned)
 	{
 		currentHealth = HealthMax;
 		Health = HealthMax;
+ 
+        if (champRepInfo != none){
+             mana = champRepInfo.MaxMana;
+        }
 	}
-
-
-    champRepInfo = WiPChampionReplicationInfo(PlayerReplicationInfo);
-    if (champRepInfo == none ) return;
-    
-    champRepInfo.BaseManaRegen = 2;
-
-
 }
 
 // called everytime the champion updates (update mana)
 simulated function Tick(float TimeDelta){
-    
+
     local WiPChampionReplicationInfo champRepInfo;
 
     if (Role != Role_Authority) return;
@@ -84,7 +95,7 @@ simulated function Tick(float TimeDelta){
     champRepInfo = WiPChampionReplicationInfo(PlayerReplicationInfo);
     if (champRepInfo == none ) return;
 
-    Mana = FMin(champRepInfo.MaxMana, Mana + ( champRepInfo.BaseManaRegen * TimeDelta));
+    Mana = FMin(champRepInfo.MaxMana, Mana + ( champRepInfo.ManaRegen * TimeDelta));
 }
 
 // called when the pawn dies (assign a new respawn time)
@@ -163,6 +174,7 @@ simulated function float AbilityTargetCenterFromRot(){
 simulated function ActivateSpell(byte slot){
 
     `log("Activated Spell at Slot " @ slot);
+    `log("Current mana " @ mana);
 
     activatedAbility = Abilities[slot];
 
@@ -265,6 +277,8 @@ defaultProperties
     LastHitMultiplier = 1.2
     HealthMax = 100
     BaseHealthRegen = 1
+    BaseMaxMana = 200;
+    BaseManaRegen = .3;
 
     DefaultMeleeWeaponArchetype = WiPChampion_MeleeWeapon'WiP_ASSETS.Archetypes.DefaultChampionMeleeWeapon'
     DefaultRangedWeaponArchetype = WiPChampion_RangedWeapon'WiP_ASSETS.Archetypes.DefaultChampionRangedWeapon'
