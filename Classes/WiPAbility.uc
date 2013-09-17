@@ -3,8 +3,6 @@ class WiPAbility extends ReplicationInfo;
 // struct to handle ability replication
 struct RepAbilityEffects
 {
-	// Emitter to spawn
-	var ParticleSystem AbilityParticleSystem;
 	// Place to spawn the emitter
 	var Vector VHitLocation;
 	var Rotator RHitRotation;
@@ -26,7 +24,8 @@ var(Ability) const array<float> Cooldowns;
 var(Ability) const float MomentumTransfer;
 // the damage type of the spell
 var(Ability) class<DamageType> MyDamageType;
-
+// wether or not the ability should target friendly pawns
+var(Ability) bool Friendly;
 
 var WiPChampion caster;
 
@@ -42,6 +41,45 @@ replication
        AbilityEffectsReplicated;
 }
 
+// called when a RepNotify variable is changed
+simulated event ReplicatedEvent(name VarName){
+
+    `log("There was a replication: " @ VarName);
+
+    if (VarName == 'AbilityEffectsReplicated')
+       ServerPerform(AbilityEffectsReplicated.VHitLocation, AbilityEffectsReplicated.RHitRotation);
+    else
+      Super.ReplicatedEvent(VarName);
+}
+
+// perform the actual cast of the ability
+simulated function cast(WiPChampion source, vector HitLocation){
+
+    `log("called cast");
+    // only castable on the server
+    if (source == none) return;
+
+    caster = source;
+    if (Role < ROLE_Authority)  {
+       return;
+    }
+    
+    ClientPerform(HitLocation, caster.Rotation);
+
+    startCooldown();
+    `log("Current mana " @ source.Mana);
+}
+
+function ServerPerform(vector HitLocation, Rotator HitRotation){
+    PerformAbility(HitLocation, HitRotation);
+}
+
+simulated function clientPerform(vector HitLocation, Rotator HitRotation){
+    PerformAbility(HitLocation, HitRotation);
+}
+
+// tbi by sublcasses
+simulated function PerformAbility(vector HitLocation, rotator HitRotation);
 
 
 // return the mana cost of the ability
@@ -100,10 +138,6 @@ simulated function float GetDamage(){
     
     return Damages[Level-1];
 }
-
-// tbi by subclasses
-simulated function cast(WiPChampion source, vector HitLocation);
-
 
 defaultproperties
 {
