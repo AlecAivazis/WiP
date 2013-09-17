@@ -7,7 +7,7 @@ struct RepAbilityEffects
 	var ParticleSystem AbilityParticleSystem;
 	// Place to spawn the emitter
 	var Vector VHitLocation;
-	var Vector VHitRotation;
+	var Rotator RHitRotation;
 };
 
 // the current level of the spell

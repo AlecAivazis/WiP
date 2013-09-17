@@ -14,7 +14,7 @@ simulated event ReplicatedEvent(name VarName){
        if (AbilityEffectsReplicated.AbilityParticleSystem != none){
           shot = Spawn(class'WiPAbility_SkillShot_Projectile', self,, AbilityEffectsReplicated.VHitLocation);
           shot.Ability = self;
-          shot.init(AbilityEffectsReplicated.VHitRotation);
+          shot.init(AbilityEffectsReplicated.VHitLocation - caster.Location);
         }
 
     } else
@@ -39,10 +39,10 @@ simulated function cast(WiPChampion source, vector HitLocation){
     shot = Spawn(AbilityProjectile.class,,,caster.Location,,AbilityProjectile);
 
     shot.Ability = self;
-    shot.init(HitLocation - caster.Location);
+    shot.init(HitLocation-caster.Location);
 
     repEffects.VHitLocation = caster.Location;
-    repEffects.VHitRotation = HitLocation - caster.Location;
+    repEffects.RHitRotation = caster.Rotation;
 
 
     startCooldown();

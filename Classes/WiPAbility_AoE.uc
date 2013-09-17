@@ -14,7 +14,7 @@ simulated event ReplicatedEvent(name VarName){
        if (AbilityEffectsReplicated.AbilityParticleSystem != none){
 
           `log("Replicating the emitter: " @ AbilityEffectsReplicated.AbilityParticleSystem @ " At: " @ AbilityEffectsReplicated.VHitLocation);
-          WorldInfo.MyEmitterPool.SpawnEmitter(AbilityEffectsReplicated.AbilityParticleSystem, AbilityEffectsReplicated.VHitLocation);
+          WorldInfo.MyEmitterPool.SpawnEmitter(AbilityEffectsReplicated.AbilityParticleSystem, AbilityEffectsReplicated.VHitLocation, AbilityEffectsReplicated.RHitRotation);
         }
 
     } else
@@ -50,10 +50,10 @@ function SpawnEffects(Vector HitLocation){
     if(AbilityParticleSystem != none){
 
         `Log("Spawning emitter: " @ AbilityParticleSystem @ " At: " @ HitLocation);
-        WorldInfo.MyEmitterPool.SpawnEmitter(AbilityParticleSystem, HitLocation,);
+        WorldInfo.MyEmitterPool.SpawnEmitter(AbilityParticleSystem, HitLocation, Rotation);
         AbilityEffectsReplicated.AbilityParticleSystem = AbilityParticleSystem;
         AbilityEffectsReplicated.VHitLocation = HitLocation;
-        AbilityEffectsReplicated.VHitRotation = caster.Location - HitLocation; 
+        AbilityEffectsReplicated.RHitRotation = caster.Rotation;
         `log("setting new values for AbilityEffectsReplicated.");
     }
 }
