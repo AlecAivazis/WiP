@@ -1,4 +1,4 @@
-class WiPAbility_SkillShotProjectile extends UTProjectile;
+class WiPAbility_SkillShot_Projectile extends UTProjectile;
 
 // the ability that created this projectile
 var WiPAbility Ability;
