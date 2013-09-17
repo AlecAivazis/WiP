@@ -24,7 +24,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNorma
 		Explode( HitLocation, HitNormal );
 
 	else{
-		Other.TakeDamage(abilityDamage,InstigatorController,HitLocation,MomentumTransfer * Normal(Velocity), MyDamageType,, self);
+		Other.TakeDamage(abilityDamage,InstigatorController,HitLocation,Ability.MomentumTransfer * Normal(Velocity), Ability.MyDamageType,, self);
 		Shutdown();
 	}
 }
@@ -44,7 +44,6 @@ defaultproperties
 	speed= 15.0
 	MaxSpeed= 5.0
 	DamageRadius=220.0
-	MomentumTransfer=0
 	LifeSpan=0.5
 	RotationRate=(Roll=50000)
 	bCollideWorld=true

@@ -22,6 +22,11 @@ var(Ability) const array<float> MaxRanges;
 var(Ability) const array<float> Multipliers;
 // the ability's cooldown
 var(Ability) const array<float> Cooldowns;
+// the amplitude of momentum transfered from the spell
+var(Ability) const float MomentumTransfer;
+// the damage type of the spell
+var(Ability) class<DamageType> MyDamageType;
+
 
 var WiPChampion caster;
 
@@ -102,5 +107,7 @@ simulated function cast(WiPChampion source, vector HitLocation);
 
 defaultproperties
 {
-     Level =1
+    Level =1
+    MomentumTransfer = 0
+    MyDamageType=class'UTDmgType_Rocket'
 }

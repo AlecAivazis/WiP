@@ -2,6 +2,8 @@ class WiPAbility_AoE extends WiPAbility;
 
 // the particle system associated with this ability
 var(Ability) const ParticleSystem AbilityParticleSystem;
+// the radius of the AoE at various levels
+var(Ability) const array<float> Radius;
 
 
 // called when a RepNotify variable is changed
@@ -23,8 +25,9 @@ simulated event ReplicatedEvent(name VarName){
 
 // perform the actual cast of the ability
 simulated function cast(WiPChampion source, vector HitLocation){
-
+    local WiPAttackable target;
     local array<WiPAttackable> enemiesHit;
+    local float abilityDamage;
 
     `log("called cast");
     // only castable on the server
@@ -35,11 +38,21 @@ simulated function cast(WiPChampion source, vector HitLocation){
        return;
     }
 
+    abilityDamage = GetDamage();
+
     enemiesHit = GetEnemiesHit(HitLocation);
+
+    foreach enemiesHit(target){
+		WiPPawn(target).TakeDamage(abilityDamage,caster.Controller , HitLocation, MomentumTransfer * Normal(Velocity), MyDamageType,, self);
+    }
 
     SpawnEffects(HitLocation);
     startCooldown();
     `log("Current mana " @ source.Mana);
+}
+
+simulated function float GetRadius(){
+    return Radius[Level-1];
 }
 
 
@@ -58,10 +71,31 @@ function SpawnEffects(Vector HitLocation){
     }
 }
 
-function array<WiPAttackable> GetEnemiesHit(Vector HitLocation);
+// can be overwritten in subclasses for different shapes of AoE
+simulated function array<WiPAttackable> GetEnemiesHit(Vector HitLocation){
+
+    local array<WiPAttackable> enemiesHit;
+    local WiPPawn target;
+
+    // loop over each WiPAttackable in a circle
+    // with radius GetRadius(),  centered about HitLocation
+    foreach CollidingActors(class'WiPPawn', target, GetRadius(), HitLocation, true,  class'WiPAttackable'){
+
+        // if its on the opposite team and the caster
+        // and is valid to attack
+        if (target.GetTeamNum() != caster.GetTeamNum() && target.IsValidToAttack()){
+           enemiesHit.AddItem(target);
+           `log("Added " @ target @ " to the AoE enemies list...");
+        }
+    }
+    
+    return enemiesHit;
+};
 
 
 defaultproperties
 {
      AbilityParticleSystem = ParticleSystem'WP_RocketLauncher.Effects.P_WP_RocketLauncher_RocketTrail'
+     MyDamageType=class'UTDmgType_Rocket'
+     MomentumTransfer = 0
 }
