@@ -14,6 +14,7 @@ simulated function PostBeginPlay(){
 simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNormal){
 	
 	local float abilityDamage;
+	local WiPAttackable touched;
 
     if (Ability != none)
 	   abilityDamage = Ability.GetDamage();
@@ -24,8 +25,14 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNorma
 		Explode( HitLocation, HitNormal );
 
 	else{
-		Other.TakeDamage(abilityDamage,InstigatorController,HitLocation,Ability.MomentumTransfer * Normal(Velocity), Ability.MyDamageType,, self);
-		Shutdown();
+
+        touched = WiPAttackable(Other);
+        if (touched == none) return;
+
+        if (touched.IsValidToAttack() && Ability.Caster.GetTeamNum() != touched.GetTeamNum()){
+    		Other.TakeDamage(abilityDamage,InstigatorController,HitLocation,Ability.MomentumTransfer * Normal(Velocity), Ability.MyDamageType,, self);
+    		Shutdown();
+        }
 	}
 }
 
