@@ -7,7 +7,7 @@ struct RepAbilityEffects
 	var ParticleSystem AbilityParticleSystem;
 	// Place to spawn the emitter
 	var Vector VHitLocation;
-	var Rotator RHitRotation;
+	var Vector VHitRotation;
 };
 
 // the current level of the spell
@@ -24,6 +24,19 @@ var(Ability) const array<float> Multipliers;
 var(Ability) const array<float> Cooldowns;
 
 var WiPChampion caster;
+
+// associated effects replication info
+var RepNotify RepAbilityEffects AbilityEffectsReplicated;
+
+//  replication block - used to spawn the particle system across the network
+replication
+{
+
+    // Whenever changed on the server
+    if (bNetDirty)
+       AbilityEffectsReplicated;
+}
+
 
 
 // return the mana cost of the ability
@@ -62,9 +75,9 @@ simulated function float GetRange(){
 
 // return the appropriate damage given the current level
 simulated function float GetDamage(){
-    
+
     local WiPPawnReplicationInfo pawnRepInfo;
-    
+
     `log("Instigator = " @ Instigator);
     
     if (Instigator == none){

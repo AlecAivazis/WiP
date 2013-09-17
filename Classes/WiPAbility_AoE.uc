@@ -3,19 +3,6 @@ class WiPAbility_AoE extends WiPAbility;
 // the particle system associated with this ability
 var(Ability) const ParticleSystem AbilityParticleSystem;
 
-// associated effects replication info
-var RepNotify RepAbilityEffects AbilityEffectsReplicated;
-
-
-//  replication block - used to spawn the particle system across the network
-replication
-{
-
-    // Whenever changed on the server
-    if (bNetDirty)
-       AbilityEffectsReplicated;
-}
-
 
 // called when a RepNotify variable is changed
 simulated event ReplicatedEvent(name VarName){
@@ -27,7 +14,7 @@ simulated event ReplicatedEvent(name VarName){
        if (AbilityEffectsReplicated.AbilityParticleSystem != none){
 
           `log("Replicating the emitter: " @ AbilityEffectsReplicated.AbilityParticleSystem @ " At: " @ AbilityEffectsReplicated.VHitLocation);
-          WorldInfo.MyEmitterPool.SpawnEmitter(AbilityEffectsReplicated.AbilityParticleSystem, AbilityEffectsReplicated.VHitLocation, AbilityEffectsReplicated.RHitRotation);
+          WorldInfo.MyEmitterPool.SpawnEmitter(AbilityEffectsReplicated.AbilityParticleSystem, AbilityEffectsReplicated.VHitLocation);
         }
 
     } else
@@ -37,6 +24,8 @@ simulated event ReplicatedEvent(name VarName){
 // perform the actual cast of the ability
 simulated function cast(WiPChampion source, vector HitLocation){
 
+    local array<WiPAttackable> enemiesHit;
+
     `log("called cast");
     // only castable on the server
     if (source == none) return;
@@ -45,6 +34,8 @@ simulated function cast(WiPChampion source, vector HitLocation){
     if (Role < ROLE_Authority)  {
        return;
     }
+
+    enemiesHit = GetEnemiesHit(HitLocation);
 
     SpawnEffects(HitLocation);
     startCooldown();
@@ -59,13 +50,15 @@ function SpawnEffects(Vector HitLocation){
     if(AbilityParticleSystem != none){
 
         `Log("Spawning emitter: " @ AbilityParticleSystem @ " At: " @ HitLocation);
-        WorldInfo.MyEmitterPool.SpawnEmitter(AbilityParticleSystem, HitLocation, Rotation);
+        WorldInfo.MyEmitterPool.SpawnEmitter(AbilityParticleSystem, HitLocation,);
         AbilityEffectsReplicated.AbilityParticleSystem = AbilityParticleSystem;
         AbilityEffectsReplicated.VHitLocation = HitLocation;
-        AbilityEffectsReplicated.RHitRotation = Rotation; 
+        AbilityEffectsReplicated.VHitRotation = caster.Location - HitLocation; 
         `log("setting new values for AbilityEffectsReplicated.");
     }
 }
+
+function array<WiPAttackable> GetEnemiesHit(Vector HitLocation);
 
 
 defaultproperties

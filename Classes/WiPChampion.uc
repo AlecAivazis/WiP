@@ -17,10 +17,12 @@ var(Stats) const float BaseManaRegen;
 // the base maximum mana amount
 var(Stats) const float BaseMaxMana;
 
+var repnotify int test;
+
 replication
 {
-    if (bNetDirty)
-       Mana;
+    if (bNetDirty || bNetOwner)
+       Mana, test;
 }
 
 simulated event ReplicatedEvent(name VarName){
@@ -121,6 +123,8 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
             `log("player respawn time ============ " @ playerRepInfo.NextRespawnTime );
         }
     }
+    
+    test++;
 
     return Super.Died(Killer, DamageType, HitLocation);
 
@@ -289,8 +293,10 @@ defaultProperties
     LastHitMultiplier = 1.2
     HealthMax = 100
     BaseHealthRegen = 1
-    BaseMaxMana = 200;
-    BaseManaRegen = .3;
+    BaseMaxMana = 200
+    BaseManaRegen = .3
+    
+    test = 0
 
     DefaultMeleeWeaponArchetype = WiPChampion_MeleeWeapon'WiP_ASSETS.Archetypes.DefaultChampionMeleeWeapon'
     DefaultRangedWeaponArchetype = WiPChampion_RangedWeapon'WiP_ASSETS.Archetypes.DefaultChampionRangedWeapon'
