@@ -81,7 +81,7 @@ function bool setCurrentEnemy(Actor potentialEnemy, optional WiPAttackable poten
 function bool canReachDestination(Vector loc){
 
     local Actor actorHit;
-    local Vector hitLocation, hitNormal, extent;
+    local Vector hitNormal, extent;
 
 
     if (Pawn == none) return false;

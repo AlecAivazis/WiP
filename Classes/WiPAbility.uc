@@ -11,7 +11,7 @@ struct RepAbilityEffects
 };
 
 // the current level of the spell
-var RepNotify int level;
+var int level;
 // the mana costs of the spell
 var(Ability) const array<float> ResourceCosts;
 // the damage of the spell (before modifiers)
@@ -30,7 +30,6 @@ var WiPChampion caster;
 // associated effects replication info
 var RepNotify RepAbilityEffects AbilityEffectsReplicated;
 
-var RepNotify bool test;
 
 //  replication block - used to spawn the particle system across the network
 replication
@@ -38,7 +37,7 @@ replication
 
     // Whenever changed on the server
     if (bNetDirty)
-       AbilityEffectsReplicated, test;
+       AbilityEffectsReplicated;
 }
 
 // return if not on cooldown

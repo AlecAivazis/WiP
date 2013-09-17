@@ -2,8 +2,6 @@ class WiPChampion extends WiPPawn
     implements (WiPAttackable);
 
 
-
-
 // the default melee weapon archetype
 var(Weapon) const archetype WiPChampion_MeleeWeapon DefaultMeleeWeaponArchetype;
 // the default melee weapon archetype
@@ -12,17 +10,20 @@ var(Weapon) const archetype WiPChampion_RangedWeapon DefaultRangedWeaponArchetyp
 var(Champion) array<WiPAbility>  Abilities;
 // the spell currently activated by the champion
 var WiPAbility activatedAbility;
+// How much mana the hero has
+var float Mana;
 
-var RepNotify bool test;
-
+replication
+{
+    if (bNetDirty)
+       Mana;
+}
 
 
 
 simulated event PostBeginPlay(){
-    
-    local int i;
 
-    test = false          ;
+   local int i;
 
     super.PostBeginPlay();
 
@@ -37,9 +38,53 @@ simulated event PostBeginPlay(){
 	// replace abilities with instantiated version of their archetype
 	for (i=0; i< Abilities.Length ; i++){
         Abilities[i] = Spawn(Abilities[i].class,,,Location, ,Abilities[i]);
-
     }
+    
 
+
+}
+
+
+// recalcuate the pawn's stats
+function recalculateStats(){
+
+    local WiPChampionReplicationInfo champRepInfo;
+	local bool JustSpawned;
+
+    if (Role != Role_Authority) return;
+
+    Super.recalculateStats();
+
+    JustSpawned = (Abs(WorldInfo.TimeSeconds - SpawnTime) < 0.05f);
+   	// If just spawned, then set Health to HealthMax
+	if (JustSpawned)
+	{
+		currentHealth = HealthMax;
+		Health = HealthMax;
+	}
+
+
+    champRepInfo = WiPChampionReplicationInfo(PlayerReplicationInfo);
+    if (champRepInfo == none ) return;
+    
+    champRepInfo.BaseManaRegen = 2;
+
+
+}
+
+// called everytime the champion updates (update mana)
+simulated function Tick(float TimeDelta){
+    
+    local WiPChampionReplicationInfo champRepInfo;
+
+    if (Role != Role_Authority) return;
+
+    Super.Tick(TimeDelta);
+
+    champRepInfo = WiPChampionReplicationInfo(PlayerReplicationInfo);
+    if (champRepInfo == none ) return;
+
+    Mana = FMin(champRepInfo.MaxMana, Mana + ( champRepInfo.BaseManaRegen * TimeDelta));
 }
 
 // called when the pawn dies (assign a new respawn time)
@@ -121,7 +166,6 @@ simulated function ActivateSpell(byte slot){
 
     activatedAbility = Abilities[slot];
 
-    test = true;
 
     if (activatedAbility.CanActivate())
        GoToState('ActiveAbility');
@@ -219,6 +263,8 @@ defaultProperties
     ExperienceToGiveOnKill = 200
     MoneyToGiveOnKill = 400
     LastHitMultiplier = 1.2
+    HealthMax = 100
+    BaseHealthRegen = 1
 
     DefaultMeleeWeaponArchetype = WiPChampion_MeleeWeapon'WiP_ASSETS.Archetypes.DefaultChampionMeleeWeapon'
     DefaultRangedWeaponArchetype = WiPChampion_RangedWeapon'WiP_ASSETS.Archetypes.DefaultChampionRangedWeapon'

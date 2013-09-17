@@ -156,4 +156,6 @@ defaultproperties
 	ExperienceToGiveOnKill = 50
 	MoneyToGiveOnKill = 25
 	LastHitMultiplier = 1.5
+    HealthMax = 100
+    BaseHealthRegen =0
 }
