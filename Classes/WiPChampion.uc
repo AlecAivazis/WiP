@@ -173,14 +173,13 @@ simulated function float AbilityTargetCenterFromRot(){
 
 simulated function ActivateSpell(byte slot){
 
-    `log("Activated Spell at Slot " @ slot);
-    `log("Current mana " @ mana);
-
     activatedAbility = Abilities[slot];
 
 
-    if (activatedAbility.CanActivate())
+    if (activatedAbility.CanActivate() && mana >= activatedAbility.GetManaCost()){
+       `log("Activated Spell at Slot " @ slot);
        GoToState('ActiveAbility');
+    }
 }
 
 // return the team number of this pawn
@@ -253,7 +252,14 @@ state ActiveAbility{
 
         `log("Casted an ability " @ activatedAbility);
 
-        if (activatedAbility == none) GoToState('');
+        if (activatedAbility == none) GoToState('');  
+        
+        if (Mana < activatedAbility.GetManaCost()){
+           `log("not enough mana to use that ability");
+            GoToState('');
+        }
+        
+        Mana -= activatedAbility.GetManaCost();
 
         ActivatedAbility.Cast(self, target);
 

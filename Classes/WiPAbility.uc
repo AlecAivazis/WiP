@@ -112,6 +112,7 @@ simulated function cast(WiPChampion source, vector HitLocation){
 
     //SpawnEffects(HitLocation);
     startCooldown();
+    `log("Current mana " @ source.Mana);
 }
 
 simulated function float GetDamage(){
