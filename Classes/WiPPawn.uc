@@ -131,7 +131,7 @@ simulated function Tick(float TimeDelta){
    }
    
    Health = int(CurrentHealth);
-   
+
    RecalculateStats();
 }
 
@@ -294,6 +294,17 @@ simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp){
     if (SkelComp == Mesh){
         SwingAnim = AnimNodePlayCustomAnim(SkelComp.FindAnimNode('SwingCustomAnim'));
     }
+}
+
+event bool  HealDamage(int amount,Controller cntlr, class<DamageType> dmgType){
+    `log("I was healed " @ health);
+
+    currentHealth += amount;
+	Health = int(currentHealth);
+	
+	`log("Current health: " @ currentHealth );
+	
+	return true;
 }
 
 

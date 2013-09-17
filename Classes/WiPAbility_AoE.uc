@@ -38,12 +38,12 @@ simulated function cast(WiPChampion source, vector HitLocation){
        return;
     }
 
-    abilityDamage = GetDamage();
-
     enemiesHit = GetEnemiesHit(HitLocation);
 
+    abilityDamage = GetDamage();
+
     foreach enemiesHit(target){
-		WiPPawn(target).TakeDamage(abilityDamage,caster.Controller , HitLocation, MomentumTransfer * Normal(Velocity), MyDamageType,, self);
+            WiPPawn(target).TakeDamage(abilityDamage, Caster.Controller , HitLocation, MomentumTransfer * vect(0,0,0), MyDamageType,, self);
     }
 
     SpawnEffects(HitLocation);
@@ -51,6 +51,8 @@ simulated function cast(WiPChampion source, vector HitLocation){
     `log("Current mana " @ source.Mana);
 }
 
+
+// return the AoE radius of the spell
 simulated function float GetRadius(){
     return Radius[Level-1];
 }
