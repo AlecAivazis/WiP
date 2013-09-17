@@ -11,7 +11,7 @@ var(Champion) array<WiPAbility>  Abilities;
 // the spell currently activated by the champion
 var WiPAbility activatedAbility;
 // How much mana the hero has
-var float Mana;
+var repnotify float Mana;
 // the base mana regen rate
 var(Stats) const float BaseManaRegen;
 // the base maximum mana amount
@@ -21,6 +21,12 @@ replication
 {
     if (bNetDirty)
        Mana;
+}
+
+simulated event ReplicatedEvent(name VarName){
+
+    `log("There was a replication: " @ VarName);
+
 }
 
 
