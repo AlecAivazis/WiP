@@ -8,14 +8,16 @@ var(Weapon) const archetype WiPChampion_MeleeWeapon DefaultMeleeWeaponArchetype;
 var(Weapon) const archetype WiPChampion_RangedWeapon DefaultRangedWeaponArchetype;
 // an array of this champions abilities
 var(Champion) array<WiPAbility>  Abilities;
-// the spell currently activated by the champion
-var WiPAbility activatedAbility;
+
 // How much mana the hero has
 var repnotify float Mana;
 // the base mana regen rate
 var(Stats) const float BaseManaRegen;
 // the base maximum mana amount
 var(Stats) const float BaseMaxMana;
+
+// the spell currently activated by the champion
+var WiPAbility activatedAbility;
 
 var repnotify int test;
 

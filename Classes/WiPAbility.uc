@@ -1,4 +1,4 @@
-class WiPAbility extends ReplicationInfo;
+class WiPAbility extends Actor;
 
 // struct to handle ability replication
 struct RepAbilityEffects
