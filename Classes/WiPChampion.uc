@@ -1,20 +1,20 @@
 class WiPChampion extends WiPPawn
     implements (WiPAttackable);
 
-
 // the default melee weapon archetype
 var(Weapon) const archetype WiPChampion_MeleeWeapon DefaultMeleeWeaponArchetype;
 // the default melee weapon archetype
 var(Weapon) const archetype WiPChampion_RangedWeapon DefaultRangedWeaponArchetype;
+
 // an array of this champions abilities
 var(Champion) array<WiPAbility>  Abilities;
 
-// How much mana the hero has
-var repnotify float Mana;
 // the base mana regen rate
 var(Stats) const float BaseManaRegen;
 // the base maximum mana amount
 var(Stats) const float BaseMaxMana;
+// How much mana the hero has
+var repnotify float Mana;
 
 // the spell currently activated by the champion
 var WiPAbility activatedAbility;
@@ -53,9 +53,6 @@ simulated event PostBeginPlay(){
 	for (i=0; i< Abilities.Length ; i++){
         Abilities[i] = Spawn(Abilities[i].class,,,Location, ,Abilities[i]);
     }
-    
-
-
 }
 
 
@@ -73,8 +70,8 @@ function recalculateStats(){
     champRepInfo = WiPChampionReplicationInfo(PlayerReplicationInfo);
     
     if (champRepInfo != none){
-       champRepInfo.ManaRegen = BaseManaRegen;
-       champRepInfo.MaxMana = BaseMaxMana;
+       champRepInfo.ManaRegen = StatModifier.CalculateStat(STAT_ManaRegen, BaseManaRegen);
+       champRepInfo.MaxMana = StatModifier.CalculateStat(STAT_MaxMana, BaseManaRegen);
     }
 
     JustSpawned = (Abs(WorldInfo.TimeSeconds - SpawnTime) < 0.05f);
@@ -82,15 +79,11 @@ function recalculateStats(){
     // If just spawned, then set Health to HealthMax
 	// and mana to maxMana
 
-    if (JustSpawned)
-	{
-		currentHealth = HealthMax;
-		Health = HealthMax;
- 
+    if (JustSpawned){
         if (champRepInfo != none){
              mana = champRepInfo.MaxMana;
         }
-	}
+    }
 }
 
 // called everytime the champion updates (update mana)
@@ -287,7 +280,7 @@ defaultProperties
 	RewardRange = 2000.f
     BaseHealth = 150.f
     BaseAttackDamage = 50
-	BaseAttackTime = 2.f
+	BaseAttackSpeed=1.f
 	PawnDamageType = class'DamageType'
     ControllerClass = class'WiPChampionController'
     ExperienceToGiveOnKill = 200
@@ -295,6 +288,7 @@ defaultProperties
     LastHitMultiplier = 1.2
     HealthMax = 100
     BaseHealthRegen = 1
+    BaseMaxHealth = 150
     BaseMaxMana = 200
     BaseManaRegen = .3
     

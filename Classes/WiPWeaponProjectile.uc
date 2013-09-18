@@ -29,11 +29,13 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNorma
 }
 
 simulated function float GetDamage(){
-    
+
     local WiPChampion instigatorChampion;
+    local WiPPawnReplicationInfo pawnRepInfo;
+    local float attackDamage;
 
     `log("Instigator = " @ Instigator);
-    
+
     if (Instigator == none){
        `log("Instigator was none (GetDamage - WiPWeaponProjectile)");
        return 50;
@@ -44,9 +46,15 @@ simulated function float GetDamage(){
        `log("Could not cast instigator to champion (GetDamage - WiPWeaponProjectile)");
        return 50;
     }
+
+    pawnRepInfo = WiPPawnReplicationInfo(Instigator.PlayerReplicationInfo);
+    if (pawnRepInfo != none && pawnRepInfo.AttackDamage > 0){
+       attackDamage = pawnRepInfo.AttackDamage;
+    }
+
     
-    `log("Returned " @instigatorChampion.BaseAttackDamage @ " damage");
-    return instigatorChampion.BaseAttackDamage;
+    `log("Returned " @ attackDamage @ " damage");
+    return attackDamage;
 
 }
 

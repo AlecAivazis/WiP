@@ -15,11 +15,12 @@ simulated function float GetFireInterval( byte FireModeNum ){
     //   `log("Cached owner was none....");
     }
 
-	firingRate = cachedOwner.BaseAttackTime;
+	firingRate = cachedOwner.BaseAttackSpeed;
+
     //`log("Base firing rate ========================" @ firingRate);
     pawnRepInfo = WiPPawnReplicationInfo(cachedOwner.PlayerReplicationInfo);
-    if (pawnRepInfo != none && pawnRepInfo.AttackSpeed > -1.f){
-        firingRate /= (1.f + pawnRepInfo.AttackSpeed);
+    if (pawnRepInfo != none && pawnRepInfo.AttackDamage > -1.f){
+        firingRate = pawnRepInfo.AttackSpeed;
     //`log("Attack Speed ======================" @ pawnRepInfo.AttackSpeed);
     }
 

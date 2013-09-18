@@ -96,21 +96,17 @@ function startFire(){
 
         neutralPawn = WiPNeutralPawn(WeaponOwner);
         if (neutralPawn != none){
-            firingRate = neutralPawn.BaseAttackTime;
-       //     `log("Base firing rate ========================" @ firingRate);
 
             pawnRepInfo = WiPPawnReplicationInfo(neutralPawn.PlayerReplicationInfo);
-            if (pawnRepInfo != none && pawnRepInfo.AttackSpeed > -1.f){
-                firingRate /= (1.f + pawnRepInfo.AttackSpeed);
-           //     `log("Attack Speed ======================" @ pawnRepInfo.AttackSpeed);
-            }
+            
+            firingRate = (pawnRepInfo != none && (pawnRepInfo.AttackSpeed > 1.f)) ? pawnRepInfo.AttackSpeed : neutralPawn.BaseAttackSpeed;
 
          //   `log("Final Firing rate ========================== " @ firingRate);
 
             // start firing timer
             WeaponOwner.GetActor().SetTimer(firingRate, true, NameOf(Fire), self);
             bIsFiring = true;
-        
+
         // the owner exists but isn't a pawn, therefore its a tower
         } else {
             WeaponOwner.GetActor().SetTimer(1, true, NameOf(Fire), self);

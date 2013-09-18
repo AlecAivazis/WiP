@@ -44,6 +44,8 @@ simulated event PostBeginPlay(){
         SightTrigger.OnUnTouch = InternalOnUnTouch;
 
     }
+    
+    currentHealth = Health;
 }
 
 // called whenever a pawn touches the sight detector
@@ -238,7 +240,7 @@ defaultproperties
 
 	bDontPossess=true
 	bEdShouldSnap=true
-	HealthMax=4250
+	BaseMaxHealth=4250
 	Health=40
 	SightRadius=512.f
 	BaseAttackDamage=2.f
