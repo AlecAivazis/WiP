@@ -4,6 +4,7 @@ class WiPStatModifier extends Object;
 enum EStat {
      STAT_Damage,
      STAT_MaxHealth,
+     STAT_Health, // used to filter out debuffs that deal dmg (DoTs)
      STAT_AttackSpeed,
      STAT_AbilityPower,
      STAT_HealthRegen,
@@ -11,19 +12,22 @@ enum EStat {
      STAT_ManaRegen,
 };
 
-// the active debuffs affecting the pawn
-var ProtectedWrite array<WiPDebuff> debuffs;
+enum EBuffOperation
+{
+	Operation_Multiplication<DisplayName=Multiplication>,
+	Operation_Addition<DisplayName=Addition>,
+};
 
 
-// add a debuff to the list
-simulated function AddDebuff(WiPDebuff debuff){
-    debuffs.AddItem(debuff);
-}
+struct StatChange
+{
+	var(StatChange) EStat Stat;
+	var(StatChange) float Amount;
+	var(StatChange) EBuffOperation Operation;
+};
 
-// remove a debuff from the list
-simulated function RemoveDebuff(WiPDebuff debuff){
-    debuffs.RemoveItem(debuff);
-}
+
+
 
 simulated function float CalculateStat(EStat stat, float baseValue){
     local float NewValue;

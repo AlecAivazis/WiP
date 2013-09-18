@@ -1,9 +1,26 @@
 class WiPAbility_AoE_Debuff extends WiPAbility_AoE;
 
-// the time over which this DoT occurs
-var(Ability) const array<float> duration;
-// the time in between ticks
-var(Ability) const array<float> tickTime;
+
+// the debuff applied by this ability
+var(Ability) archetype const WiPDebuff Debuff;
+
+simulated function PerformAbility(vector HitLocation, Rotator HitRotation){
+    local WiPAttackable target;
+    local array<WiPAttackable> enemiesHit;
+    local WiPDebuff wipDebuff;
+
+    enemiesHit = GetEnemiesHit(HitLocation);
+
+
+    foreach enemiesHit(target){
+        wipDebuff =  Spawn(Debuff.class,,,,,Debuff);
+        wipDebuff.Level = Level;
+        wipDebuff.Source = self;
+        WiPPawn(target).AddDebuff(wipDebuff);
+    }
+
+    SpawnEffects(HitLocation);
+}
 
 defaultproperties
 {

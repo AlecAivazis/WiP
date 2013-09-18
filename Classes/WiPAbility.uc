@@ -121,7 +121,7 @@ simulated function float GetDamage(){
 
     local WiPPawnReplicationInfo pawnRepInfo;
 
-    `log("Instigator = " @ Instigator);
+    // `log("Instigator = " @ Instigator);
     
     if (Instigator == none){
        `log("Instigator was none (GetDamage - WiPWeaponProjectile)");

@@ -171,7 +171,6 @@ simulated function GetWeaponFiringLocationAndRotation(out Vector FireLocation, o
 
 defaultproperties
 {
-	BaseAttackTime=2.f
 	BaseAttackSpeed=1.f
 	SightRange=500.f
 	PawnDamageType=class'DamageType'

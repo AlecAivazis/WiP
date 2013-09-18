@@ -35,9 +35,7 @@ var(Misc) const DynamicLightEnvironmentComponent LightEnvironment;
 
 // How much health this pawn has - sync'd with 'Pawn.Health'
 var(Stats) float currentHealth;
-// How long an attack takes to do (in seconds) - doesn't change, but does combine with Attack Speed stat.
-var(Stats) const float BaseAttackTime;
-// Attack speed multiplier for this unit without upgrades/items
+// How long an attack takes to do (in seconds).
 var(Stats) const float BaseAttackSpeed;
 // Attack speed multiplier for this unit without upgrades/items
 var(Stats) const float BaseAttackDamage;
@@ -51,6 +49,10 @@ var(Stats) const float BaseHealth;
 var(Stats) float BaseHealthRegen;
 // the maximum health of this pawn
 var (Stats) float BaseMaxHealth;
+
+
+// the active debuffs affecting the pawn
+var ProtectedWrite array<WiPDebuff> debuffs;
 
 // statModifier
 var ProtectedWrite WiPStatModifier statModifier;
@@ -158,12 +160,11 @@ function recalculateStats(){
 
 simulated function AddDebuff(WiPDebuff debuff){
     `log("Adding buff/debuff " @ debuff );
-    statModifier.AddDebuff(debuff);
-}
+    // add it to the list of debuff
+    debuffs.AddItem(debuff);
 
-simulated function RemoveDebuff(WiPDebuff debuff){
-    `log("Removing buff/debuff " @ debuff );
-    statModifier.RemoveDebuff(debuff);
+    // tell the buff to activate
+    debuff.activate(self);
 }
 
 // buff/debuff damage take compensate for missing, magic amp, etc.
@@ -224,8 +225,14 @@ simulated event BecomeViewTarget( PlayerController PC )
 event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector Momentum, class<DamageType> DamageType, optional TraceHitInfo HitInfo, optional Actor DamageCauser){
     local int actualDamage;
     local Controller killer;
-
+    local WiPPawn wipPawn;
    // `log("attacked : " @ self);
+
+   // if the person who hurt me is on the same team 
+   wipPawn = WiPPawn(InstigatedBy.Pawn);
+   if (wipPawn == none || wipPawn.GetTeamNum() == GetTeamNum())
+      return;
+
 
    `log("my health is at =========================" @ currentHealth);
    `log("I'm taking damage!!!!! ====================" @ Damage);
@@ -314,11 +321,9 @@ event bool  HealDamage(int amount,Controller cntlr, class<DamageType> dmgType){
 	Health = int(currentHealth);
 	
 	`log("Current health: " @ currentHealth );
-	
+
 	return true;
 }
-
-
 
 // called when the pawn dies
 function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLocation){
