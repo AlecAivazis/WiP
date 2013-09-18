@@ -228,15 +228,15 @@ event TakeDamage(int Damage, Controller InstigatedBy, vector HitLocation, vector
     local WiPPawn wipPawn;
    // `log("attacked : " @ self);
 
-   // if the person who hurt me is on the same team 
+   // if the person who hurt me is on the same team
    wipPawn = WiPPawn(InstigatedBy.Pawn);
    if (wipPawn == none || wipPawn.GetTeamNum() == GetTeamNum())
       return;
 
 
-   `log("my health is at =========================" @ currentHealth);
-   `log("I'm taking damage!!!!! ====================" @ Damage);
-   `log("This guy hurt me =============== " @ InstigatedBy);
+  // `log("my health is at =========================" @ currentHealth);
+  // `log("I'm taking damage!!!!! ====================" @ Damage);
+ //  `log("This guy hurt me =============== " @ InstigatedBy);
 
     if (Role < ROLE_Authority || Health <=0){
         return;
@@ -332,6 +332,7 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
     local WiPChampionReplicationInfo champRepInfo;
     local WiPPlayerReplicationInfo currentPlayerRepInfo;
     local int moneyToGive, expToGive;
+    local WiPDebuff debuff;
 
 
     `log("This pawn has died" @ self);
@@ -377,6 +378,12 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
             }
         }
     }
+    
+    // deactivate all of the buffs
+    foreach debuffs(debuff){
+        debuff.Deactivate();
+    }
+
     Mesh.SetHidden(true);
     return Super.Died(Killer, DamageType, HitLocation);
 }
