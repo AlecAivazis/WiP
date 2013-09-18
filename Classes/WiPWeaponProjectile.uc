@@ -14,7 +14,9 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation, Vector HitNorma
     // only deal damage if it is okay to do so
     if (!target.isValidToAttack()) return;
 
-    `log("I hit a valid target");
+    // `log("I hit a valid target");
+
+    if (target.GetTeamNum() == WiPPawn(instigator).GetTeamNum()) return;
 
 	if (DamageRadius > 0.0){
 		Explode( HitLocation, HitNormal );
@@ -53,7 +55,7 @@ simulated function float GetDamage(){
     }
 
     
-    `log("Returned " @ attackDamage @ " damage");
+    // `log("Returned " @ attackDamage @ " damage");
     return attackDamage;
 
 }
