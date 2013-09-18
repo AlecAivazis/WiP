@@ -82,6 +82,28 @@ simulated function startFire(byte FireModeNum){
 
 function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLocation){
 
+    local WiPPlayerController playerController;
+    local WiPPlayerReplicationInfo playerRepInfo;
+
+
+    `log("This pawn has died" @ self);
+
+    // reward a last hit to the killer
+    if (WiPPlayerController(Killer) != none){
+        // grab the killer's controller
+        //killerController = WiPChampionController(Killer);
+
+        playerController = WiPPlayerController(Killer);
+        playerRepInfo = WiPPlayerReplicationInfo(playerController.PlayerReplicationInfo);
+        if (playerRepInfo != none){
+
+            // give the player a last hit and
+            playerRepInfo.lastHits++;
+           // `log("You got a last hit. Current amount " @ playerRepInfo.lastHits);
+
+        }
+    }
+    
     // Tell the inventory manager
     if (InvManager != none)    InvManager.OwnerDied();
     // Detach controller
@@ -97,8 +119,10 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
 
 	BeginRagdoll();
 	LifeSpan = 1.f;
-	return Super.Died(Killer, DamageType, HitLocation);
+	
+    return Super.Died(Killer, DamageType, HitLocation);
 }
+
 
 // return teamIndex
 simulated function byte GetTeamNum(){
@@ -151,11 +175,11 @@ defaultproperties
 	BaseAttackSpeed=1.f
 	SightRange=500.f
 	PawnDamageType=class'DamageType'
-	BaseAttackDamage=20.f
+	BaseAttackDamage=2.f
 	RewardRange = 2000.f
 	ExperienceToGiveOnKill = 50
 	MoneyToGiveOnKill = 25
 	LastHitMultiplier = 1.5
-    HealthMax = 100
     BaseHealthRegen =0
+    BaseMaxHealth = 20
 }
