@@ -1,6 +1,5 @@
 class WiPAbility_AoE_Debuff extends WiPAbility_AoE;
 
-
 // the debuff applied by this ability
 var(Ability) archetype const WiPDebuff Debuff;
 
@@ -20,6 +19,12 @@ simulated function PerformAbility(vector HitLocation, Rotator HitRotation){
     }
 
     SpawnEffects(HitLocation);
+}
+
+// Debuff spells deal no damage
+simulated function float GetDamage(){
+    
+    return 0;
 }
 
 defaultproperties
