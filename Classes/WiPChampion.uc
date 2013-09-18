@@ -19,6 +19,7 @@ var repnotify float Mana;
 // the spell currently activated by the champion
 var WiPAbility activatedAbility;
 
+
 var repnotify int test;
 
 replication
@@ -48,12 +49,15 @@ simulated event PostBeginPlay(){
 	}
 
 	currentHealth = BaseHealth;
+	mana = BaseMaxMana;
 
 	// replace abilities with instantiated version of their archetype
 	for (i=0; i< Abilities.Length ; i++){
         Abilities[i] = Spawn(Abilities[i].class,,,Location, ,Abilities[i]);
     }
 }
+
+
 
 
 // recalcuate the pawn's stats
@@ -68,10 +72,10 @@ function recalculateStats(){
 
 
     champRepInfo = WiPChampionReplicationInfo(PlayerReplicationInfo);
-    
+
     if (champRepInfo != none){
        champRepInfo.ManaRegen = StatModifier.CalculateStat(STAT_ManaRegen, BaseManaRegen);
-       champRepInfo.MaxMana = StatModifier.CalculateStat(STAT_MaxMana, BaseManaRegen);
+       champRepInfo.MaxMana = StatModifier.CalculateStat(STAT_MaxMana, BaseMaxMana);
     }
 
     JustSpawned = (Abs(WorldInfo.TimeSeconds - SpawnTime) < 0.05f);
@@ -81,7 +85,8 @@ function recalculateStats(){
 
     if (JustSpawned){
         if (champRepInfo != none){
-             mana = champRepInfo.MaxMana;
+           `log("just spawned and I found a champ rep ... setting mana " @ StatModifier.CalculateStat(STAT_MaxMana, BaseMaxMana));
+             mana = StatModifier.CalculateStat(STAT_MaxMana, BaseMaxMana);
         }
     }
 }
@@ -166,7 +171,7 @@ simulated function float AbilityTargetCenterFromRot(){
     // if we are aiming in the first quadrant, return max range
     if (fracAngle > 0 && fracAngle < 0.25f)
        return maxRange;
-    
+
     // if we are aiming in the 4th quadrant, return the correct range
     if (fracAngle > 0.75 && fracAngle < 1){
        return 100;
@@ -176,10 +181,14 @@ simulated function float AbilityTargetCenterFromRot(){
 }
 
 
+
+
 simulated function ActivateSpell(byte slot){
 
     activatedAbility = Abilities[slot];
 
+    `log("Tried to activate " @ slot);
+    `log("current mana " @ Mana );
 
     if (activatedAbility.CanActivate() && mana >= activatedAbility.GetManaCost()){
        `log("Activated Spell at Slot " @ slot);
