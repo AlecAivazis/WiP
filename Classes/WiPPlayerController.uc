@@ -6,19 +6,20 @@ var rotator CurrentCameraRotation;
 function PlayerMove(float DeltaTime){
     local vector X, Y, Z, AltAccel;
     local rotator OldRotation;
+
     GetAxes(CurrentCameraRotation, X, Y, Z);
-    AltAccel = PlayerInput.aForward * Z + PlayerInput.aStrafe
-    * Y;
+    
+    AltAccel = PlayerInput.aForward * Z + PlayerInput.aStrafe* Y;
     AltAccel.Z = 0;
     AltAccel = Pawn.AccelRate * Normal(AltAccel);
+    
     OldRotation = Rotation;
     UpdateRotation(DeltaTime);
+    
     if(Role < ROLE_Authority)
-    ReplicateMove(DeltaTime, AltAccel, DCLICK_None,
-    OldRotation - Rotation);
+        ReplicateMove(DeltaTime, AltAccel, DCLICK_None, OldRotation - Rotation);
     else
-    ProcessMove(DeltaTime, AltAccel, DCLICK_None,
-    OldRotation - Rotation);
+        ProcessMove(DeltaTime, AltAccel, DCLICK_None, OldRotation - Rotation);
 }
 
 simulated function PostBeginPlay()
