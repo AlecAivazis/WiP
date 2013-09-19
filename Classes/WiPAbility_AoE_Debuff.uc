@@ -18,7 +18,7 @@ simulated function PerformAbility(vector HitLocation, Rotator HitRotation){
         WiPPawn(target).AddDebuff(wipDebuff);
     }
 
-    SpawnEffects(HitLocation);
+    SpawnEffects(HitLocation, caster.Rotation);
 }
 
 // Debuff spells deal no damage

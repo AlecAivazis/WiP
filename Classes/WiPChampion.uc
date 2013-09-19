@@ -28,12 +28,6 @@ replication
        Mana, ActivatedAbility, test;
 }
 
-simulated event ReplicatedEvent(name VarName){
-
-    `log("There was a replication: " @ VarName);
-
-}
-
 
 
 simulated event PostBeginPlay(){
@@ -46,12 +40,15 @@ simulated event PostBeginPlay(){
 	if (Role == Role_Authority)
 	{
 		SpawnDefaultController();
+
+
 	}
 	
 	// replace abilities with instantiated version of their archetype
-	for (i=0; i< Abilities.Length ; i++){
-        Abilities[i] = Spawn(Abilities[i].class,,,Location, ,Abilities[i]);
-    }
+    	for (i=0; i< Abilities.Length ; i++){
+            Abilities[i] = Spawn(Abilities[i].class,,,Location, ,Abilities[i]);
+        }
+
 
 	currentHealth = BaseHealth;
 	mana = BaseMaxMana;
@@ -182,7 +179,7 @@ simulated function float AbilityTargetCenterFromRot(){
 
 simulated function SelectAbility(byte slot){
     if (Role < Role_Authority){
-        ServerSelectAbility(slot);   
+        ServerSelectAbility(slot);
     }
 
     ActivateAbility(slot);
@@ -191,9 +188,6 @@ simulated function SelectAbility(byte slot){
 reliable server function ServerSelectAbility(byte slot){
     ActivateAbility(slot);
 }
-
-
-
 
 simulated function ActivateAbility(byte slot){
     activatedAbility = Abilities[slot];
@@ -287,7 +281,7 @@ state ActiveAbility{
 }
 
 reliable server function ServerStartFire(byte FireModeNum){
-    `log("calleding server startfire");
+    test++;
         BeginCast();
 }
 

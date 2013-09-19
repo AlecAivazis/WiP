@@ -26,14 +26,13 @@ var(Ability) const float MomentumTransfer;
 var(Ability) class<DamageType> MyDamageType;
 // wether or not the ability should target friendly pawns
 var(Ability) bool Friendly;
+// the particle system associated with this ability
+var(Ability) const ParticleSystem AbilityParticleSystem;
 
 var WiPChampion caster;
 
 // associated effects replication info
 var RepNotify RepAbilityEffects AbilityEffectsReplicated;
-
-// test
-var repnotify int test;
 
 //  replication block - used to spawn the particle system across the network
 replication
@@ -41,19 +40,34 @@ replication
 
     // Whenever changed on the server
     if (bNetDirty)
-       AbilityEffectsReplicated, test;
+       AbilityEffectsReplicated;
 }
+
 
 // called when a RepNotify variable is changed
 simulated event ReplicatedEvent(name VarName){
 
-    `log("There was a replication: " @ VarName);
-
-    if (VarName == 'AbilityEffectsReplicated')
-       `log("it worked!");
+    if (VarName == 'AbilityEffectsReplicated')  {
+       `log("it worked!" @ AbilityEffectsReplicated.VHitLocation @ " , " @ AbilityEffectsReplicated.RHitRotation);
+       SpawnEffects(AbilityEffectsReplicated.VHitLocation, AbilityEffectsReplicated.RHitRotation);
        //ServerPerform(AbilityEffectsReplicated.VHitLocation, AbilityEffectsReplicated.RHitRotation);
+    }
     else
       Super.ReplicatedEvent(VarName);
+}
+
+// run on the server to set up emitter replication info
+function simulated SpawnEffects(Vector HitLocation, Rotator HitRotation){
+    `log("Spawning effects!");
+
+    if(AbilityParticleSystem != none){
+
+        `Log("Spawning emitter: " @ AbilityParticleSystem @ " At: " @ HitLocation);
+        WorldInfo.MyEmitterPool.SpawnEmitter(AbilityParticleSystem, HitLocation, Rotation);
+        AbilityEffectsReplicated.VHitLocation = HitLocation;
+        AbilityEffectsReplicated.RHitRotation = HitRotation;
+        `log("setting new values for AbilityEffectsReplicated.");
+    }
 }
 
 // perform the actual cast of the ability
@@ -67,7 +81,7 @@ function cast(WiPChampion source, vector HitLocation){
     if (Role < ROLE_Authority)  {
        return;
     }
-    
+
     caster.test ++ ;
 
     PerformAbility(HitLocation, caster.Rotation);

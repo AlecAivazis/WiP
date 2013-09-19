@@ -13,7 +13,7 @@ simulated function PerformAbility(vector HitLocation, Rotator HitRotation){
             WiPPawn(target).TakeDamage(abilityDamage, Caster.Controller , HitLocation, MomentumTransfer * vect(0,0,0), MyDamageType,, self);
     }
 
-    SpawnEffects(HitLocation);
+    SpawnEffects(HitLocation, caster.Rotation);
 }
 
 defaultproperties

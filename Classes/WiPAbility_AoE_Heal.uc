@@ -22,7 +22,7 @@ simulated function PerformAbility(vector HitLocation, Rotator HitRotation){
        WiPPawn(target).HealDamage(GetHealAmount(), Caster.Controller , MyDamageType);
     }
 
-    SpawnEffects(caster.Location);
+    SpawnEffects(caster.Location, caster.Rotation);
 }
 
 defaultproperties
