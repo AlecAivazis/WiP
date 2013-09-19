@@ -32,13 +32,16 @@ var WiPChampion caster;
 // associated effects replication info
 var RepNotify RepAbilityEffects AbilityEffectsReplicated;
 
+// test
+var repnotify int test;
+
 //  replication block - used to spawn the particle system across the network
 replication
 {
 
     // Whenever changed on the server
     if (bNetDirty)
-       AbilityEffectsReplicated;
+       AbilityEffectsReplicated, test;
 }
 
 // called when a RepNotify variable is changed
@@ -47,13 +50,14 @@ simulated event ReplicatedEvent(name VarName){
     `log("There was a replication: " @ VarName);
 
     if (VarName == 'AbilityEffectsReplicated')
-       ServerPerform(AbilityEffectsReplicated.VHitLocation, AbilityEffectsReplicated.RHitRotation);
+       `log("it worked!");
+       //ServerPerform(AbilityEffectsReplicated.VHitLocation, AbilityEffectsReplicated.RHitRotation);
     else
       Super.ReplicatedEvent(VarName);
 }
 
 // perform the actual cast of the ability
-simulated function cast(WiPChampion source, vector HitLocation){
+function cast(WiPChampion source, vector HitLocation){
 
     `log("called cast");
     // only castable on the server
@@ -64,18 +68,12 @@ simulated function cast(WiPChampion source, vector HitLocation){
        return;
     }
     
-    ClientPerform(HitLocation, caster.Rotation);
+    caster.test ++ ;
+
+    PerformAbility(HitLocation, caster.Rotation);
 
     startCooldown();
     `log("Current mana " @ source.Mana);
-}
-
-function ServerPerform(vector HitLocation, Rotator HitRotation){
-    PerformAbility(HitLocation, HitRotation);
-}
-
-simulated function clientPerform(vector HitLocation, Rotator HitRotation){
-    PerformAbility(HitLocation, HitRotation);
 }
 
 // tbi by sublcasses
@@ -135,7 +133,7 @@ simulated function float GetDamage(){
        `log("Could not get Pawn Rep Info (GetDamage - WiPWeaponProjectile)");
        return 50;
     }
-    
+
     return Damages[Level-1];
 }
 
@@ -144,4 +142,5 @@ defaultproperties
     Level =1
     MomentumTransfer = 0
     MyDamageType=class'UTDmgType_Rocket'
+    RemoteRole = ROLE_SimulatedProxy
 }

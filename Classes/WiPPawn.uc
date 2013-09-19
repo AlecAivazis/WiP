@@ -68,7 +68,7 @@ simulated event PostBeginPlay(){
         //create a StatModifier
         statModifier = new class'WiPStatModifier'();
     }
-    
+
     //currentHealth = BaseMaxHealth;
 }
 
@@ -127,6 +127,7 @@ simulated function Tick(float TimeDelta){
    Health = int(CurrentHealth);
 
    RecalculateStats();
+
 }
 
 // recalcuate the pawn's stats
@@ -425,7 +426,7 @@ defaultproperties
 		SkeletalMesh=SkeletalMesh'WiP_ASSETS.Characters.Bane'
 	End Object
 
- Begin Object Class=SkeletalMeshComponent Name=MyWeaponSkeletalMeshComponent
+    Begin Object Class=SkeletalMeshComponent Name=MyWeaponSkeletalMeshComponent
 		CollideActors=false
 		BlockRigidBody=false
 		bHasPhysicsAssetInstance=false
@@ -447,5 +448,7 @@ defaultproperties
     End Object
     CylinderComponent=CollisionCylinder
     
-    meleeSocketName = WeaponPoint
+    meleeSocketName=WeaponPoint
+
+    RemoteRole=ROLE_SimulatedProxy
 }

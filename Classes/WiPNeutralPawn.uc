@@ -85,9 +85,6 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
     local WiPPlayerController playerController;
     local WiPPlayerReplicationInfo playerRepInfo;
 
-
-    `log("This pawn has died" @ self);
-
     // reward a last hit to the killer
     if (WiPPlayerController(Killer) != none){
         // grab the killer's controller

@@ -17,7 +17,7 @@ var(Stats) const float BaseMaxMana;
 var repnotify float Mana;
 
 // the spell currently activated by the champion
-var WiPAbility activatedAbility;
+var repnotify WiPAbility activatedAbility;
 
 
 var repnotify int test;
@@ -25,7 +25,7 @@ var repnotify int test;
 replication
 {
     if (bNetDirty || bNetOwner)
-       Mana, test;
+       Mana, ActivatedAbility, test;
 }
 
 simulated event ReplicatedEvent(name VarName){
@@ -47,14 +47,14 @@ simulated event PostBeginPlay(){
 	{
 		SpawnDefaultController();
 	}
-
-	currentHealth = BaseHealth;
-	mana = BaseMaxMana;
-
+	
 	// replace abilities with instantiated version of their archetype
 	for (i=0; i< Abilities.Length ; i++){
         Abilities[i] = Spawn(Abilities[i].class,,,Location, ,Abilities[i]);
     }
+
+	currentHealth = BaseHealth;
+	mana = BaseMaxMana;
 }
 
 
@@ -104,6 +104,7 @@ simulated function Tick(float TimeDelta){
     if (champRepInfo == none ) return;
 
     Mana = FMin(champRepInfo.MaxMana, Mana + ( champRepInfo.ManaRegen * TimeDelta));
+
 }
 
 // called when the pawn dies (assign a new respawn time)
@@ -123,8 +124,6 @@ function bool Died(Controller Killer, class<DamageType> DamageType, vector HitLo
             `log("player respawn time ============ " @ playerRepInfo.NextRespawnTime );
         }
     }
-    
-    test++;
 
     return Super.Died(Killer, DamageType, HitLocation);
 
@@ -178,23 +177,39 @@ simulated function float AbilityTargetCenterFromRot(){
     }
 
     return 0;
+
+}
+
+simulated function SelectAbility(byte slot){
+    if (Role < Role_Authority){
+        ServerSelectAbility(slot);   
+    }
+
+    ActivateAbility(slot);
+}
+
+reliable server function ServerSelectAbility(byte slot){
+    ActivateAbility(slot);
 }
 
 
 
 
-simulated function ActivateSpell(byte slot){
-
+simulated function ActivateAbility(byte slot){
     activatedAbility = Abilities[slot];
 
     `log("Tried to activate " @ slot);
     `log("current mana " @ Mana );
+
+    test++;
 
     if (activatedAbility.CanActivate() && mana >= activatedAbility.GetManaCost()){
        `log("Activated Spell at Slot " @ slot);
        GoToState('ActiveAbility');
     }
 }
+
+
 
 // return the team number of this pawn
 simulated function byte GetTeamNum(){
@@ -248,16 +263,35 @@ state ActiveAbility{
 
     // called when the state is first entered
     function BeginState(Name PreviousStateName){
+        
+        `log("server is in the right state");
 
         `log("Activated an ability = " @ activatedAbility );
 
         if (activatedAbility == none) GoToState();
+
+
 
     }
 
     // overwrite so that click casts the weapon
     simulated function StartFire(byte FireModeNum){
 
+        if ( Role < ROLE_Authority){
+           ServerStartFire(FireModeNum);
+        }
+
+        BeginCast();
+
+    }
+}
+
+reliable server function ServerStartFire(byte FireModeNum){
+    `log("calleding server startfire");
+        BeginCast();
+}
+
+simulated function BeginCast(){
        local vector target;
 
        target.X = AbilityTargetCenterFromRot();
@@ -266,20 +300,21 @@ state ActiveAbility{
 
         `log("Casted an ability " @ activatedAbility);
 
-        if (activatedAbility == none) GoToState('');  
+        if (activatedAbility == none) GoToState('');
         
         if (Mana < activatedAbility.GetManaCost()){
            `log("not enough mana to use that ability");
             GoToState('');
         }
-        
+
         Mana -= activatedAbility.GetManaCost();
 
         ActivatedAbility.Cast(self, target);
 
         GoToState('');
-    }
 }
+
+
 
 
 

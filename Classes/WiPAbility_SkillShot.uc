@@ -6,8 +6,10 @@ var(Ability) archetype  const WiPAbility_SkillShot_Projectile AbilityProjectile;
 
 // perform the actual cast of the ability
 simulated function PerformAbility(vector HitLocation, rotator HitRotation){
-
+    
     local WiPAbility_SkillShot_Projectile shot;
+     caster.test ++ ;
+
 
     shot = Spawn(AbilityProjectile.class,,,caster.Location,,AbilityProjectile);
 
